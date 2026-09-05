@@ -428,6 +428,35 @@ async def main() -> None:
     run_t0 = time.time()
     await asyncio.gather(*(one(t) for t in tasks))
     log(f"total {round(time.time() - run_t0, 1)}s for {len(tasks)} tasks")
+    _flush_out_dir(out_dir)
+
+
+def _fsync_file(path: Path) -> None:
+    if not path.exists():
+        return
+    fd = os.open(path, os.O_APPEND)
+    try:
+        os.fsync(fd)
+    finally:
+        os.close(fd)
+
+
+def _flush_out_dir(out_dir: Path) -> None:
+    """fsync ship artifacts so a force-exit cannot drop the last writes."""
+    sys.stdout.flush()
+    sys.stderr.flush()
+    pred = out_dir / "predictions.jsonl"
+    if not pred.exists():
+        pred.write_text("", encoding="utf-8")
+    for name in ("predictions.jsonl", "run.log"):
+        _fsync_file(out_dir / name)
+    out_fd = os.open(out_dir, os.O_RDONLY)
+    try:
+        os.fsync(out_fd)
+    finally:
+        os.close(out_fd)
+    if not pred.exists() or not (out_dir / "run.log").exists() or not (out_dir / "outputs").is_dir():
+        raise SystemExit("ship outputs missing after flush")
 
 
 def parse_args() -> argparse.Namespace:
@@ -465,4 +494,17 @@ def parse_args() -> argparse.Namespace:
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    # Tinker SessionFuturesPoller stays pending after main(); judges need a real exit.
+    import traceback
+
+    code = 0
+    try:
+        asyncio.run(main())
+    except SystemExit as e:
+        code = e.code if isinstance(e.code, int) else (0 if e.code is None else 1)
+    except Exception:
+        traceback.print_exc()
+        code = 1
+    sys.stdout.flush()
+    sys.stderr.flush()
+    os._exit(code)

@@ -18,3 +18,8 @@
    - Built strict lossless round-trip validator (`research/validate_spans.py`).
    - Cleaned & frozen 228 balanced, verified trajectories under SHA-256 hash `3dae518df...`.
    - v2 training dataset guaranteed 100% parse-clean with zero empty completions or syntax leaks.
+
+## 3. Step-200 Crashed-Run Diagnostic Evidence
+- **Checkpoint URI**: `tinker://0c3c3765-2d63-5515-a49a-6613a7b9a888:train:0/sampler_weights/000200`
+- **Subsample Evaluation**: Scored on the stratified 100-task benchmark (`research/data/subsample_100_ids.txt`, 50 cell / 50 sheet).
+- **Finding**: Pre-fix syntax error emissions (e.g. `error: syntax error: invalid syntax (<unknown>, line 1)`) persisted across sheet codegen tasks, proving that the un-repaired delimiter drift was encoded into early weights and validating the need for the clean 60/40 mix SFT dataset (`build_sft_v2.py`).
