@@ -57,7 +57,7 @@ except A.
 | task_0010 | A | **done** | Write through merged cells (`MergedCell` was a hard error on 208-20 / 38703 / 55060). |
 | task_0011 | A | **done** | Write-path: numeric strings → int/float. Do **not** strip text (goldens keep padding; strip broke 80-42 / 290-27 on the gate). |
 | task_0012 | A | **done** | Wire `harness/skills.py` `get_skill_fragment` into codegen **system** prompt (lookup / agg / sheet-reorg / date). |
-| task_0013 | A | **in_progress** | Full 400 codegen headline → `/tmp/tinker-400-codegen`. Gate: re-run 20 sheet ids first. Conc 4; B stays on acct #2 / Modal. |
+| task_0013 | A | **in_progress** | Full 400 → `/tmp/tinker-400-codegen` (**327/400** at 16:29, conc 4, ETA ~16:50). A has the org quota; B paused until C posts this score. |
 
 `ts400` loaded old code at start — it is the no-repair baseline. Nobody else edits
 `pipeline.py`. When A edits it, A owns it exclusively.
@@ -164,3 +164,19 @@ number. Checkpoint = ship candidate AND latency hedge.
 **Standing rule**: exactly one heavy Tinker consumer at a time; the other role waits
 or uses account #2/Modal for eval-only work. Post quota intent ("launching, until
 ~HH:MM") to the mission log before any big run.
+
+### Decisions made — final, do not re-litigate (2026-09-05, ~17:00)
+
+- **B does NOT move to Modal for task_0002.** That was the fix for quota contention
+  while A and B shared one Tinker org; A's VM run has finished and B already
+  relocated sampling to the VM at full speed (105+/200 and climbing). B stays on
+  the Tinker VM. Modal / account #2 are reserved exclusively for task_0003's eval
+  fan-out (parallel temp-0 sweep across all 400).
+- **Single blocking item for task_0002**: the `completion`-field fix. Sequence:
+  commit write-time fix (canonical `{"cells":[...]}` + `<8k` chars assert) →
+  pause sampler → repair existing records to `trajectories.jsonl.repaired` →
+  verify quality gate → swap → resume. Land it before the count crosses 200.
+- **Gate for task_0002 sign-off**: ≥200 verified trajectories AND clean completions
+  (mean length ~1–3k chars, 0 think leaks, 0 parse failures), confirmed by C's
+  quality script. task_0003 fires immediately after.
+- Standing rule satisfied today: one heavy consumer (B) only.
