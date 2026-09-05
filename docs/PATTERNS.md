@@ -1,5 +1,10 @@
 # Patterns & principles — ready for Sat 12:00 init
 
+> **Historical / superseded 2026-09-05.** Leftover from a prior product plus early
+> Sat scaffolding. Do not implement receipts, findings builders, import UX, or
+> CoT/thinking prompts from this file — thinking stays **off**
+> (`research/methodology-notes.md`). Current plan: `docs/TEAM-BRIEF.md`.
+
 Principles only, no provenance. All text-only, no installs.
 
 ## Harness backbone

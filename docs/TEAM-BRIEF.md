@@ -46,8 +46,8 @@ except A.
 | id | owner | status | task |
 |---|---|---|---|
 | task_0001 | A | **done** | Wire codegen/execution-feedback loop into `pipeline.py` (exclusive `harness/*.py`) |
-| task_0002 | B | in_progress | Rejection-sampling data gen at scale (Modal / Tinker acct #2). Use `--temperature 0.7`. Current committed harness already emits trajectories; v2 improves now that codegen has landed. |
-| task_0003 | B | blocked on 0002 | First LoRA fine-tune + checkpoint eval → after ≥200 verified trajectories |
+| task_0002 | B | **done** | 226 verified SFT trajectories (gate ≥200). Quality-gate clean. Sampler keeps running for expert-iteration v2. |
+| task_0003 | B | **done** | LoRA-v1 scored **32.25%** / cell 46.6 / sheet 0.8. Not ship. Cause: data-mix starvation of codegen completions; overtrained on 202 records. |
 | task_0004 | C | **done*** | `/tmp/tinker-400` finished (400/400). `results.json` summary: **pass_rate 0.4675**, cell_accuracy 0.3728, cell 0.48 / sheet 0.44. Harness log: 373 ok / 14 partial / 13 error. *C should still paste into RESULTS_CHECKLIST / SUBMISSION and confirm whether scoring used recalc.* |
 | task_0005 | C | **unblocked** | Failure taxonomy from `/tmp/tinker-400/traces`. A already sees: missing large ranges, JSONDecodeError on 30k+ replies, MergedCell writes, sheet-level prose. |
 | task_0006 | C | in_progress | Skill library (`skills/library.py` `fragment_for`) + write-up skeleton. A already calls the hook. |
@@ -60,6 +60,9 @@ except A.
 | task_0013 | A | **done** | `/tmp/tinker-400-codegen` scored (`--all --no-recalc`): **pass_rate 0.5175**, cell_acc **0.9761**, cell **0.4364**, sheet **0.696**. Vs tinker-400 0.4675 / 0.3728 / 0.48 / 0.44. Sheet +25.6pp; cell −4.4pp. **Tinker quota free — B may resume.** |
 | task_0014 | A | **done** | Hybrid stitch (cell←values `/tmp/tinker-400`, sheet←codegen `/tmp/tinker-400-codegen`): **pass_rate 0.5475**, cell **0.48**, sheet **0.696**, cell_acc **0.9545**. Ship default `--path hybrid` (no cross-path fallback). A on standby for C's recalc-gate. |
 | task_0015 | A | **done** | C pin-leak fix: `_answer_range_excerpt` emits addresses only (no init values). Recalc-as-gate: soffice `#ERR!` on sheet codegen → discard workbook → values-first. No new Tinker run. |
+| task_0016 | A | **done** | Pin-fix 27-cell re-score (`--path hybrid --temperature 0`, n=1, 66.3s). Overlay 19/27 held, **8 regressions**. hybrid-v2 `--all --no-recalc`: **52.75%** / cell **45.09%** / sheet **69.6%**. Ship stays `/tmp/tinker-400-hybrid` **54.75%**. Pin-omit on values-first is not free. |
+| task_0017 | A | **done** | Recalc-gate proven on VM LibreOffice 24.2.7: `#DIV/0!` `#REF!` `#NAME?` fail; clean `SUM`/literal pass; 4 real sheet tasks (13-1, 17-35, 22-47, 23-24) fire; hybrid fake-completer codegen→values fallback writes 7 not `=1/0`. Script: `research/prove_recalc_gate.py`. |
+| task_0018 | A | **done** | Pin-scope landed (codegen omits init values; values-first keeps them). 275-cell `--path values` temp 0 + codegen sheets: **51.75%** / cell **43.64%** / sheet **69.6%**. +14/−26 vs old hybrid cells. Does not clear 54.75%. Ship stays `/tmp/tinker-400-hybrid`. |
 
 `ts400` loaded old code at start — it is the no-repair baseline. Nobody else edits
 `pipeline.py`. When A edits it, A owns it exclusively.

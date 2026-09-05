@@ -1,0 +1,5 @@
+# Cell-level tasks that passed /tmp/tinker-400 (values-first) and failed
+# /tmp/tinker-400-codegen (--path auto). Re-score with pin-fix hybrid
+# (--path hybrid or --path values) after B reaches 200 trajectories.
+# Expected: recover toward 48% cell-level → ship ~56–57%.
+39931,41410,46240,48080,48620,48969,51586,2768,4714,5835,7902,10452,13284,31628,32255,40892,42181,46121,53117,53994,54638,55817,56274,56378,58723,58949,55421

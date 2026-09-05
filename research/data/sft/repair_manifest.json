@@ -1,0 +1,14 @@
+{
+  "max_completion_len": 8000,
+  "total": 113,
+  "kept": 81,
+  "rejected": 32,
+  "too_long": 32,
+  "bad_json": 0,
+  "think_leak": 0,
+  "mean_len": 2348,
+  "max_len": 7710,
+  "min_len": 52,
+  "repaired_path": "research/data/sft/trajectories.jsonl.repaired",
+  "rejected_path": "research/data/sft/trajectories.jsonl.rejected"
+}

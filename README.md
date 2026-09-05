@@ -12,21 +12,21 @@ everything from that point (skeletons + docs committed at hack start, all implem
 ```
 tieout/
   research/            UPSTREAM, read-only reference (sb.py, evaluate.py, baseline/)
-  harness/             our pipeline: classify -> write py -> exec -> verify -> retry
-  docs/                CONSTRAINTS.md, SETUP.md, PLAN.md (this machine is space-constrained)
+  harness/             our pipeline: classify -> codegen/values -> exec -> verify -> retry
+  docs/                TEAM-BRIEF.md (current), SESSION-STATUS.md, CONSTRAINTS.md, SETUP.md
   Dockerfile           submission container (/data ro -> /out)
   SUBMISSION.md        150–300 word write-up + scores (from research/SUBMISSION_TEMPLATE.md)
   predictions.jsonl    our run on the 400 (generated at venue, not now)
   outputs/ traces/ run.log results.json   generated at venue
 ```
 
-## Design principles (distilled from prior builds)
+## Design principles
 
-- Task-typed prompts + time-guard + offline container discipline
-- Model writes code + executes + iterates, SUMMARY_JSON, positive control
-- Deterministic openpyxl surgery, seeded + header-tolerant
-- Deterministic rules decide, model narrates + receipt
-- Preview → atomic-commit import flow (product demo only)
+- Tinker Qwen3.8-27B default; thinking off; 16k output tokens; temperature 0
+- Sheet-level: model writes openpyxl → sandbox exec → read back → repair
+- Cell-level: values-first JSON write + repair; codegen as fallback
+- Never blank: always write a line + an xlsx (init copy on total failure)
+- Current plan: `docs/TEAM-BRIEF.md`. Do not follow `docs/PLAN.md` / `docs/PATTERNS.md`.
 
 ## Venue-first rule
 

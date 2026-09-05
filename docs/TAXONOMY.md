@@ -1,3 +1,30 @@
+# Failure taxonomy — /tmp/tinker-400 (400 tasks, Qwen3.8-27B, no-repair baseline, 2026-09-05)
+
+Headline: **pass_rate 0.4675, cell_accuracy 0.3728** (cell 132/275 = 48.0%, sheet 55/125 = 44.0%).
+Harness status 373 ok / 14 partial / 13 error. Attempts/task mean 1.15, max 3.
+
+| failure bucket | cell (n=275) | sheet (n=125) | all 400 |
+|---|---|---|---|
+| PASS | 132 (48.0%) | 55 (44.0%) | 187 (46.8%) |
+| reasoning (graded wrong values) | 136 (49.5%) | 52 (41.6%) | 188 (47.0%) |
+| serialization (missing answer cells) | 5 (1.8%) | 8 (6.4%) | 13 (3.3%) |
+| parse/truncation (JSONDecodeError, 12k–34k char replies) | 0 | 8 (6.4%) | 8 (2.0%) |
+| other error | 2 (0.7%) | 2 (1.6%) | 4 (1.0%) |
+
+Key reads:
+- **Reasoning dominates**: 188/213 failures (88%) are "ran fine, wrong values" — the biggest
+  lever remains model quality / execution-feedback repair, not plumbing.
+- **Serialization** = missing answer cells (14 partial + worse in error status): long answer
+  ranges dropped mid-list. A's range-expansion fix (task_0010 era) targets this.
+- **Parse/truncation** is sheet-only (8 tasks, JSON replies >12k chars hit JSONDecodeError).
+  Codegen path or chunked output would bypass; raise max_tokens per methodology §1.
+- **Retry recovery is weak**: 31 tasks retried (2×2, 29×3 attempts) → only 4 recovered to
+  pass (13%). Blind resampling is the documented weak baseline — confirms attribution-guided
+  repair (methodology §4.2). 27/31 retried tasks still failed.
+- Output tokens max 16384 (cap hit), latency mean 35.6s / p50 6.6s / max 307s.
+
+---
+
 # Taxonomy probe — 20-task sample (10 cell + 10 sheet), principles only
 
 Source: 400-task dataset stats + sampled `instruction`/`prompt.txt` (no workbooks opened).

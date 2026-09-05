@@ -1,5 +1,8 @@
 # Plan — split to maximize win probability
 
+> **Superseded 2026-09-05.** Current roles and inference are in `docs/TEAM-BRIEF.md`.
+> This file is the pre-Adib P1–P4 / Gemini-primary plan. Do not follow it.
+
 Primary metric is pass_rate over all 400. One wrong graded cell = failed task.
 Reliability (code-exec + verify) beats clever prompting.
 

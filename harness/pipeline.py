@@ -283,16 +283,22 @@ async def predict_task(
         for sheet, coord in answer_cells(task, wb0):
             ws = wb0[sheet] if sheet and sheet in wb0.sheetnames else wb0.active
             graded_refs.append(cell_ref(sheet or ws.title, coord))
+        kind = classify(task)
+        # Pin-scope (task_0018): codegen omits init values (echo); values-first keeps them.
+        codegen_first = path == "codegen" or (
+            kind == "sheet-level" and path in ("hybrid", "auto")
+        )
         ctx = {
             "complete": complete,
             "task": task,
             "out": out,
             "out_dir": out_dir,
             "step": 0,
-            "wb_serialized": serialize_task_workbook(task),
+            "wb_serialized": serialize_task_workbook(
+                task, include_init_values=not codegen_first
+            ),
             "graded_refs": graded_refs,
         }
-        kind = classify(task)
         if path == "values" or (path == "hybrid" and kind != "sheet-level"):
             status = await run_values_loop(ctx, MAX_ATTEMPTS)
         elif path == "codegen":
@@ -304,6 +310,9 @@ async def predict_task(
             if status != "ok" and is_formula_error_reason(status):
                 if out.exists():
                     out.unlink()
+                ctx["wb_serialized"] = serialize_task_workbook(
+                    task, include_init_values=True
+                )
                 fallback = await run_values_loop(ctx, MAX_ATTEMPTS)
                 status = (
                     fallback
@@ -315,6 +324,9 @@ async def predict_task(
             if kind == "sheet-level":
                 status = await run_codegen_loop(ctx, MAX_ATTEMPTS)
                 if status != "ok":
+                    ctx["wb_serialized"] = serialize_task_workbook(
+                        task, include_init_values=True
+                    )
                     fallback = await run_values_loop(ctx, 1)
                     status = (
                         fallback

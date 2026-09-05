@@ -13,7 +13,7 @@ python harness/pipeline.py --dataset-dir ... --out-dir ... --ids 13-1,51-12 --fr
 `--resume` (default) skips ids already in `predictions.jsonl`. `--fresh` wipes the out-dir artifacts first.
 `--path hybrid` (default, ship): cell values-only, sheet codegen-only.
 Sheet codegen + LibreOffice `#ERR!` → values-first (C recalc-as-gate).
-Pinned answer range is coordinates only (no init values — models were echoing them).
+Pinned answer range: values-first keeps init values; codegen omits them (echo caused the cell dip).
 `--path auto` adds one cross-path fallback. `--temperature` (default 0; B uses 0.7).
 
 ## Files

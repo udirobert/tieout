@@ -1,5 +1,9 @@
 # Constraints — space-constrained Mac, external services only
 
+> **Scoring + space rules below still apply.** Inference/role split was updated
+> 2026-09-05: Qwen-only lifted, Tinker is primary, see `docs/TEAM-BRIEF.md`.
+> Do not treat the Gemini-primary / OpenRouter notes in §1 as current.
+
 ## 0. Iron rule
 
 Ask before anything that uses disk. This Mac is space-constrained.
@@ -12,7 +16,8 @@ Do NOT run on this Mac before the venue:
 - `docker build / docker run` (GBs)
 - Any local Qwen weights or HF downloads
 
-`tieout/` is currently ~780K (scaffolding only). Keep it that way until venue wifi.
+Keep dataset downloads, LibreOffice, Docker, and local weights off this Mac
+(`docs/SETUP.md` — those run on the VM). Do not `uv sync` here.
 
 ## 1. Model / compute credits (provided at team-forming)
 
@@ -22,12 +27,10 @@ Do NOT run on this Mac before the venue:
 - Qwen3.8-27B — fixed model everyone builds on. Hosted/provided, not supplied locally.
   Baselines (one-shot, values not formulas, all 400): DeepSeek-V3.2 55.8%, Qwen3.8-27B 59.0%, Gemini 3.7 Flash 68.3%.
   59.0% is our floor — edge comes from harness + fine-tune, not model size.
-- Inference decision (Sat 12:45): OpenRouter is SKIPPED (personal key unfunded, team credits
-  may be an OpenRouter promo — grab at desk as warm spare only). Primary inference is the
-  free GEMINI_API_KEY from AI Studio on the hackathon gcplab project (Gemini 3.7 Flash was the
-  strongest baseline at 68.3%); Tinker is the fine-tune + checkpoint path. Harness complete()
-  adapters: gemini (primary) + tinker (finetune). Container `-e` contract: GEMINI_API_KEY and/or
-  TINKER_API_KEY only — no OPENROUTER anywhere in the shipped image.
+- Inference (current): Tinker Qwen3.8-27B is primary (`TINKER_API_KEY`). Gemini 3.7 Flash
+  is a spare teacher (`GEMINI_API_KEY`). OpenRouter is SKIPPED (unfunded) — no
+  `OPENROUTER_API_KEY` in the shipped image. Container `-e` contract: `TINKER_API_KEY`
+  and optionally `GEMINI_API_KEY`.
 - gcplab environment (accounts/projects/keys) is decommissioned Sunday — never commit keys;
   SUBMISSION.md lists env names only.
 

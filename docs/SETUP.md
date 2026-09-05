@@ -5,8 +5,8 @@ Run in this order. Nothing here runs on the space-constrained Mac beforehand.
 1. Team forms → declare research track → hand personal Google Cloud email to research desk.
    Tinker invite is manual. This is step 0, parallelize immediately.
 2. Collect team API keys + model credits at desk. Put in `.env` (gitignored), never commit.
-   Keys in play: `TINKER_API_KEY` (fine-tune + sampling), `GEMINI_API_KEY` (AI Studio on the
-   gcplab account — free, primary inference). OpenRouter skipped (unfunded).
+   Keys in play: `TINKER_API_KEY` (primary sampling + fine-tune), `GEMINI_API_KEY`
+   (spare teacher). OpenRouter skipped (unfunded).
    Sync `.env` to the VM manually (gitignored, not transported by git):
    `gcloud compute scp .env tieout-builder:~/tieout/research/.env`
 3. Venue wifi:
@@ -28,7 +28,7 @@ Run in this order. Nothing here runs on the space-constrained Mac beforehand.
 6. Build container early Sat afternoon, test unattended start:
    ```
    docker build -t tieout .
-   docker run --rm -e OPENROUTER_API_KEY -e TINKER_API_KEY -v <dataset>:/data:ro -v <empty>:/out tieout
+   docker run --rm -e TINKER_API_KEY -e GEMINI_API_KEY -v <dataset>:/data:ro -v <empty>:/out tieout
    ```
 7. Full 400 run + `evaluate.py --all --out results.json` before Sun 12:00. Paste summary into SUBMISSION.md.
 

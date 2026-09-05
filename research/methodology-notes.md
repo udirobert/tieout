@@ -41,10 +41,10 @@ Source: Qwen docs (qwen.readthedocs.io, Quickstart).
 2. Replace blind ≤3-retry with **attribution-guided repair**: on sanity_check/verifier
    failure, send back a *targeted* repair prompt (what failed, why, smallest edit) —
    mirrors SheetAgent/WML; blind resampling is the documented weak baseline.
-3. Consider `soffice --headless --convert-to xlsx` recalculation as a pre-submission
-   verifier when tasks involve formulas (WML's evaluator), if the rules allow — flag
-   for Adib: does "Qwen-only" permit deterministic tooling like LibreOffice? (Benchmarks
-   allow it; it's not a model.)
+3. `soffice --headless --convert-to xlsx` recalculation as a pre-submission verifier
+   when tasks involve formulas (WML's evaluator). **Resolved 2026-09-05 (Adib): any
+   approach is allowed** — LibreOffice recalc is in play. `verifier.postcheck_soffice`
+   runs when `soffice` exists and skips silently on this Mac.
 4. Build a small reusable "skill"/prompt-fragment library per task category (sheet
    manipulation patterns) instead of one monolithic prompt — retrieval-instructed beats
    direct in the paper's ablations.
@@ -81,6 +81,40 @@ decompose → inspect → act → reflect loop over one-shot generation.
   stop sequences; lenient downstream parser already tolerates this. No change now.
 - `enable_thinking` hard-switch is Qwen3-non-VL; VL variants ignore soft switches.
   (Our model is Vision-capable but we send text only — non-issue.)
+
+## 7. Open-Source SOTA & Literature Deep Dive ("Shoulders of Giants")
+
+### 7a. SpreadsheetLLM & SheetCompressor (Microsoft Research, arXiv:2407.09025)
+- **Problem**: 2D grid structure + formatting balloons prompt token counts (e.g. 10k rows easily blow 64k/128k context windows), causing silent truncation (our 20k-char cap hit this).
+- **Core Mechanism — SheetCompressor (up to 96% token reduction)**:
+  1. **Structural-Anchor Compression**: Detects boundaries of functional tables, headers, and separator rows/columns. Preserves layout skeleton, drops interior homogenous blocks.
+  2. **Inverted Index Translation**: Compact JSON mapping of coordinates `(row_idx, col_idx)` rather than full grid repetition.
+  3. **Data-Format-Aware Aggregation**: Contiguous cells of identical data types/formatting are aggregated into bounding-box spans (e.g. `[A2:A50] : int`).
+- **Open-source equivalent**: `sheetwise` Python library.
+- **Direct application to tieout**: When large workbooks exceed token limits, rather than naive string truncation (`[:20000]`), serialize headers + first/last N data rows + answer range coordinates.
+
+### 7b. SheetAgent & SheetCopilot (arXiv:2403.03636, WWW 2025 oral / arXiv:2305.19308)
+- **Problem**: Long-horizon spreadsheet tasks require state tracking across multi-step mutations.
+- **Core Mechanism**:
+  - **Decomposition**: Planner $\rightarrow$ Informer $\rightarrow$ Retriever $\rightarrow$ Reflector state machine.
+  - **Virtual Workbench (Atomic Primitives)**: Agent emits high-level primitive commands (e.g. `filter_rows`, `delete_column`, `set_cell_formula`, `aggregate_range`) rather than writing monolithic raw scripts.
+  - **Visual & Structural Reflection**: Inspecting workbook state after each tool call to verify step success before committing changes.
+- **Pass Rate Gains**: 20–40% absolute pass-rate boost over direct one-shot LLM baselines.
+
+### 7c. WML & Compiled Execution (arXiv:2607.20999)
+- **Core Mechanism**:
+  - Procedural skill packages indexed by workflow type.
+  - **Compiled execution graph**: Translates natural language workflows into compiled deterministic code (Python/OpenPyXL/LibreOffice macros) executed with zero model intervention during the runtime phase.
+  - SOTA 74.67 Hard Accuracy on `spreadsheetbench_verified_400`.
+
+### 7d. Synthesis of Levers for tieout
+| Architecture Lever | Source Paper | Expected Gain | Implementation in tieout |
+| :--- | :--- | :--- | :--- |
+| **Execution Feedback Loop** | SpreadsheetBench / WML | **~2.5x gain** | Role A (`harness/executor.py` + repair prompt) |
+| **Domain Skill Library** | WML / SheetAgent | **+5–10% gain** | Role C ([`harness/skills.py`](file:///Users/udingethe/dev/tieout/harness/skills.py)) |
+| **Structural Anchor Serialization** | SpreadsheetLLM (MSFT) | **Recovers 13.6% truncated tasks** | Role A/C (`harness/serializer.py` table bounding) |
+| **Normalizer & Sanity Gate** | tieout Audit | **+6.75% ceiling** | Role A (`write_output` coercion & openpyxl) |
+| **Expert Iteration (STaR)** | WML / STaR | **+8–15% gain** | Role B (`sample_data.py` + LoRA fine-tune) |
 
 ## Process rule going forward
 Before any harness change: check this file + source papers first. Only run model calls

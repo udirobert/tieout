@@ -53,28 +53,39 @@ def _fill_lines(path: str, max_rows=120, max_cols=30) -> str:
     return "\n".join(out)
 
 
-def _answer_range_excerpt(task: dict) -> str:
-    """Pin graded coordinates only — never init values (C: models echoed placeholders)."""
+def _answer_range_excerpt(task: dict, include_init_values: bool) -> str:
+    """Pin graded cells. Values-first keeps init values; codegen omits them.
+
+    Codegen echoed `Sheet1!C4=23.56` as the answer (cell-level dip). Values-first
+    needs those values — pin-omit on that path cost 8/27 in hybrid-v2.
+    """
     wb = openpyxl.load_workbook(task["init_xlsx"], data_only=True)
     lines = []
     pairs = list(answer_cells(task, wb))
     for sheet, coord in pairs[:PIN_LIMIT]:
         ws = wb[sheet] if sheet and sheet in wb.sheetnames else wb.active
-        lines.append(f"{ws.title}!{coord}")
-    header = f"### Answer range (pinned addresses only, {len(pairs)} cells"
+        if include_init_values:
+            v = ws[coord].value
+            lines.append(f"{ws.title}!{coord}={'' if v is None else v}")
+        else:
+            lines.append(f"{ws.title}!{coord}")
+    if include_init_values:
+        header = f"### Answer range (pinned, {len(pairs)} cells"
+    else:
+        header = f"### Answer range (pinned addresses only, {len(pairs)} cells"
     if len(pairs) > PIN_LIMIT:
         header += f", showing first {PIN_LIMIT}"
-    header += "; init values omitted)"
+    header += ")" if include_init_values else "; init values omitted)"
     return header + "\n" + "\n".join(lines) if lines else header
 
 
-def serialize_task_workbook(task: dict) -> str:
+def serialize_task_workbook(task: dict, include_init_values: bool = True) -> str:
     text = serialize_workbook(task["init_xlsx"])
     if _FILL_TRIGGER.search(task.get("instruction", "")):
         extra = _fill_lines(task["init_xlsx"])
         if extra:
             text += "\n\n" + extra
-    pinned = _answer_range_excerpt(task)
+    pinned = _answer_range_excerpt(task, include_init_values)
     note = ""
     overhead = len(pinned) + 120
     if len(text) + overhead > MAX_WORKBOOK_CHARS:
