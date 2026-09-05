@@ -120,12 +120,12 @@ async def predict_task(
 
 async def main() -> None:
     args = parse_args()
-    env_path = ROOT / "research" / ".env"
-    for line in env_path.read_text().splitlines() if env_path.exists() else []:
-        line = line.strip()
-        if line and not line.startswith("#") and "=" in line:
-            k, v = line.split("=", 1)
-            os.environ.setdefault(k.strip(), v.strip().strip('"').strip("'"))
+    for env_path in (ROOT / ".env", ROOT / "research" / ".env"):
+        for line in env_path.read_text().splitlines() if env_path.exists() else []:
+            line = line.strip()
+            if line and not line.startswith("#") and "=" in line:
+                k, v = line.split("=", 1)
+                os.environ.setdefault(k.strip(), v.strip().strip('"').strip("'"))
 
     out_dir = Path(args.out_dir)
     for sub in ("outputs", "traces"):

@@ -57,7 +57,9 @@ def _tinker(base_model: str, model_path: str | None):
     from tinker import types
     from tinker_cookbook.tokenizer_utils import get_tokenizer
 
-    client = tinker.ServiceClient(project_id=os.environ.get("TINKER_PROJECT_ID") or None)
+    client = tinker.ServiceClient(
+        project_id=os.environ.get("TINKER_PROJECT_ID") or None
+    )
     sampler = client.create_sampling_client(
         base_model=base_model, model_path=model_path or None
     )
