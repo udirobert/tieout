@@ -148,17 +148,22 @@ async def main() -> None:
     sem = asyncio.Semaphore(args.concurrency)
 
     async def one(task):
+        t0 = time.time()
         status = await predict_task(complete, task, out_dir, sem)
-        log(f"{task['id']:<8} {status}")
+        elapsed_s = round(time.time() - t0, 1)
+        log(f"{task['id']:<8} {elapsed_s:>6}s  {status}")
         line = {
             "id": task["id"],
             "output": f"outputs/{task['id']}.xlsx",
             "status": status,
+            "elapsed_s": elapsed_s,
         }
         with (out_dir / "predictions.jsonl").open("a") as f:
             f.write(json.dumps(line) + "\n")
 
+    run_t0 = time.time()
     await asyncio.gather(*(one(t) for t in tasks))
+    log(f"total {round(time.time() - run_t0, 1)}s for {len(tasks)} tasks")
 
 
 def parse_args() -> argparse.Namespace:
