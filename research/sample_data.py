@@ -41,7 +41,7 @@ from sb import answer_cells, load_dataset  # noqa: E402
 from adapters import make_completer  # noqa: E402
 from executor import run_snippet  # noqa: E402
 from parsing import parse_answer, parse_code  # noqa: E402
-from pipeline import _accept, _load_env, read_graded, write_output  # noqa: E402
+from pipeline import _accept, _coerce, _load_env, read_graded, write_output  # noqa: E402
 from prompts import (  # noqa: E402
     CODEGEN_SYSTEM,
     SYSTEM_VALUES,
@@ -68,15 +68,28 @@ def _dedupe_key(answer) -> str:
     )
 
 
-def _values_from_written(written: dict) -> str:
-    """Convert a codegen-passed workbook read-back into JSON cell values."""
+def _values_equal(v1, v2) -> bool:
+    if v1 == v2:
+        return True
+    if isinstance(v1, (int, float)) and isinstance(v2, (int, float)):
+        return round(float(v1), 10) == round(float(v2), 10)
+    if (v1 is None or v1 == "") and (v2 is None or v2 == ""):
+        return True
+    return False
+
+
+def _values_from_written(written: dict, init_values: dict | None = None) -> str:
+    """Convert a workbook read-back into a compact diff JSON (all changed cells)."""
     def enc(v):
         if isinstance(v, (datetime.datetime, datetime.date)):
             return v.isoformat()
         return v
 
     cells = []
+    init_values = init_values or {}
     for ref, v in written.items():
+        if _values_equal(v, init_values.get(ref)):
+            continue
         sheet, _, coord = ref.rpartition("!")
         c = {"cell": coord, "value": enc(v)}
         if sheet:
@@ -103,10 +116,13 @@ async def sample_task(complete, task: dict, args, sem: asyncio.Semaphore, tmp_di
     """Return verified trajectory records for one task (up to max-per-task)."""
     kind = classify(task)
     wb0 = openpyxl.load_workbook(task["init_xlsx"])
+    init_values = {}
     graded_refs = []
     for sheet, coord in answer_cells(task, wb0):
         ws = wb0[sheet] if sheet and sheet in wb0.sheetnames else wb0.active
-        graded_refs.append(f"{sheet or ws.title}!{coord}")
+        ref = f"{sheet or ws.title}!{coord}"
+        graded_refs.append(ref)
+        init_values[ref] = _coerce(ws[coord].value, ws, coord)
     wb_serialized = serialize_task_workbook(task)
     out_path = tmp_dir / f"{task['id']}.xlsx"
 
@@ -141,7 +157,7 @@ async def sample_task(complete, task: dict, args, sem: asyncio.Semaphore, tmp_di
                 ok, _ = _accept(task, out_path, info["graded"], info["written"])
                 if not ok:
                     return
-                answer_json = _values_from_written(info["written"])
+                answer_json = _values_from_written(info["written"], init_values)
                 assert len(answer_json) <= MAX_COMPLETION_LEN, f"completion too long: {len(answer_json)} chars"
                 key = json.dumps(sorted((r, repr(v)) for r, v in info["written"].items()), default=str)
             else:
@@ -150,7 +166,7 @@ async def sample_task(complete, task: dict, args, sem: asyncio.Semaphore, tmp_di
                 ok, _ = _accept(task, out_path, info["graded"], info["written"])
                 if not ok:
                     return
-                answer_json = _clean_answer(answer)
+                answer_json = _values_from_written(info["written"], init_values)
                 assert len(answer_json) <= MAX_COMPLETION_LEN, f"completion too long: {len(answer_json)} chars"
                 key = _dedupe_key(answer)
         except Exception as e:  # noqa: BLE001
