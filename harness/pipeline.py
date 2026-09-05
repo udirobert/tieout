@@ -264,7 +264,7 @@ async def run_codegen_loop(ctx: dict, attempts: int) -> str:
 
 
 async def predict_task(
-    complete, task: dict, out_dir: Path, sem: asyncio.Semaphore, path: str = "auto"
+    complete, task: dict, out_dir: Path, sem: asyncio.Semaphore, path: str = "hybrid"
 ) -> str:
     out = out_dir / "outputs" / f"{task['id']}.xlsx"
     async with sem:
@@ -282,12 +282,13 @@ async def predict_task(
             "wb_serialized": serialize_task_workbook(task),
             "graded_refs": graded_refs,
         }
-        if path == "values":
+        kind = classify(task)
+        if path == "values" or (path == "hybrid" and kind != "sheet-level"):
             status = await run_values_loop(ctx, MAX_ATTEMPTS)
-        elif path == "codegen":
+        elif path == "codegen" or (path == "hybrid" and kind == "sheet-level"):
             status = await run_codegen_loop(ctx, MAX_ATTEMPTS)
         else:
-            kind = classify(task)
+            # auto: hybrid + one-shot cross-path fallback (hurt cell-level on the 400)
             if kind == "sheet-level":
                 status = await run_codegen_loop(ctx, MAX_ATTEMPTS)
                 if status != "ok":
@@ -408,9 +409,10 @@ def parse_args() -> argparse.Namespace:
     )
     p.add_argument(
         "--path",
-        choices=("auto", "values", "codegen"),
-        default="auto",
-        help="auto = sheet codegen / cell values-first + fallback; values|codegen force one path",
+        choices=("hybrid", "auto", "values", "codegen"),
+        default="hybrid",
+        help="hybrid = cell values-only / sheet codegen-only (ship); "
+        "auto adds one cross-path fallback; values|codegen force one path",
     )
     p.add_argument("--concurrency", type=int, default=4)
     p.add_argument(

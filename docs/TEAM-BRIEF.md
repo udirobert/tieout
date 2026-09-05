@@ -57,7 +57,8 @@ except A.
 | task_0010 | A | **done** | Write through merged cells (`MergedCell` was a hard error on 208-20 / 38703 / 55060). |
 | task_0011 | A | **done** | Write-path: numeric strings → int/float. Do **not** strip text (goldens keep padding; strip broke 80-42 / 290-27 on the gate). |
 | task_0012 | A | **done** | Wire `harness/skills.py` `get_skill_fragment` into codegen **system** prompt (lookup / agg / sheet-reorg / date). |
-| task_0013 | A | **in_progress** | Full 400 → `/tmp/tinker-400-codegen` (**327/400** at 16:29, conc 4, ETA ~16:50). A has the org quota; B paused until C posts this score. |
+| task_0013 | A | **done** | `/tmp/tinker-400-codegen` scored (`--all --no-recalc`): **pass_rate 0.5175**, cell_acc **0.9761**, cell **0.4364**, sheet **0.696**. Vs tinker-400 0.4675 / 0.3728 / 0.48 / 0.44. Sheet +25.6pp; cell −4.4pp. **Tinker quota free — B may resume.** |
+| task_0014 | A | **done** | Hybrid stitch (cell←values `/tmp/tinker-400`, sheet←codegen `/tmp/tinker-400-codegen`): **pass_rate 0.5475**, cell **0.48**, sheet **0.696**, cell_acc **0.9545**. Ship default `--path hybrid` (no cross-path fallback). A on standby for C's recalc-gate. |
 
 `ts400` loaded old code at start — it is the no-repair baseline. Nobody else edits
 `pipeline.py`. When A edits it, A owns it exclusively.

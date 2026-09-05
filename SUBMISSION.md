@@ -58,15 +58,16 @@ uv run evaluate.py --predictions /tmp/tinker-400/predictions.jsonl --all --no-re
 | **Qwen3.8-27B Baseline (Values-first, no repair)** | **46.75%** (187/400) | 37.28% | 48.00% (132/275) | 44.00% (55/125) | /tmp/tinker-400, temp 0, 16k max_tokens |
 | *+ Attribution-guided Repair (v1)* | *pending eval* | | | | committed in 93d109c |
 | *+ Category Skills Library* | *pending eval* | | | | harness/skills.py → codegen system prompt |
-| *+ Codegen Execution Loop (Role A)* | **55% on 20 sheet-fails** (11/20), cell-acc 0.9911 vs 0/20 on same ids | 0.9911 (subset) | — | 0.55 (subset) | /tmp/sheet20-codegen. **13-1 model gap** (Qwen 31/120, Gemini 120/120) — B fine-tune, not a harness patch. Headline 400: /tmp/tinker-400-codegen (running/queued). |
+| *+ Codegen Execution Loop (Role A)* | **51.75%** (207/400) | **97.61%** | **43.64%** (120/275) | **69.60%** (87/125) | `/tmp/tinker-400-codegen` (`--path auto` with fallbacks). Cell drop from codegen fallback. |
+| *+ Hybrid route (ship)* | **54.75%** (219/400) | **95.45%** | **48.00%** (132/275) | **69.60%** (87/125) | `/tmp/tinker-400-hybrid`: cell←values-first, sheet←codegen. No new model calls. Default `--path hybrid`. |
 | *+ Expert Iteration Fine-Tune (Role B)* | *pending eval* | | | | Tinker LoRA checkpoint |
 
 ## Your run on the 400
 
-- `predictions.jsonl`: `/tmp/tinker-400/predictions.jsonl`
-- `outputs/`: `/tmp/tinker-400/outputs/`
-- `traces/`: `/tmp/tinker-400/traces/`
-- `run.log`: `/tmp/tinker-400/run.log`
+- `predictions.jsonl`: `/tmp/tinker-400-hybrid/predictions.jsonl`
+- `outputs/`: `/tmp/tinker-400-hybrid/outputs/`
+- `traces/`: `/tmp/tinker-400-hybrid/traces/`
+- `run.log`: `/tmp/tinker-400-hybrid/run.log`
 
 ## Code
 
