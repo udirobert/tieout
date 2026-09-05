@@ -1,15 +1,31 @@
-"""tieout tracer — trace format judges actually read.
+"""tieout tracer — traces/<id>.jsonl, one line per model call, in order.
 
-One file per task: traces/<id>.jsonl, one line per model call in order.
-Mirrors upstream baseline/common.py predict_task trace keys, plus agent tool fields.
-A trace with the golden value and no reasoning, a prompt containing golden values,
-or a lookup step = disqualification. Keep failed calls with error set.
+Never include golden values in prompts; keep failed calls with error set
+(golden value with no reasoning = disqualification).
 """
 
-TRACE_FIELDS = (
-    "step,model,prompt,response,input_tokens,output_tokens,latency_ms,error,"
-    "tool,tool_input,tool_output"
+import json
+from pathlib import Path
+
+
+FIELDS = (
+    "step",
+    "model",
+    "prompt",
+    "response",
+    "input_tokens",
+    "output_tokens",
+    "latency_ms",
+    "error",
+    "tool",
+    "tool_input",
+    "tool_output",
 )
 
-# Truncate workbook serialization to 20k chars per SUBMISSION.md, and say so in SUBMISSION.md.
-MAX_WORKBOOK_CHARS = 20000
+
+def append_trace(out_dir, task_id: str, record: dict) -> None:
+    rec = {k: record.get(k) for k in FIELDS}
+    with (Path(out_dir) / "traces" / f"{task_id}.jsonl").open(
+        "a", encoding="utf-8"
+    ) as f:
+        f.write(json.dumps(rec, ensure_ascii=False, default=str) + "\n")
