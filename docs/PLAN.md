@@ -9,6 +9,8 @@ Reliability (code-exec + verify) beats clever prompting.
   → exec in-container → verify second way (re-read after write / pandas vs formula) → retry ≤3.
   Inference: Gemini API primary (free AI Studio key on gcplab project — strongest baseline 68.3%),
   Tinker for the fine-tuned checkpoint; pluggable complete() adapters, no OpenRouter (unfunded).
+   Methodology is research-driven, not trial-and-error: check `research/methodology-notes.md`
+   before any harness change (thinking off, 16k tokens, attribution-guided repair).
   Always best guess, never blank. Owns `traces/<id>.jsonl` (one line per model call, keep failures
   with `error` set — golden value with no reasoning = disqualify).
 - P2 Fine-tune (Tinker): starts at team-forming, queued invite first. Trains on task-type-diverse
