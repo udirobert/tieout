@@ -33,6 +33,8 @@ sys.path.insert(0, str(ROOT / "research"))
 sys.path.insert(0, str(ROOT / "harness"))
 sys.path.insert(0, str(ROOT))
 
+MAX_COMPLETION_LEN = 8000
+
 import openpyxl  # noqa: E402
 from sb import answer_cells, load_dataset  # noqa: E402
 
@@ -56,7 +58,7 @@ def _clean_answer(answer) -> str:
         {"cell": c.cell, "value": c.value, **({"sheet": c.sheet} if c.sheet else {})}
         for c in answer.cells
     ]
-    return json.dumps({"cells": cells}, ensure_ascii=False)
+    return json.dumps({"cells": cells}, ensure_ascii=False, separators=(",", ":"))
 
 
 def _dedupe_key(answer) -> str:
@@ -80,7 +82,7 @@ def _values_from_written(written: dict) -> str:
         if sheet:
             c["sheet"] = sheet
         cells.append(c)
-    return json.dumps({"cells": cells}, ensure_ascii=False)
+    return json.dumps({"cells": cells}, ensure_ascii=False, separators=(",", ":"))
 
 
 def _already(path: Path) -> set[str]:
@@ -140,6 +142,7 @@ async def sample_task(complete, task: dict, args, sem: asyncio.Semaphore, tmp_di
                 if not ok:
                     return
                 answer_json = _values_from_written(info["written"])
+                assert len(answer_json) <= MAX_COMPLETION_LEN, f"completion too long: {len(answer_json)} chars"
                 key = json.dumps(sorted((r, repr(v)) for r, v in info["written"].items()), default=str)
             else:
                 answer = parse_answer(text)
@@ -148,6 +151,7 @@ async def sample_task(complete, task: dict, args, sem: asyncio.Semaphore, tmp_di
                 if not ok:
                     return
                 answer_json = _clean_answer(answer)
+                assert len(answer_json) <= MAX_COMPLETION_LEN, f"completion too long: {len(answer_json)} chars"
                 key = _dedupe_key(answer)
         except Exception as e:  # noqa: BLE001
             print(f"  {task['id']} sample {idx}: {type(e).__name__}: {e}"[:160], flush=True)
@@ -248,7 +252,7 @@ async def main() -> None:
     tasks = [t for t in tasks if t["id"] not in done]
     print(f"sampling {len(tasks)}/{before} tasks  n={args.n}  temp={os.environ['TINKER_TEMPERATURE']}  skip {before - len(tasks)}", flush=True)
 
-    complete = make_completer(args.model)
+    complete = make_completer(args.model, temperature=0.7)
     sem = asyncio.Semaphore(args.concurrency)
     traj_path = out_dir / "trajectories.jsonl"
     totals = [0, 0, 0]
