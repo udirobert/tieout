@@ -18,10 +18,18 @@ Do NOT run on this Mac before the venue:
 
 - Model credits for building — issued to every team at team-forming. Ask at the desk if burned through.
 - API keys — one per team. NEVER commit to public repo. Name them in SUBMISSION.md only.
-  Use env vars (`OPENROUTER_API_KEY`, `TINKER_API_KEY`, etc. via `.env`, gitignored).
+  Use env vars (`TINKER_API_KEY`, `GEMINI_API_KEY`, etc. via `.env`, gitignored).
 - Qwen3.8-27B — fixed model everyone builds on. Hosted/provided, not supplied locally.
   Baselines (one-shot, values not formulas, all 400): DeepSeek-V3.2 55.8%, Qwen3.8-27B 59.0%, Gemini 3.7 Flash 68.3%.
   59.0% is our floor — edge comes from harness + fine-tune, not model size.
+- Inference decision (Sat 12:45): OpenRouter is SKIPPED (personal key unfunded, team credits
+  may be an OpenRouter promo — grab at desk as warm spare only). Primary inference is the
+  free GEMINI_API_KEY from AI Studio on the hackathon gcplab project (Gemini 3.7 Flash was the
+  strongest baseline at 68.3%); Tinker is the fine-tune + checkpoint path. Harness complete()
+  adapters: gemini (primary) + tinker (finetune). Container `-e` contract: GEMINI_API_KEY and/or
+  TINKER_API_KEY only — no OPENROUTER anywhere in the shipped image.
+- gcplab environment (accounts/projects/keys) is decommissioned Sunday — never commit keys;
+  SUBMISSION.md lists env names only.
 
 ## 2. Research-track specifics
 

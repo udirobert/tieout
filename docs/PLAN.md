@@ -5,8 +5,10 @@ Reliability (code-exec + verify) beats clever prompting.
 
 ## Roles (3–4 people, independent axes)
 
-- P1 Harness/loop: classify (cell/sheet, formula/value/VBA) → Qwen writes openpyxl Python
+- P1 Harness/loop: classify (cell/sheet, formula/value/VBA) → model writes openpyxl Python
   → exec in-container → verify second way (re-read after write / pandas vs formula) → retry ≤3.
+  Inference: Gemini API primary (free AI Studio key on gcplab project — strongest baseline 68.3%),
+  Tinker for the fine-tuned checkpoint; pluggable complete() adapters, no OpenRouter (unfunded).
   Always best guess, never blank. Owns `traces/<id>.jsonl` (one line per model call, keep failures
   with `error` set — golden value with no reasoning = disqualify).
 - P2 Fine-tune (Tinker): starts at team-forming, queued invite first. Trains on task-type-diverse

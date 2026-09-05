@@ -10,6 +10,9 @@ Upstream reference: `../research/baseline/common.py` (prompt, answer schema, out
 - `pipeline.py` — entry: `--dataset-dir /data --out-dir /out`. One line per task in
   `predictions.jsonl` (`{"id","output":"outputs/<id>.xlsx","status":"ok|error"}`).
   On failure still write line + copy init workbook as output (missing = 0).
+- Inference adapters (pluggable `complete(prompt) -> (text, in_tokens, out_tokens)`):
+  `gemini` — PRIMARY (free AI Studio key, Gemini 3.7 Flash was strongest baseline);
+  `tinker` — fine-tuned checkpoint (`tinker://...`). No OpenRouter (unfunded).
 - `prompts.py` — task-type prompts (reason hard, direct easy).
   System: spreadsheet expert, compute FINAL VALUES for answer range, plain values not formulas
   for v0; formulas with `_xlfn.` prefix for v1 where scorer recalcs.
