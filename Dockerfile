@@ -1,11 +1,26 @@
-# Placeholder — replaced at venue from reference Dockerfile.
-# Contract: judges run `docker build -t tieout .` then
-# `docker run --rm -e <KEYS> -v <dataset>:/data:ro -v <empty>:/out tieout`
-# Pipeline reads /data (dataset.json + init workbooks + prompt.txt), writes to /out:
-# predictions.jsonl, outputs/<id>.xlsx, traces/<id>.jsonl, run.log
-# Model-written code executes INSIDE this container only.
+# Ship container — research track. Judges run:
+#   docker build -t tieout .
+#   docker run --rm -e <KEYS via env> -v <dataset>:/data:ro -v <empty>:/out tieout
+# Contract: /out gets predictions.jsonl, outputs/<id>.xlsx, traces/<id>.jsonl, run.log.
+# Missing file or line = 0. Default --path hybrid = ship config (cell values /
+# sheet codegen, recalc-gate fallback to values when soffice present).
 FROM python:3.11-slim
+
+# libreoffice-calc: recalc-as-gate (fatal formula errors → values-first fallback)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        libreoffice-calc \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip install --no-cache-dir \
+        "openpyxl>=3.1" \
+        "tinker>=0.27.1" \
+        "tinker-cookbook>=0.5.7"
+
 WORKDIR /app
-COPY research/pyproject.toml research/uv.lock ./
-# VENUE: install deps + libreoffice-calc for recalc scoring, copy harness/, set ENTRYPOINT
-# ENTRYPOINT ["python", "harness/pipeline.py", "--dataset-dir", "/data", "--out-dir", "/out"]
+COPY harness/ ./harness/
+COPY research/sb.py ./research/sb.py
+COPY skills/ ./skills/
+
+ENV PYTHONUNBUFFERED=1
+ENTRYPOINT ["python", "harness/pipeline.py", "--dataset-dir", "/data", "--out-dir", "/out"]
+

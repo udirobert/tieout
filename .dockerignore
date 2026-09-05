@@ -1,0 +1,7 @@
+research/
+data/
+docs/
+*.tar.gz
+.env
+__pycache__/
+.git/
