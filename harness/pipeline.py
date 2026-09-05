@@ -54,8 +54,11 @@ def write_output(task: dict, answer, out_path: Path) -> dict:
     written = {}
     for sheet, coord in graded:
         ws = wb[sheet] if sheet and sheet in wb.sheetnames else wb.active
-        if coord in cells and cells[coord] is not None:
-            v = _coerce(cells[coord], ws, coord)
+        if coord in cells:
+            v = cells[coord]
+            v = _coerce(
+                "" if v is None else v, ws, coord
+            )  # null -> empty cell (scorer: "" == empty)
             ws[coord] = v
             written[coord] = v
     wb.save(out_path)
