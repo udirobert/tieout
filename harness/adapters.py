@@ -1,25 +1,25 @@
 """tieout adapters — pluggable complete(prompt) -> (text, in_tokens, out_tokens).
 
-gemini is PRIMARY (free AI Studio key, strongest baseline). tinker serves the
-fine-tuned checkpoint. No OpenRouter (unfunded). Temperature 0 everywhere.
+tinker is PRIMARY (Qwen3.8-27B sampling + fine-tune). gemini is a spare teacher
+(Gemini 3.7 Flash baseline 68.3%). No OpenRouter (unfunded). Temperature 0.
 """
 
 import asyncio
 import os
 
 
-def make_completer(spec: str):
+def make_completer(spec: str, temperature: float = 0.0):
     """spec: 'gemini:<model>' (e.g. gemini:gemini-3.7-flash) or 'tinker:<base>|<model_path>'."""
     if spec.startswith("gemini:"):
-        return _gemini(spec.split(":", 1)[1])
+        return _gemini(spec.split(":", 1)[1], temperature)
     if spec.startswith("tinker:"):
         rest = spec.split(":", 1)[1]
         base, _, path = rest.partition("|")
-        return _tinker(base, path or None)
+        return _tinker(base, path or None, temperature)
     raise ValueError(f"unknown adapter spec: {spec}")
 
 
-def _gemini(model: str):
+def _gemini(model: str, temperature: float = 0.0):
     from google import genai
 
     client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
@@ -28,7 +28,11 @@ def _gemini(model: str):
         r = client.models.generate_content(
             model=model,
             contents=prompt,
-            config={"systemInstruction": system, "temperature": 0},
+            config={
+                "systemInstruction": system,
+                "temperature": temperature,
+                "maxOutputTokens": 16384,
+            },
         )
         in_tok = out_tok = None
         if r.usage_metadata:
@@ -37,15 +41,14 @@ def _gemini(model: str):
         return r.text or "", in_tok, out_tok
 
     async def complete(prompt: str, system: str = ""):
-        return await asyncio.get_event_loop().run_in_executor(
-            None, complete_sync, prompt, system
-        )
+        return await asyncio.to_thread(complete_sync, prompt, system)
 
     complete.model_name = f"gemini:{model}"
+    complete.temperature = temperature
     return complete
 
 
-def _tinker(base_model: str, model_path: str | None):
+def _tinker(base_model: str, model_path: str | None, temperature: float = 0.0):
     """Proven pattern: model's own chat template -> ModelInput -> sample -> decode.
 
     project_id selects the Tinker org project (TINKER_PROJECT_ID env). Thinking
@@ -91,10 +94,13 @@ def _tinker(base_model: str, model_path: str | None):
             num_samples=1,
             # Qwen docs: recommend 16k output headroom for complex tasks to avoid
             # silent truncation of long JSON answers.
-            sampling_params=types.SamplingParams(max_tokens=16384, temperature=0),
+            sampling_params=types.SamplingParams(
+                max_tokens=16384, temperature=temperature
+            ),
         )
         seq = resp.sequences[0]
         return tokenizer.decode(seq.tokens), in_tok, len(seq.tokens)
 
     complete.model_name = model_path or base_model
+    complete.temperature = temperature
     return complete

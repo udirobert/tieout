@@ -29,3 +29,5 @@ results.json
 .DS_Store
 .vscode/
 .idea/
+research/data/sft/trajectories.jsonl
+research/data/sft/tmp_outputs/
