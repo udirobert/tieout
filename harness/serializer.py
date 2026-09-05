@@ -54,18 +54,17 @@ def _fill_lines(path: str, max_rows=120, max_cols=30) -> str:
 
 
 def _answer_range_excerpt(task: dict) -> str:
-    """Pinned graded cells — always appended, never subject to the 20k body cut."""
+    """Pin graded coordinates only — never init values (C: models echoed placeholders)."""
     wb = openpyxl.load_workbook(task["init_xlsx"], data_only=True)
     lines = []
     pairs = list(answer_cells(task, wb))
     for sheet, coord in pairs[:PIN_LIMIT]:
         ws = wb[sheet] if sheet and sheet in wb.sheetnames else wb.active
-        v = ws[coord].value
-        lines.append(f"{ws.title}!{coord}={'' if v is None else v}")
-    header = f"### Answer range (pinned, {len(pairs)} cells"
+        lines.append(f"{ws.title}!{coord}")
+    header = f"### Answer range (pinned addresses only, {len(pairs)} cells"
     if len(pairs) > PIN_LIMIT:
         header += f", showing first {PIN_LIMIT}"
-    header += ")"
+    header += "; init values omitted)"
     return header + "\n" + "\n".join(lines) if lines else header
 
 

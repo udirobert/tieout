@@ -13,5 +13,6 @@ Pipeline default is now `--path hybrid` (no cross-path fallback). Never-blank ke
 - hybrid stitch: **54.75%** / cell 48% / sheet 69.6%
 
 ## A status
-Standby for C's recalc-gate spec. No new harness work. No new Tinker jobs
-(B owns the quota for the checkpoint). If the checkpoint regresses, fix is data-side.
+C spec landed (task_0015): pin addresses only; sheet hybrid falls back to
+values-first only when soffice reports `#ERR!` (silent skip on this Mac).
+No new Tinker run — B owns the quota. Standby otherwise.

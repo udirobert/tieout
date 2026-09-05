@@ -43,7 +43,12 @@ from prompts import (  # noqa: E402
 )
 from serializer import serialize_task_workbook  # noqa: E402
 from tracer import append_trace  # noqa: E402
-from verifier import MAX_ATTEMPTS, postcheck_soffice, sanity_check  # noqa: E402
+from verifier import (  # noqa: E402
+    MAX_ATTEMPTS,
+    is_formula_error_reason,
+    postcheck_soffice,
+    sanity_check,
+)
 
 _ISO_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}([ T]\d{2}:\d{2}(:\d{2})?)?$")
 DEFAULT_MODEL = "tinker:Qwen/Qwen3.8-27B"
@@ -245,6 +250,11 @@ async def run_codegen_loop(ctx: dict, attempts: int) -> str:
                     append_trace(out_dir, task["id"], trace)
                     return "ok"
                 status = f"partial: {reason}"
+                # Recalc-as-gate: #ERR! → stop codegen retries; caller may values-fallback.
+                if is_formula_error_reason(reason):
+                    trace["latency_ms"] = int((time.time() - started) * 1000)
+                    append_trace(out_dir, task["id"], trace)
+                    return f"{status} (codegen, {last_reason})"[:200]
         except Exception as e:  # noqa: BLE001 — best guess, never blank
             status = f"error: {type(e).__name__}: {e}"[:200]
             trace["error"] = status
@@ -285,8 +295,21 @@ async def predict_task(
         kind = classify(task)
         if path == "values" or (path == "hybrid" and kind != "sheet-level"):
             status = await run_values_loop(ctx, MAX_ATTEMPTS)
-        elif path == "codegen" or (path == "hybrid" and kind == "sheet-level"):
+        elif path == "codegen":
             status = await run_codegen_loop(ctx, MAX_ATTEMPTS)
+        elif path == "hybrid" and kind == "sheet-level":
+            # C recalc-as-gate: codegen first; #ERR! after soffice → values-first.
+            # No soffice → sanity only (Mac). Never-blank still copies init.
+            status = await run_codegen_loop(ctx, MAX_ATTEMPTS)
+            if status != "ok" and is_formula_error_reason(status):
+                if out.exists():
+                    out.unlink()
+                fallback = await run_values_loop(ctx, MAX_ATTEMPTS)
+                status = (
+                    fallback
+                    if fallback == "ok"
+                    else f"{status}; values-fallback: {fallback}"[:200]
+                )
         else:
             # auto: hybrid + one-shot cross-path fallback (hurt cell-level on the 400)
             if kind == "sheet-level":

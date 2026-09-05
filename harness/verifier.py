@@ -14,7 +14,7 @@ from pathlib import Path
 MAX_ATTEMPTS = 3
 
 _XL_ERR = re.compile(
-    r"^#(NAME\?|REF!|VALUE!|DIV/0!|N/A|NULL!|NUM!|GETTING_DATA!)", re.I
+    r"^#(NAME\?|REF!|VALUE!|DIV/0!|N/A|NULL!|NUM!|GETTING_DATA!|ERR!)", re.I
 )
 
 
@@ -35,6 +35,12 @@ def sanity_check(
 
 def excel_error_cells(cells: dict[str, object]) -> list[str]:
     return [c for c, v in cells.items() if isinstance(v, str) and _XL_ERR.match(v)]
+
+
+def is_formula_error_reason(reason: str) -> bool:
+    """True when codegen output failed the recalc-as-gate (C spec)."""
+    r = (reason or "").lower()
+    return "recalc errors" in r or "excel errors" in r
 
 
 def postcheck_soffice(task: dict, out_path: Path) -> tuple[bool, str]:
