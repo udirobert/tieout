@@ -31,15 +31,15 @@ from sb import answer_cells, load_dataset  # noqa: E402
 
 from adapters import make_completer  # noqa: E402
 from executor import run_snippet  # noqa: E402
-from parsing import cell_ref, parse_answer, parse_code  # noqa: E402
+from parsing import cell_ref, normalize_cell_value, parse_answer, parse_code  # noqa: E402
 from prompts import (  # noqa: E402
-    CODEGEN_SYSTEM,
     SYSTEM_VALUES,
     build_codegen_prompt,
     build_codegen_repair_prompt,
     build_repair_prompt,
     build_values_prompt,
     classify,
+    codegen_system,
 )
 from serializer import serialize_task_workbook  # noqa: E402
 from tracer import append_trace  # noqa: E402
@@ -50,15 +50,17 @@ DEFAULT_MODEL = "tinker:Qwen/Qwen3.8-27B"
 
 
 def _coerce(value, target_ws, coord):
-    """ISO strings -> real datetimes when the target cell shows a date format (scorer wants serials)."""
-    if isinstance(value, str) and _ISO_DATE.match(value):
+    """Dates to serials; numeric strings to numbers; strip text. Scorer: 2dp / ''==empty."""
+    if value is None:
+        return ""
+    if isinstance(value, str) and _ISO_DATE.match(value.strip()):
         numfmt = target_ws[coord].number_format or ""
         if any(tok in numfmt for tok in ("yy", "dd", "d/", "mm", "h:")) or "T" in value:
             try:
-                return datetime.datetime.fromisoformat(value.replace(" ", "T"))
+                return datetime.datetime.fromisoformat(value.strip().replace(" ", "T"))
             except ValueError:
                 pass
-    return value
+    return normalize_cell_value(value)
 
 
 def _set_cell(ws, coord, value) -> None:
@@ -212,7 +214,7 @@ async def run_codegen_loop(ctx: dict, attempts: int) -> str:
         trace = _new_trace(complete, ctx["step"], prompt)
         started = time.time()
         try:
-            text, in_tok, out_tok = await complete(prompt, CODEGEN_SYSTEM)
+            text, in_tok, out_tok = await complete(prompt, codegen_system(task))
             trace.update(response=text, input_tokens=in_tok, output_tokens=out_tok)
             code = parse_code(text)
             result = await asyncio.to_thread(

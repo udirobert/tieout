@@ -1,4 +1,4 @@
-"""tieout parsing — lenient answer parser (the biggest free win, per docs/PATTERNS.md).
+"""tieout parsing — lenient answer + codegen parsers.
 
 Handles: <think> blocks, code fences, prose around JSON, concatenated JSON objects,
 bare {"cell","value"} dicts without the "cells" wrapper, sheet-qualified refs (Sheet1!B6).
@@ -13,21 +13,79 @@ from pydantic import BaseModel, Field
 class CellValue(BaseModel):
     cell: str
     value: str | int | float | bool | None = None
+    sheet: str | None = None
 
 
 class Answer(BaseModel):
     cells: list[CellValue] = Field(default_factory=list)
 
 
+def cell_ref(sheet: str | None, coord: str) -> str:
+    """Stable graded-cell key: 'Sheet1!B6' when a sheet is known, else 'B6'."""
+    sheet = (sheet or "").strip()
+    return f"{sheet}!{coord}" if sheet else coord
+
+
 def _first_json(text: str):
-    """First JSON object via raw_decode; fall back to braces span on decode error."""
-    start = text.find("{")
-    if start < 0:
-        raise ValueError(f"no JSON object in reply: {text[:120]!r}")
+    """First JSON object or array via raw_decode; fall back to span on decode error."""
+    start_brace = text.find("{")
+    start_bracket = text.find("[")
+    starts = [i for i in (start_brace, start_bracket) if i >= 0]
+    if not starts:
+        raise ValueError(f"no JSON object or array in reply: {text[:120]!r}")
+    start = min(starts)
     try:
         return json.JSONDecoder().raw_decode(text[start:])[0]
     except json.JSONDecodeError:
-        return json.loads(text[start : text.rfind("}") + 1])
+        end_char = "}" if text[start] == "{" else "]"
+        end = text.rfind(end_char)
+        if end >= start:
+            return json.loads(text[start : end + 1])
+        raise
+
+
+def normalize_cell_value(value):
+    """Write-path scalar: strip text; numeric strings become int/float.
+
+    Scorer requires type match after its own 2dp round — a numeric string
+    never equals a number. Leading-zero tokens like '001' stay strings.
+    """
+    if value is None:
+        return ""
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, int):
+        return value
+    if isinstance(value, float):
+        return int(value) if value.is_integer() else value
+    if not isinstance(value, str):
+        return value
+    s = value.strip()
+    if s == "":
+        return ""
+    try:
+        n = float(s)
+    except ValueError:
+        return s
+    body = s[1:] if s[0] in "+-" and len(s) > 1 else s
+    if body.startswith("0") and body not in ("0",) and not body.startswith("0."):
+        return s
+    if n.is_integer() and "e" not in s.lower() and "." not in s:
+        return int(n)
+    return n
+
+
+def _normalize_cell(c: CellValue) -> None:
+    raw = (c.cell or "").strip()
+    if "!" in raw:
+        sheet_part, coord = raw.rsplit("!", 1)
+        if not c.sheet:
+            c.sheet = sheet_part.replace("'", "").replace('"', "").strip() or None
+        raw = coord
+    c.cell = raw.replace("$", "").strip().upper()
+    if c.sheet:
+        c.sheet = c.sheet.replace("'", "").replace('"', "").strip() or None
+    c.value = normalize_cell_value(c.value)
 
 
 def parse_answer(text: str) -> Answer:
@@ -39,6 +97,17 @@ def parse_answer(text: str) -> Answer:
     elif isinstance(obj, dict) and "cells" not in obj and "cell" in obj:
         obj = {"cells": [obj]}
     ans = Answer.model_validate(obj)
-    for c in ans.cells:  # Sheet1!B6 -> B6; $B$6 -> B6
-        c.cell = c.cell.split("!")[-1].replace("$", "").strip().upper()
+    for c in ans.cells:
+        _normalize_cell(c)
     return ans
+
+
+def parse_code(text: str) -> str:
+    """Extract a Python script from a model reply (fenced or bare)."""
+    text = re.sub(r"<think>.*?</think>", "", text, flags=re.S).strip()
+    m = re.search(r"```(?:python)?\s*\n(.*?)```", text, re.S)
+    if m:
+        return m.group(1).strip()
+    text = re.sub(r"^```(?:python)?\s*\n", "", text)
+    text = re.sub(r"\n```\s*$", "", text)
+    return text.strip()

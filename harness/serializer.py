@@ -1,8 +1,9 @@
-"""tieout serializer — upstream serialization + fill-aware enrichment.
+"""tieout serializer — upstream serialization + fill-aware + pinned answer range.
 
 Formatting-gated tasks (docs/TAXONOMY.md #4) need cell.fill: plain serialization
 drops it. When the instruction mentions highlighting/color, append the highlighted
-cells per sheet. Values capped at MAX_WORKBOOK_CHARS with an explicit truncation note.
+cells per sheet. The 120x30 / 20k preview can hide the answer range — we always
+append a pinned excerpt of graded cells so truncation never drops them.
 """
 
 import re
@@ -11,16 +12,16 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "research"))
 
-from sb import serialize_workbook  # noqa: E402
+import openpyxl  # noqa: E402
+from sb import answer_cells, serialize_workbook  # noqa: E402
 
 MAX_WORKBOOK_CHARS = 20000
+PIN_LIMIT = 200
 
 _FILL_TRIGGER = re.compile(r"yellow|highlight|shad|fill colou?r|colou?r.*fill", re.I)
 
 
 def _fill_lines(path: str, max_rows=120, max_cols=30) -> str:
-    import openpyxl
-
     wb = openpyxl.load_workbook(path)
     out = []
     for ws in wb.worksheets:
@@ -41,14 +42,31 @@ def _fill_lines(path: str, max_rows=120, max_cols=30) -> str:
                     or fg.theme not in (None, 0)
                     or fg.indexed not in (None, 64)
                 ):
-                    hits.append(
-                        f"{cell.coordinate}={getattr(fg, 'rgb', None) or f'theme{fg.theme}' or fg.indexed}"
+                    shown = getattr(fg, "rgb", None) or (
+                        f"theme{fg.theme}" if fg.theme not in (None, 0) else fg.indexed
                     )
+                    hits.append(f"{cell.coordinate}={shown}")
         if hits:
             out.append(
                 f"### Sheet: {ws.title} highlighted cells: {', '.join(hits[:200])}"
             )
     return "\n".join(out)
+
+
+def _answer_range_excerpt(task: dict) -> str:
+    """Pinned graded cells — always appended, never subject to the 20k body cut."""
+    wb = openpyxl.load_workbook(task["init_xlsx"], data_only=True)
+    lines = []
+    pairs = list(answer_cells(task, wb))
+    for sheet, coord in pairs[:PIN_LIMIT]:
+        ws = wb[sheet] if sheet and sheet in wb.sheetnames else wb.active
+        v = ws[coord].value
+        lines.append(f"{ws.title}!{coord}={'' if v is None else v}")
+    header = f"### Answer range (pinned, {len(pairs)} cells"
+    if len(pairs) > PIN_LIMIT:
+        header += f", showing first {PIN_LIMIT}"
+    header += ")"
+    return header + "\n" + "\n".join(lines) if lines else header
 
 
 def serialize_task_workbook(task: dict) -> str:
@@ -57,10 +75,14 @@ def serialize_task_workbook(task: dict) -> str:
         extra = _fill_lines(task["init_xlsx"])
         if extra:
             text += "\n\n" + extra
-    if len(text) > MAX_WORKBOOK_CHARS:
-        text = (
-            text[:MAX_WORKBOOK_CHARS]
-            + "\n\n[TRUNCATED — workbook larger than 20k chars; "
+    pinned = _answer_range_excerpt(task)
+    note = ""
+    overhead = len(pinned) + 120
+    if len(text) + overhead > MAX_WORKBOOK_CHARS:
+        keep = max(MAX_WORKBOOK_CHARS - overhead, 0)
+        text = text[:keep]
+        note = (
+            "\n\n[TRUNCATED — workbook larger than 20k chars; "
+            "answer range cells appended below]\n"
         )
-        "big data regions summarized above; answer range cells included where visible]"
-    return text
+    return text + note + "\n\n" + pinned

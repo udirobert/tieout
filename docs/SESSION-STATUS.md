@@ -1,50 +1,30 @@
-# Session status / handoff (updated 2026-09-05, post-smoke + full-run launch)
+# Session status / handoff (updated 2026-09-05, A in charge)
 
-Fresh-context handoff. Read `research/methodology-notes.md` first — it is the source of
-truth for methodology decisions. Then this file for state.
+Fresh-context handoff. Read `research/methodology-notes.md` first, then
+`docs/TEAM-BRIEF.md` (board + roles), then this file for state.
 
 ## Goal
-Beat 59.0% baseline on SpreadsheetBench Verified 400 with Qwen3.8-27B via Tinker, guided
-by published methodology (no trial-and-error).
+Beat 59.0% baseline on SpreadsheetBench Verified 400 with Qwen3.8-27B via Tinker.
 
 ## State
-- **adapters.py** (`harness/adapters.py`): `enable_thinking=False` on the model's own HF
-  chat template (confirmed correct vs Tinker's `qwen3_5_disable_thinking` renderer —
-  same empty-`<think></think>` prompt), `max_tokens=16384`, temp 0. Committed.
-- **SMOKE PASSED (2026-09-05)**: `13-1`, `51-12` via Tinker Qwen3.8-27B — no `<think>`
-  leak, replies end at `<|im_end|>` (no truncation), clean JSON, both `ok` in 1 attempt.
-  Traces in `/tmp/tinker-smoke`.
-- **FULL 400-TASK RUN RUNNING**: screen `ts400`, log `/tmp/tinker-400.log`,
-  out `/tmp/tinker-400` (Qwen3.8-27B, concurrency 8, ~55s/task wall).
-  Next: score with `uv run evaluate.py --predictions /tmp/tinker-400/predictions.jsonl`
-  (VM if recalc needed; `--no-recalc` locally for values-first v0).
-- **Attribution-guided repair LANDED (harness/pipeline.py + prompts.py)**: attempt 1 uses
-  `build_values_prompt`; on sanity/parse/write failure, attempts 2–3 send
-  `build_repair_prompt` (rejected reply + failure reason + graded cells, smallest-edit
-  instruction). Blind identical-prompt resample is gone. Validated by fake-completer
-  failure-injection (bad answer → repair prompt → ok, 2 attempts). Committed.
-- **research/search.py**: Parallel Search API helper (`PARALLEL_API_KEY` in gitignored
-  `.env`; key redacted never commit). Uses curl (python.org 3.14 lacks SSL certs).
-  `python3 research/search.py --objective "..." -q "..."` → excerpts for the notes.
-- **methodology-notes.md §6** has the 2026-09-05 Parallel search sweep: verified SOTA on
-  our track is 59.25% (Shortcut); paper ablation shows execution feedback ≈2.5x;
-  Tinker Qwen3.8-27B = Hybrid+Vision 64K, current (not retired).
+- **A owns `harness/*.py` exclusively.** Codegen loop + write-path fixes + soffice
+  post-check + `--path` / `--temperature` are in. task_0001 and task_0009 done.
+- **`ts400` finished** on this Mac (`/tmp/tinker-400`): 400 lines, pass_rate
+  **0.4675**, cell 0.48 / sheet 0.44, 373 harness-ok / 14 partial / 13 error.
+  That is the no-repair values-first number (old code). Below the 59.0% published
+  one-shot floor — C should confirm recalc vs `--no-recalc`.
+- **A smoke (task_0007) in progress** — both paths on `13-1` + `51-12` via Gemini
+  on `tieout-builder` (dataset lives there).
+- **MergedCell write crash fixed** (task_0010).
+- **C hook**: `skills/library.py` `fragment_for` is wired; stub returns "".
+- **`.env`**: GEMINI_API_KEY had a missing newline. Fixed locally, not committed.
 
-## Next steps (in order)
-1. ~~Rerun Tinker smoke~~ DONE 2026-09-05 — clean (see State).
-2. ~~Full 400-task research-track run~~ RUNNING — screen `ts400`, `/tmp/tinker-400.log`;
-   when done: `uv run evaluate.py --predictions /tmp/tinker-400/predictions.jsonl`.
-   Note: this run predates the repair loop (it loaded the old code at start) — it is the
-   no-repair baseline; a second full run with repair can follow if it beats 59.0% or if
-   retries are material in traces.
-3. ~~Attribution-guided repair in pipeline.py~~ DONE + committed (93d109c).
-4. ~~Ask Adib~~ ANSWERED: "use any approach you like" — Qwen-only lifted; LibreOffice
-   recalc + teacher models + extra capacity all legal. Team split: `docs/TEAM-BRIEF.md`
-   (A harness/codegen, B expert-iteration training, C measurement/skills/write-up).
-5. Later: per-category skill/prompt-fragment library (retrieval-instructed beats direct).
+## Next (A)
+1. Write-path + skills committed (task_0011/0012). Re-run 20-id gate, then `/tmp/tinker-400-codegen`.
+2. 13-1 Qwen vs Gemini gap stays in the ablation table — B's fine-tune, not a harness patch.
+3. B: Modal / acct #2 `--temperature 0.7`. A uses Tinker #1 at concurrency 4 for the 400.
 
 ## Process rules
-- Before any harness change: check methodology-notes.md + source papers.
-- Model calls only to *measure* against published hypotheses.
-- Venue-first constraints still apply (`docs/CONSTRAINTS.md`): no dataset download,
-  no LibreOffice, no docker build on this Mac.
+- Before any harness change: methodology-notes.md + source papers.
+- Model calls only to measure a published hypothesis.
+- No dataset download / LibreOffice / docker build on this Mac.

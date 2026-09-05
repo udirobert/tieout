@@ -8,37 +8,74 @@
 
 ## What we built and why
 
-TODO (150–300 words at venue): problem picked, what built, why that route, what worked / did not.
-Be exact: model, prompt strategy, training data, tools the agent had.
+SpreadsheetBench Verified grades only answer cells after recalc; one wrong cell fails
+the task. We built an execution-feedback harness around Tinker Qwen3.8-27B (thinking
+off, 16k output tokens, temperature 0) rather than a larger one-shot prompt.
+
+Cell-level tasks (275) stay values-first: serialize the workbook (fill-aware, answer
+range pinned under the 20k cap), ask for JSON cell values, write with openpyxl, sanity
+check, then attribution-guided repair (rejected reply + failure reason, smallest edit).
+Sheet-level tasks (125) go code-first: the model writes openpyxl Python, which runs in
+a temp-dir sandbox that never sees golden files, then we read back graded cells and
+repair on exec/stderr. Each path falls back to the other; we never ship a missing
+file (init workbook is the last-resort copy). When LibreOffice is present we recalc
+and reject `#ERR!` values; on the space-constrained Mac that check is skipped.
+
+We did not put the 400 goldens in any training set. Fine-tune (if shipped) will be
+expert-iteration on verifier-passing trajectories only — details in Models once a
+checkpoint exists. Docker image still to freeze.
 
 ## Models
 
-TODO: exact model ids, or `tinker://<run-id>/sampler_weights/final` + base model with TTL cleared.
-If fine-tuned: training data + how built, whether 400 goldens were in it, steps, LR, compute, wall time.
+- Inference: `Qwen/Qwen3.8-27B` via Tinker (`TINKER_API_KEY`). Optional spare:
+  Gemini 3.7 Flash (`GEMINI_API_KEY`). No OpenRouter.
+- Fine-tune: none yet. If added: `tinker://<run-id>/sampler_weights/final` + base
+  model, training mix, whether goldens were in it, steps/LR/compute/wall time.
 
 ## Scores on the 400
 
 ```sh
-uv run evaluate.py --predictions <your predictions.jsonl> --all --out results.json
+uv run evaluate.py --predictions /tmp/tinker-400/predictions.jsonl --all --no-recalc --out results.json
 ```
 
 ```json
-{"items": 400, "graded": 0, "missing": 0, "errors": 0, "pass_rate": 0, "cell_accuracy": 0, "pass_rate_cell_level": 0, "pass_rate_sheet_level": 0}
+{
+  "items": 400,
+  "graded": 400,
+  "missing": 0,
+  "errors": 0,
+  "pass_rate": 0.4675,
+  "cell_accuracy": 0.3728,
+  "pass_rate_cell_level": 0.48,
+  "pass_rate_sheet_level": 0.44
+}
 ```
+
+### Ablation Progression
+
+| Configuration | Pass Rate (Overall) | Cell Accuracy | Cell-Level Pass | Sheet-Level Pass | Notes |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Qwen3.8-27B Baseline (Values-first, no repair)** | **46.75%** (187/400) | 37.28% | 48.00% (132/275) | 44.00% (55/125) | /tmp/tinker-400, temp 0, 16k max_tokens |
+| *+ Attribution-guided Repair (v1)* | *pending eval* | | | | committed in 93d109c |
+| *+ Category Skills Library* | *pending eval* | | | | harness/skills.py → codegen system prompt |
+| *+ Codegen Execution Loop (Role A)* | **55% on 20 sheet-fails** (11/20), cell-acc 0.9911 vs 0/20 on same ids | 0.9911 (subset) | — | 0.55 (subset) | /tmp/sheet20-codegen. **13-1 model gap** (Qwen 31/120, Gemini 120/120) — B fine-tune, not a harness patch. Headline 400: /tmp/tinker-400-codegen (running/queued). |
+| *+ Expert Iteration Fine-Tune (Role B)* | *pending eval* | | | | Tinker LoRA checkpoint |
 
 ## Your run on the 400
 
-- `predictions.jsonl`: path
-- `outputs/`: path
-- `traces/`: path
-- `run.log`: path
+- `predictions.jsonl`: `/tmp/tinker-400/predictions.jsonl`
+- `outputs/`: `/tmp/tinker-400/outputs/`
+- `traces/`: `/tmp/tinker-400/traces/`
+- `run.log`: `/tmp/tinker-400/run.log`
 
 ## Code
 
-Pipeline in `harness/`, runs in Docker reading `/data` writing `/out`. Env vars needed: TODO.
+Pipeline in `harness/`, runs in Docker reading `/data` writing `/out`. Env vars:
+`TINKER_API_KEY` (required), `GEMINI_API_KEY` (optional spare), `TINKER_PROJECT_ID`
+(optional), `SOFFICE` (optional path to LibreOffice).
 
 ## Things to look at
 
+- docs/TEAM-BRIEF.md — current roles
 - docs/CONSTRAINTS.md — space + credits + scoring params
 - docs/SETUP.md — venue setup order
-- docs/PLAN.md — team split

@@ -2,11 +2,10 @@
 
 Sheet-level (and cell-level after values-first exhaustion) use CODEGEN_SYSTEM.
 Values-first stays the always-works fallback. Thinking stays off (adapters).
-Optional skill fragments: C owns repo-root `skills/library.py` (`fragment_for`).
+Skill fragments: C owns harness/skills.py; A injects them into the codegen system prompt.
 """
 
-import sys
-from pathlib import Path
+from skills import get_skill_fragment
 
 SYSTEM_VALUES = (
     "You are a spreadsheet expert. You get a serialized workbook and a user instruction. "
@@ -40,6 +39,8 @@ CODEGEN_SYSTEM = (
     "write the graded answer cells, save to OUT_XLSX. "
     'Print exactly one line: SUMMARY_JSON={"status": "ok|error", "notes": "..."}. '
     "Never fabricate numbers — compute them from the workbook. "
+    "Write numeric results as int/float (not numeric strings). "
+    "Strip leading/trailing whitespace on text cells. "
     "Allowed imports: openpyxl, datetime, math, json, re, statistics, collections, "
     "itertools, copy, decimal."
 )
@@ -51,19 +52,18 @@ CODEGEN_FORMAT = (
 
 
 def _skill_fragment(task: dict) -> str:
-    """C-owned hook. Empty until skills/library.py exists. Never import harness/."""
-    root = Path(__file__).resolve().parent.parent / "skills"
-    if str(root) not in sys.path:
-        sys.path.insert(0, str(root))
+    """C-owned fragments from harness/skills.py (lookup / agg / sheet-reorg / date)."""
     try:
-        from library import fragment_for  # type: ignore
-    except ImportError:
-        return ""
-    try:
-        text = (fragment_for(task) or "").strip()
+        text = (get_skill_fragment(task.get("instruction") or "") or "").strip()
     except Exception:
         return ""
     return f"\n\n## Skill\n{text}\n" if text else ""
+
+
+def codegen_system(task: dict) -> str:
+    """CODEGEN_SYSTEM plus category skill(s) for this instruction. Generic only."""
+    frag = _skill_fragment(task)
+    return CODEGEN_SYSTEM + frag if frag else CODEGEN_SYSTEM
 
 
 def classify(task: dict) -> str:
