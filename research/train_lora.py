@@ -1,18 +1,19 @@
 """Tinker LoRA SFT for tieout (Role B).
 
-Trains Qwen/Qwen3.8-27B on the SFT set produced by sample_data.py.
-Expected to run after `research/data/sft/sft_train.jsonl` exists.
+Trains Qwen/Qwen3.8-27B on the SFT set produced by sample_data.py / build_sft_v2.py.
+Expected to run after `research/data/sft/sft_train*.jsonl` exists.
 
 Usage (from research/):
     .venv/bin/python train_lora.py \
-        --sft data/sft/sft_train.jsonl \
-        --log data/sft/log \
+        --sft data/sft/sft_train_v2.jsonl \
+        --log data/sft/log_v2 \
         --model Qwen/Qwen3.8-27B \
         --lora-rank 32 \
         --batch-size 1 \
         --max-length 32768 \
-        --max-steps 300 \
-        --lr 1e-4
+        --epochs 2.0 \
+        --lr 5e-5 \
+        --save-every 25
 """
 
 import argparse
@@ -48,16 +49,17 @@ def _load_env() -> None:
 
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser()
-    p.add_argument("--sft", default="data/sft/sft_train.jsonl")
-    p.add_argument("--log", default="data/sft/log")
+    p.add_argument("--sft", default="data/sft/sft_train_v2.jsonl")
+    p.add_argument("--log", default="data/sft/log_v2")
     p.add_argument("--model", default="Qwen/Qwen3.8-27B")
     p.add_argument("--lora-rank", type=int, default=32)
     p.add_argument("--batch-size", type=int, default=1)
     p.add_argument("--max-length", type=int, default=32768)
-    p.add_argument("--lr", type=float, default=1e-4)
-    p.add_argument("--max-steps", type=int, default=300)
+    p.add_argument("--lr", type=float, default=5e-5)
+    p.add_argument("--max-steps", type=int, default=0, help="override epochs cap (0 = use epochs)")
+    p.add_argument("--epochs", type=float, default=2.0, help="training epochs if --max-steps not set")
     p.add_argument("--seed", type=int, default=0)
-    p.add_argument("--save-every", type=int, default=50)
+    p.add_argument("--save-every", type=int, default=25)
     return p.parse_args()
 
 
@@ -89,15 +91,17 @@ def main() -> None:
 
     records = load_sft_records(sft_path)
     if len(records) < 200:
-        print(f"WARNING: only {len(records)} verified trajectories; training may not help. Waiting? Exiting.")
+        print(f"WARNING: only {len(records)} verified trajectories; training may not help. Exiting.")
         raise SystemExit(1)
 
-    # Shuffle deterministically; cap to max_steps batches
+    # Shuffle deterministically; cap to max_steps or epochs
     random.seed(args.seed)
     random.shuffle(records)
-    n_batches = min(len(records), args.max_steps)
+    n_batches = int(len(records) * args.epochs)
+    if args.max_steps > 0:
+        n_batches = min(n_batches, args.max_steps)
     records = records[:n_batches]
-    print(f"Training on {n_batches} records (batch size {args.batch_size})", flush=True)
+    print(f"Training on {n_batches} records over {n_batches / len(records):.2f} epochs (batch size {args.batch_size})", flush=True)
 
     # Tinker setup
     tokenizer = get_tokenizer(args.model)
@@ -114,7 +118,7 @@ def main() -> None:
 
     service_client = tinker.ServiceClient(
         project_id=os.environ.get("TINKER_PROJECT_ID") or None,
-        user_metadata=recipe_user_metadata("tieout_sft_v1"),
+        user_metadata=recipe_user_metadata("tieout_sft_v2"),
     )
 
     training_client = service_client.create_lora_training_client(
@@ -122,30 +126,35 @@ def main() -> None:
         rank=args.lora_rank,
         seed=args.seed,
         user_metadata={
-            "recipe": "tieout_sft_v1",
+            "recipe": "tieout_sft_v2",
             "sft_file": str(sft_path),
             "n_records": str(len(records)),
         },
     )
 
-    train_on = renderers.TrainOnWhat.ALL_ASSISTANT_MESSAGES
+    train_on = renderers.TrainOnWhat.LAST_ASSISTANT_MESSAGE
     n_train_batches = n_batches // args.batch_size
+
+    checkpoints_file = log_path / "checkpoints.jsonl"
 
     for batch_idx in range(n_train_batches):
         start = batch_idx * args.batch_size
         end = start + args.batch_size
         batch_records = records[start:end]
 
-        # Save periodic checkpoint
+        # Save periodic sampler-weight checkpoint for intermediate eval
         if args.save_every > 0 and batch_idx % args.save_every == 0 and batch_idx > 0:
-            save_checkpoint(
+            ckpt = save_checkpoint(
                 training_client=training_client,
                 name=f"{batch_idx:06d}",
                 log_path=str(log_path),
-                kind="state",
+                kind="sampler",
                 loop_state={"batch": batch_idx},
                 ttl_seconds=604800,
             )
+            with checkpoints_file.open("a") as f:
+                f.write(json.dumps({"name": f"{batch_idx:06d}", "batch": batch_idx, **ckpt}, default=str) + "\n")
+            print(f"Checkpoint {batch_idx}: {ckpt}", flush=True)
 
         # Linear LR schedule
         lr_mult = max(0.0, 1.0 - batch_idx / n_train_batches)
@@ -201,6 +210,8 @@ def main() -> None:
         loop_state={"batch": n_train_batches},
         ttl_seconds=None,
     )
+    with checkpoints_file.open("a") as f:
+        f.write(json.dumps({"name": "final", "batch": n_train_batches, **final}, default=str) + "\n")
     print(f"Final checkpoint saved: {final}", flush=True)
     ml_logger.close()
 
