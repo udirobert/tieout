@@ -145,7 +145,6 @@ async def sample_task(complete, task: dict, args, sem: asyncio.Semaphore, tmp_di
         graded_refs.append(ref)
         init_values[ref] = _coerce(ws[coord].value, ws, coord)
     wb_serialized = serialize_task_workbook(task)
-    out_path = tmp_dir / f"{task['id']}.xlsx"
 
     if kind == "sheet-level":
         prompt = build_codegen_prompt(task, wb_serialized, graded_refs)
@@ -160,6 +159,7 @@ async def sample_task(complete, task: dict, args, sem: asyncio.Semaphore, tmp_di
 
     async def one_sample(idx: int) -> None:
         t0 = time.time()
+        out_path = tmp_dir / f"{task['id']}.{idx}.xlsx"
         async with sem:
             try:
                 text, in_tok, out_tok = await complete(prompt, system)
