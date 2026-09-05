@@ -52,6 +52,27 @@ from prompts import (  # noqa: E402
 from serializer import serialize_task_workbook  # noqa: E402
 
 
+class SkipTask(Exception):
+    """Raised when a task is deterministically unpassable (e.g. size gate)."""
+
+
+# Tasks known to exceed MAX_COMPLETION_LEN even after diff compression.
+KNOWN_TOO_LARGE = {"17-35", "23-24", "24-23"}
+
+
+def _load_skip(out_dir: Path) -> set[str]:
+    skip = set(KNOWN_TOO_LARGE)
+    f = out_dir / "skip_ids.txt"
+    if f.exists():
+        skip |= {l.strip() for l in f.read_text().splitlines() if l.strip()}
+    return skip
+
+
+def _record_skip(out_dir: Path, task_id: str) -> None:
+    with (out_dir / "skip_ids.txt").open("a") as f:
+        f.write(task_id + "\n")
+
+
 def _clean_answer(answer) -> str:
     """Re-serialize a parsed Answer into the parser-friendly canonical format."""
     cells = [
@@ -169,6 +190,12 @@ async def sample_task(complete, task: dict, args, sem: asyncio.Semaphore, tmp_di
                 answer_json = _values_from_written(info["written"], init_values)
                 assert len(answer_json) <= MAX_COMPLETION_LEN, f"completion too long: {len(answer_json)} chars"
                 key = _dedupe_key(answer)
+        except SkipTask:
+            raise
+        except AssertionError as e:
+            # Size gate is deterministic: if one sample is too large, all will be.
+            print(f"  {task['id']}: size gate -> skipping task ({e})"[:160], flush=True)
+            raise SkipTask(str(e)) from e
         except Exception as e:  # noqa: BLE001
             print(f"  {task['id']} sample {idx}: {type(e).__name__}: {e}"[:160], flush=True)
             return
@@ -188,7 +215,9 @@ async def sample_task(complete, task: dict, args, sem: asyncio.Semaphore, tmp_di
             "out_tokens": out_tok,
         })
 
-    await asyncio.gather(*(one_sample(i) for i in range(args.n)))
+    results = await asyncio.gather(*(one_sample(i) for i in range(args.n)), return_exceptions=True)
+    if any(isinstance(r, SkipTask) for r in results):
+        _record_skip(tmp_dir.parent, task["id"])
     print(f"{task['id']:<8} {kind:<11} kept {len(kept)}/{args.n}  tok {tok[0]}/{tok[1]}", flush=True)
     return kept[: args.max_per_task]
 
@@ -264,8 +293,12 @@ async def main() -> None:
     if args.limit:
         tasks = tasks[: args.limit]
     done = _already(out_dir / "trajectories.jsonl")
+    skip = _load_skip(out_dir)
     before = len(tasks)
-    tasks = [t for t in tasks if t["id"] not in done]
+    tasks = [t for t in tasks if t["id"] not in done and t["id"] not in skip]
+    import random
+
+    random.Random(42).shuffle(tasks)  # fixed seed: interleave cell/sheet kinds
     print(f"sampling {len(tasks)}/{before} tasks  n={args.n}  temp={os.environ['TINKER_TEMPERATURE']}  skip {before - len(tasks)}", flush=True)
 
     complete = make_completer(args.model, temperature=0.7)
