@@ -12,6 +12,7 @@ import argparse
 import asyncio
 import datetime
 import json
+import os
 import re
 import shutil
 import sys
@@ -116,10 +117,13 @@ async def predict_task(
 
 async def main() -> None:
     args = parse_args()
-    from common import load_env  # research/baseline/.env loader, reused
+    env_path = ROOT / "research" / ".env"
+    for line in env_path.read_text().splitlines() if env_path.exists() else []:
+        line = line.strip()
+        if line and not line.startswith("#") and "=" in line:
+            k, v = line.split("=", 1)
+            os.environ.setdefault(k.strip(), v.strip().strip('"').strip("'"))
 
-    sys.path.insert(0, str(ROOT / "research" / "baseline"))
-    load_env(Path(ROOT / "research" / ".env"))
     out_dir = Path(args.out_dir)
     for sub in ("outputs", "traces"):
         (out_dir / sub).mkdir(parents=True, exist_ok=True)
