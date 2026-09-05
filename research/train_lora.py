@@ -94,14 +94,21 @@ def main() -> None:
         print(f"WARNING: only {len(records)} verified trajectories; training may not help. Exiting.")
         raise SystemExit(1)
 
-    # Shuffle deterministically; cap to max_steps or epochs
+    # Shuffle deterministically; tile to cover the requested number of epochs/steps
     random.seed(args.seed)
     random.shuffle(records)
-    n_batches = int(len(records) * args.epochs)
+    dataset_len = len(records)
+    n_batches = int(dataset_len * args.epochs)
     if args.max_steps > 0:
         n_batches = min(n_batches, args.max_steps)
-    records = records[:n_batches]
-    print(f"Training on {n_batches} records over {n_batches / len(records):.2f} epochs (batch size {args.batch_size})", flush=True)
+    if n_batches > dataset_len:
+        repeats = (n_batches // dataset_len) + 1
+        records = (records * repeats)[:n_batches]
+        random.seed(args.seed + 1)
+        random.shuffle(records)
+    else:
+        records = records[:n_batches]
+    print(f"Training on {n_batches} records ({n_batches / dataset_len:.2f} epochs, batch size {args.batch_size})", flush=True)
 
     # Tinker setup
     tokenizer = get_tokenizer(args.model)
@@ -135,8 +142,6 @@ def main() -> None:
     train_on = renderers.TrainOnWhat.LAST_ASSISTANT_MESSAGE
     n_train_batches = n_batches // args.batch_size
 
-    checkpoints_file = log_path / "checkpoints.jsonl"
-
     for batch_idx in range(n_train_batches):
         start = batch_idx * args.batch_size
         end = start + args.batch_size
@@ -152,8 +157,6 @@ def main() -> None:
                 loop_state={"batch": batch_idx},
                 ttl_seconds=604800,
             )
-            with checkpoints_file.open("a") as f:
-                f.write(json.dumps({"name": f"{batch_idx:06d}", "batch": batch_idx, **ckpt}, default=str) + "\n")
             print(f"Checkpoint {batch_idx}: {ckpt}", flush=True)
 
         # Linear LR schedule
@@ -210,8 +213,6 @@ def main() -> None:
         loop_state={"batch": n_train_batches},
         ttl_seconds=None,
     )
-    with checkpoints_file.open("a") as f:
-        f.write(json.dumps({"name": "final", "batch": n_train_batches, **final}, default=str) + "\n")
     print(f"Final checkpoint saved: {final}", flush=True)
     ml_logger.close()
 
