@@ -46,39 +46,46 @@ def _gemini(model: str):
 
 
 def _tinker(base_model: str, model_path: str | None):
+    """Proven pattern: model's own chat template -> ModelInput -> sample -> decode.
+
+    project_id selects the Tinker org project (TINKER_PROJECT_ID env). Thinking
+    (<think>...</think>) in replies is handled by the lenient parser downstream.
+    """
+    import os
+
     import tinker
     from tinker import types
+    from tinker_cookbook.tokenizer_utils import get_tokenizer
 
-    sampler = tinker.ServiceClient().create_sampling_client(
-        base_model=base_model, model_path=model_path
+    client = tinker.ServiceClient(project_id=os.environ.get("TINKER_PROJECT_ID") or None)
+    sampler = client.create_sampling_client(
+        base_model=base_model, model_path=model_path or None
     )
+    tokenizer = get_tokenizer(base_model)
+
+    def _encode(messages: list[dict]):
+        enc = tokenizer.apply_chat_template(
+            messages, add_generation_prompt=True, tokenize=True
+        )
+        tokens = enc["input_ids"] if hasattr(enc, "keys") else enc
+        if hasattr(tokens, "tolist"):
+            tokens = tokens.tolist()
+        if tokens and isinstance(tokens[0], list):
+            tokens = tokens[0]
+        return tokens
 
     async def complete(prompt: str, system: str = ""):
-        from tinker_cookbook import renderers
-        from tinker_cookbook.model_info import get_recommended_renderer_name
-        from tinker_cookbook.tokenizer_utils import get_tokenizer
-
-        renderer = renderers.get_renderer(
-            get_recommended_renderer_name(base_model), get_tokenizer(base_model)
-        )
-        messages = [
-            {"role": "system", "content": system},
-            {"role": "user", "content": prompt},
+        messages = ([{"role": "system", "content": system}] if system else []) + [
+            {"role": "user", "content": prompt}
         ]
-        model_input = renderer.build_generation_prompt(messages)
-        params = types.SamplingParams(
-            max_tokens=8192, temperature=0, stop=renderer.get_stop_sequences()
+        in_tok = len(_encode(messages))
+        resp = await sampler.sample_async(
+            prompt=types.ModelInput.from_ints(_encode(messages)),
+            num_samples=1,
+            sampling_params=types.SamplingParams(max_tokens=8192, temperature=0),
         )
-        response = await sampler.sample_async(
-            prompt=model_input, num_samples=1, sampling_params=params
-        )
-        tokens = response.sequences[0].tokens
-        content = renderer.parse_response(tokens)[0]["content"]
-        if not isinstance(content, str):
-            content = "".join(
-                p.get("text", "") for p in content if p.get("type") == "text"
-            )
-        return content, model_input.length, len(tokens)
+        seq = resp.sequences[0]
+        return tokenizer.decode(seq.tokens), in_tok, len(seq.tokens)
 
     complete.model_name = model_path or base_model
     return complete
