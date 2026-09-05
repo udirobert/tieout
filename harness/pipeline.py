@@ -28,7 +28,7 @@ from sb import answer_cells, load_dataset  # noqa: E402
 
 from adapters import make_completer  # noqa: E402
 from parsing import parse_answer  # noqa: E402
-from prompts import SYSTEM_VALUES, build_values_prompt  # noqa: E402
+from prompts import SYSTEM_VALUES, build_repair_prompt, build_values_prompt  # noqa: E402
 from serializer import serialize_task_workbook  # noqa: E402
 from tracer import append_trace  # noqa: E402
 from verifier import MAX_ATTEMPTS, sanity_check  # noqa: E402
@@ -74,6 +74,9 @@ async def predict_task(
     last_reason = ""
     async with sem:
         prompt = build_values_prompt(task, serialize_task_workbook(task))
+        wb0 = openpyxl.load_workbook(task["init_xlsx"])
+        graded_coords = [c for _, c in answer_cells(task, wb0)]
+        last_reply = ""  # kept for the targeted repair prompt (attribution-guided)
         for attempt in range(MAX_ATTEMPTS):
             step += 1
             trace = {
@@ -104,11 +107,20 @@ async def predict_task(
                     append_trace(out_dir, task["id"], trace)
                     return "ok"
                 status = f"partial: {reason}"
+                last_reply = text  # attribution: carry the rejected reply into repair
             except Exception as e:  # noqa: BLE001 — best guess, never blank
                 status = f"error: {type(e).__name__}: {e}"[:200]
                 trace["error"] = status
+                last_reply = (trace.get("response") or "")  # may be None on call failure
             trace["latency_ms"] = int((time.time() - started) * 1000)
             append_trace(out_dir, task["id"], trace)
+            # Attribution-guided repair (notes §4.2): next attempt gets a targeted
+            # "what failed, why, smallest edit" prompt instead of the identical one.
+            if attempt + 1 < MAX_ATTEMPTS and last_reply:
+                failure = last_reason or status
+                prompt = build_repair_prompt(
+                    task, last_reply, failure, graded_coords
+                )
         if (
             not out.exists()
         ):  # every attempt failed to write — never ship a missing file

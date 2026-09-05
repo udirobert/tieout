@@ -57,3 +57,23 @@ def build_values_prompt(task: dict, workbook_text: str) -> str:
         f"## Answer range\nSheet: {task.get('answer_sheet') or 'active sheet'}\n"
         f"Cells: {task['answer_position']}\n" + FORMAT_HINT
     )
+
+
+# Attribution-guided repair (methodology-notes §2/§3: the documented biggest lever —
+# targeted "what failed, why, smallest edit" instead of blind full retries).
+# The previous reply is enough context for repair (it holds the full proposed answer);
+# re-sending the workbook would double input tokens without fixing attribution.
+def build_repair_prompt(
+    task: dict, previous_reply: str, failure_reason: str, graded_cells: list[str]
+) -> str:
+    return (
+        f"## Instruction\n{task['instruction']}\n\n"
+        f"## Answer range\nSheet: {task.get('answer_sheet') or 'active sheet'}\n"
+        f"Cells: {', '.join(graded_cells)}\n\n"
+        f"## Your previous reply (rejected)\n{previous_reply[:8000]}\n\n"
+        f"## What failed\n{failure_reason}\n\n"
+        "Fix the smallest possible thing: keep every cell/value that is correct, change "
+        "only what the failure describes. Return the complete corrected answer — one "
+        "entry per cell in the answer range (unchanged cells included), null for cells "
+        "that must be empty, plain values not formulas." + FORMAT_HINT
+    )
