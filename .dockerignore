@@ -1,5 +1,7 @@
-research/
-data/
+research/data/
+research/eval/
+research/sft/
+research/baseline/
 docs/
 *.tar.gz
 .env
