@@ -66,9 +66,14 @@ def _tinker(base_model: str, model_path: str | None):
     tokenizer = get_tokenizer(base_model)
 
     def _encode(messages: list[dict]):
-        enc = tokenizer.apply_chat_template(
-            messages, add_generation_prompt=True, tokenize=True
-        )
+        # enable_thinking=False: Qwen3 thinking mode leaks CoT as plain text and
+        # drowns the JSON; values-first wants direct answers (parser still lenient).
+        try:
+            enc = tokenizer.apply_chat_template(
+                messages, add_generation_prompt=True, tokenize=True, enable_thinking=False
+            )
+        except TypeError:  # non-Qwen template without the kwarg
+            enc = tokenizer.apply_chat_template(messages, add_generation_prompt=True, tokenize=True)
         tokens = enc["input_ids"] if hasattr(enc, "keys") else enc
         if hasattr(tokens, "tolist"):
             tokens = tokens.tolist()
@@ -84,7 +89,9 @@ def _tinker(base_model: str, model_path: str | None):
         resp = await sampler.sample_async(
             prompt=types.ModelInput.from_ints(_encode(messages)),
             num_samples=1,
-            sampling_params=types.SamplingParams(max_tokens=8192, temperature=0),
+            # Qwen docs: recommend 16k output headroom for complex tasks to avoid
+            # silent truncation of long JSON answers.
+            sampling_params=types.SamplingParams(max_tokens=16384, temperature=0),
         )
         seq = resp.sequences[0]
         return tokenizer.decode(seq.tokens), in_tok, len(seq.tokens)
