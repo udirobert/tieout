@@ -55,7 +55,7 @@ except A.
 | task_0008 | A | **done** | 20 tinker-400 sheet-fails, Tinker Qwen `--path auto` on VM. **11/20 PASS (0.55)**, cell_accuracy **0.9911** vs **0.00** pass on the same ids in `/tmp/tinker-400`. Log `/tmp/sheet20-codegen`. Near-misses: 341-40 (2dp), 61-4 (trailing space). 13-1 failed on Qwen (31/120) after passing Gemini smoke. |
 | task_0009 | A | **done** | `--path {auto,values,codegen}` + `--temperature` so A can force paths and B can sample at 0.7 without touching harness files. |
 | task_0010 | A | **done** | Write through merged cells (`MergedCell` was a hard error on 208-20 / 38703 / 55060). |
-| task_0011 | A | **done** | Write-path: numerics as numbers, strip string cells (`normalize_cell_value`). 61-4 class; 341-40 type-match. |
+| task_0011 | A | **done** | Write-path: numeric strings → int/float. Do **not** strip text (goldens keep padding; strip broke 80-42 / 290-27 on the gate). |
 | task_0012 | A | **done** | Wire `harness/skills.py` `get_skill_fragment` into codegen **system** prompt (lookup / agg / sheet-reorg / date). |
 | task_0013 | A | **in_progress** | Full 400 codegen headline → `/tmp/tinker-400-codegen`. Gate: re-run 20 sheet ids first. Conc 4; B stays on acct #2 / Modal. |
 
@@ -124,3 +124,43 @@ Owns: evaluation runs, failure taxonomy, `skills/library.py`, SUBMISSION.md.
 - 0008 (sheet subset) after 0004. First checkpoint after ≥200 trajectories (0003).
 - Ship decision T-3h: best measured combo on all 400 (`--all`). Dockerfile still
   orchestrator-owned, not this pass.
+
+---
+
+## Blockers & concrete resolutions (2026-09-05, ~16:15)
+
+**Blocker 1 — Tinker org quota contention (B throttled to ~2 trajectories/check).**
+A's full-400 codegen run on the VM and B's sampler are fighting over one org quota.
+RESOLUTION (sequenced, not shared):
+1. A's VM run has priority — it finishes first; nobody else samples until it does.
+2. B PAUSES the sampler now (safe: trajectories.jsonl is append-only; the 51 banked
+   records are verified). B uses the pause to land the format fix (Blocker 2).
+3. When C posts A's scored result, B resumes at FULL concurrency on the free account.
+   Sequential full-speed beats two throttled runs — both land sooner.
+4. Account #2 / Modal are reserved for task_0003's eval fan-out, NOT for competing
+   with A's run. If schedule forces parallelism later, the mover throttles to half
+   concurrency — never both at full.
+
+**Blocker 2 — `completion`-field contamination in trajectories.jsonl (records avg
+213k chars, max 6.7M — workbook/prompt echo, not the answer).**
+RESOLUTION (repair in place; no re-sampling — replies are clean: 0 think leaks,
+51/51 parse):
+1. B scripts a one-pass repair: rewrite each record's `completion` to the canonical
+   parsed form `{"cells": [{"cell": "...", "value": ...}]}` from parser output.
+2. Add a write-time assert (`len(completion) < 8000`) in sample_data.py so
+   contamination cannot silently recur.
+3. Commit the repaired dataset + fixed sampler before the count passes ~200 —
+   repairing 51 is minutes; repairing 200+ risks mistakes.
+4. task_0002 sign-off gate is now: >=200 verified trajectories AND clean completions
+   (C runs the quality script before sign-off).
+
+**Blocker 3 — task_0003 (fine-tune) start.**
+RESOLUTION: launches the moment task_0002's gate passes. Data = canonical parsed
+completions only; prompt format = post-55781f2 harness (skills-in-prompt, numeric
+writes). The ~51 pre-fix records are repaired (Blocker 2), not discarded. Eval on
+all 400, temp 0, fixed ordering, vs the 46.75% values baseline and A's codegen
+number. Checkpoint = ship candidate AND latency hedge.
+
+**Standing rule**: exactly one heavy Tinker consumer at a time; the other role waits
+or uses account #2/Modal for eval-only work. Post quota intent ("launching, until
+~HH:MM") to the mission log before any big run.
