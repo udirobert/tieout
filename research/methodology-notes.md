@@ -56,6 +56,32 @@ Planner/Informer/Retriever decomposition with iterative task reasoning + reflect
 20–40% pass-rate gains over baselines on long-horizon spreadsheet tasks. Confirms
 decompose → inspect → act → reflect loop over one-shot generation.
 
+## 6. Parallel Search sweep (2026-09-05, via research/search.py — PARALLEL_API_KEY)
+### 6a. Leaderboard reality check (spreadsheetbench.github.io + Shortcut blog)
+- V1 overall top score ~70.48%; V1-Verified(400) is the track we're on.
+- Shortcut (verified via standardized API eval, Oct 2025): **59.25%** — rank 1 verified;
+  Copilot in Excel (Agent Mode) 57.2% unverified; ChatGPT Agent w/ .xlsx 45.5%.
+  → Our 59.0% baseline is essentially at the published verified SOTA line. Beating it
+  with Qwen3.8-27B via the WML playbook is genuinely competitive, not incremental.
+- Paper ablation (Table 2 / D.1, GPT-3.5): single+5rows 5.38% → multiple+ReAct+
+  execution-feedback 13.54% (~2.5x). Confirms repair loop (§4.2) is the top lever.
+- V2 exists (end-to-end workflows; best 34.89%) — out of scope, but if Adib's track
+  later moves to V2 the skill-library design carries over.
+
+### 6b. Tinker + Qwen3.8-27B specifics (tinker-docs)
+- `Qwen3.8-27B` on Tinker: Dense, **Hybrid + Vision**, 64K context
+  (`Qwen/Qwen3.8-27B:peft:262144` for 256K). Not on the retired list (June 2026 batch
+  retired older Qwen3 variants — we're on the current one).
+- Tinker renderers: `qwen3_5` (thinking, default) vs **`qwen3_5_disable_thinking`**
+  (inserts closed `<think></think>` so the model answers directly). Our adapters.py
+  path (model's own HF chat template with `enable_thinking=False`) produces the same
+  empty-think-block prompt, so current approach is confirmed correct; cookbook renderer
+  name is the documented fallback if we ever move to `renderer.build_generation_prompt`.
+- Stop sequences: cookbook pattern is `renderer.get_stop_sequences()` — we don't set
+  stop sequences; lenient downstream parser already tolerates this. No change now.
+- `enable_thinking` hard-switch is Qwen3-non-VL; VL variants ignore soft switches.
+  (Our model is Vision-capable but we send text only — non-issue.)
+
 ## Process rule going forward
 Before any harness change: check this file + source papers first. Only run model calls
 to *measure* against a published hypothesis, never to discover what a README already
