@@ -44,11 +44,21 @@ def _first_json(text: str):
         raise
 
 
-def normalize_cell_value(value):
-    """Write-path scalar: strip text; numeric strings become int/float.
+def _plain_number(token: str) -> bool:
+    if token in ("", ".", "+", "-", "+.", "-."):
+        return False
+    try:
+        float(token)
+    except ValueError:
+        return False
+    return True
 
-    Scorer requires type match after its own 2dp round — a numeric string
-    never equals a number. Leading-zero tokens like '001' stay strings.
+
+def normalize_cell_value(value):
+    """Numeric strings → int/float. Do not strip text: goldens keep padding.
+
+    Scorer requires type(gold)==type(pred) after its 2dp round, so '42' ≠ 42.
+    'AAMRANET ' / ' Sales' stay padded (61-4, 80-42, 341-40). '001' stays text.
     """
     if value is None:
         return ""
@@ -60,17 +70,13 @@ def normalize_cell_value(value):
         return int(value) if value.is_integer() else value
     if not isinstance(value, str):
         return value
-    s = value.strip()
-    if s == "":
-        return ""
-    try:
-        n = float(s)
-    except ValueError:
-        return s
-    body = s[1:] if s[0] in "+-" and len(s) > 1 else s
-    if body.startswith("0") and body not in ("0",) and not body.startswith("0."):
-        return s
-    if n.is_integer() and "e" not in s.lower() and "." not in s:
+    token = value.strip()
+    if not _plain_number(token):
+        return value
+    if token.startswith("0") and token not in ("0",) and not token.startswith("0."):
+        return value
+    n = float(token)
+    if n.is_integer() and "." not in token and "e" not in token.lower():
         return int(n)
     return n
 

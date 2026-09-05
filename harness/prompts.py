@@ -40,7 +40,7 @@ CODEGEN_SYSTEM = (
     'Print exactly one line: SUMMARY_JSON={"status": "ok|error", "notes": "..."}. '
     "Never fabricate numbers — compute them from the workbook. "
     "Write numeric results as int/float (not numeric strings). "
-    "Strip leading/trailing whitespace on text cells. "
+    "Preserve leading/trailing spaces on text cells when the sheet has them. "
     "Allowed imports: openpyxl, datetime, math, json, re, statistics, collections, "
     "itertools, copy, decimal."
 )
