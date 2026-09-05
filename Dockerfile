@@ -22,5 +22,5 @@ COPY research/sb.py ./research/sb.py
 COPY skills/ ./skills/
 
 ENV PYTHONUNBUFFERED=1
-ENTRYPOINT ["python", "harness/pipeline.py", "--dataset-dir", "/data", "--out-dir", "/out"]
+ENTRYPOINT ["python", "harness/clone_run.py", "--dataset-dir", "/data", "--out-dir", "/out"]
 
