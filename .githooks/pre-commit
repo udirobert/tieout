@@ -1,0 +1,46 @@
+#!/bin/bash
+# tieout pre-commit: secrets + submission hygiene. No dependencies (bash+grep only).
+# Activate at venue after `git init`: `git config core.hooksPath .githooks`
+set -e
+FAIL=0
+
+# 1. Block secret files staged by accident
+for pat in '\.env$' 'credentials\.json$' 'token\.json$' '\.pem$' '\.key$'; do
+  if git diff --cached --name-only | grep -Eq "$pat"; then
+    echo "BLOCKED: staged file matching $pat — unstage it (keys never go in the repo)."
+    FAIL=1
+  fi
+done
+
+# 2. Scan staged content for key patterns (allow .env.example placeholders)
+STAGED=$(git diff --cached --name-only --diff-filter=ACM | grep -v '^\.env\.example$' || true)
+if [ -n "$STAGED" ]; then
+  if echo "$STAGED" | xargs grep -nEi \
+    -e 'sk-(live|test)-[A-Za-z0-9]{8,}' \
+    -e 'OPENROUTER_API_KEY\s*=\s*[^[:space:]#]+' \
+    -e 'TINKER_API_KEY\s*=\s*[^[:space:]#]+' \
+    -e 'FASTINO_API_KEY\s*=\s*[^[:space:]#]+' \
+    -e 'PIONEER_API_KEY\s*=\s*[^[:space:]#]+' \
+    -e 'AK_[A-Za-z0-9]{16,}' \
+    -e 'xox[bap]-' \
+    -e 'ghp_[A-Za-z0-9]{20,}' \
+    -e 'AIza[0-9A-Za-z_-]{20,}' 2>/dev/null | grep -v 'KEY=$' | grep -v 'KEY= *$'; then
+    echo "BLOCKED: possible secret in staged diff above. Use env vars + .env (gitignored)."
+    FAIL=1
+  fi
+fi
+
+# 3. Submission outputs shouldn't be committed by accident pre-run
+if git diff --cached --name-only | grep -Eq '^(outputs|traces)/.*\.xlsx$|^predictions\.jsonl$|^run\.log$|^results\.json$'; then
+  echo "NOTE: submission artifacts staged — intended only for the final Sun run. Continue if deliberate."
+fi
+
+# 4. Lint: ruff if available, else skip (venue installs it)
+if command -v ruff >/dev/null 2>&1; then
+  ruff check harness/ 2>/dev/null || { echo "ruff check failed"; FAIL=1; }
+  ruff format --check harness/ 2>/dev/null || echo "NOTE: ruff format would reformat (non-blocking)."
+else
+  echo "SKIP: ruff not installed (venue: pip install ruff)."
+fi
+
+exit $FAIL

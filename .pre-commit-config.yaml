@@ -1,0 +1,22 @@
+# Venue setup (run once, before first commit):
+#
+#   git config core.hooksPath .githooks
+#   chmod +x .githooks/pre-commit
+#   # optional, heavier: pip install pre-commit detect-secrets ruff && pre-commit install
+#
+# The .githooks/pre-commit above is dependency-free (bash+grep) so it works
+# on the space-constrained Mac. The pre-commit framework config below is for
+# the venue, where installs are cheap.
+
+repos:
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
+    hooks:
+      - id: detect-secrets
+        args: ['--baseline', '.secrets.baseline']
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.6.9
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format

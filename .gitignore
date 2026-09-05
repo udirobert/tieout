@@ -1,0 +1,31 @@
+# Secrets — never commit (judges notice)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials.json
+token.json
+
+# Python / uv
+__pycache__/
+*.pyc
+.venv/
+.ruff_cache/
+.pytest_cache/
+
+# Data + runs (generated at venue; submission copies go via explicit add)
+research/data/spreadsheetbench_verified_400/
+research/data/*.tar.gz
+submissions/
+outputs/
+traces/
+run.log
+results.json
+*.xlsx
+!research/data/download.py
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
