@@ -1,6 +1,17 @@
-# Session status / handoff (updated 2026-09-05, A on standby for 0003)
+# Session status / handoff (updated 2026-09-05, evening re-baseline)
 
 Read `docs/TEAM-BRIEF.md` then this file.
+
+## ⚠ Strategic re-baseline (full hackathon brief read — read first)
+- Official Qwen3.8-27B one-shot baseline is **59.0%** — our ship (54.75%) is 4.25pp
+  BELOW the floor; our internal 46.75% baseline is 12pp below official. The gap is
+  harness config, not model. **task_0019 (A): baseline reconciliation = P1.**
+- Judges score the container on a **holdout set**: id-keyed artifacts are worthless
+  there; all shipped behavior must be generic. Docs to be de-id-keyed (task_0022).
+- Container judged **unattended, first time, read-only /data** → dry-run is P1
+  (task_0020). Demo video Sun 09:00–11:00, submissions close Sun 12:00 (task_0021).
+- Promotion bar vs ship: ≥56.75% full-400 / ≥64% on the 100-subsample (±2–3pp
+  noise band documented in SUBMISSION.md + RESULTS_CHECKLIST.md).
 
 ## Headline (ship candidate)
 `/tmp/tinker-400-hybrid` `--all --no-recalc`: **pass_rate 0.5475**, cell 0.48,

@@ -7,6 +7,43 @@ Everything still ships inside the container contract: `/data` read-only → `/ou
 
 Shared context: `research/methodology-notes.md` (methodology), `docs/SESSION-STATUS.md`
 (state), `docs/CONSTRAINTS.md` (scoring: pass_rate primary, cell_accuracy tie-break,
+## PRIORITY RE-BASELINE (2026-09-05 evening — read first)
+
+Full hackathon brief read. Research track confirmed. Four facts change priorities:
+
+1. **Official Qwen3.8-27B baseline is 59.0% one-shot. Our ship is 54.75% — we are
+   4.25pp BELOW the floor.** Our internal 46.75% baseline is 12pp below official.
+   The gap is harness config (prompt / FORMAT_HINT / max_tokens / parsing / repair),
+   not model. Closing it generalizes to the holdout by construction and is the
+   highest-expected-pp action remaining. **This is now priority 1 for A.**
+2. **Judges run the container on a HOLDOUT set we have never seen.** Id-keyed
+   artifacts (the `#N/A` whitelist ids, known-too-large skip list, per-id notes)
+   contribute ZERO on holdout. Everything shipped must be generic: general policies,
+   general repair, general prompts. Reposition the whitelist in docs as a general
+   missing-lookup policy with example ids, not an id list.
+3. **Code review is part of judging** ("you can defend it"). The variance framework,
+   negative-result rows, and decision rules are judging assets. Keep them current.
+4. **Clock:** submissions close **Sun 12:00**; demo video recorded **Sun 11:00**;
+   judges run the container **unattended, first time, read-only /data**.
+
+### Re-prioritized plan (remaining ~30h)
+
+- **P1 — A: baseline reconciliation.** Diff our values-first config against the
+  official 59.0% one-shot config. Every pp recovered lifts the whole ladder,
+  holdout included. One cycle, report deltas before touching anything.
+- **P1 — Orchestrator: container dry-run.** Full unattended container run
+  (fresh clone, read-only /data mount, env vars only) before Sun 09:00. First-time-
+  it-works is a pass/fail criterion we have not yet tested.
+- **P2 — B/C: v2 checkpoint eval.** Already running; costs nothing extra. Promotion
+  bar: ≥56.75% on full 400 (≥64.0% on the 100-subsample). A genuine fine-tune win
+  over the official-style baseline is the demo headline.
+- **P3 — freeze ablation exploration.** No more pin/overlay variations: sub-noise.
+- **P3 — demo video owner assigned; recorded Sun 09:00–11:00.**
+- **P4 — write-up freeze Sun 10:00**: SUBMISSION.md must be final except for the
+  last eval numbers.
+
+---
+
 held-out private fund dataset, write-up judged with results). `docs/PLAN.md` and
 `docs/PATTERNS.md` are superseded — do not follow them.
 
@@ -63,6 +100,11 @@ except A.
 | task_0016 | A | **done** | Pin-fix 27-cell re-score (`--path hybrid --temperature 0`, n=1, 66.3s). Overlay 19/27 held, **8 regressions**. hybrid-v2 `--all --no-recalc`: **52.75%** / cell **45.09%** / sheet **69.6%**. Ship stays `/tmp/tinker-400-hybrid` **54.75%**. Pin-omit on values-first is not free. |
 | task_0017 | A | **done** | Recalc-gate proven on VM LibreOffice 24.2.7: `#DIV/0!` `#REF!` `#NAME?` fail; clean `SUM`/literal pass; 4 real sheet tasks (13-1, 17-35, 22-47, 23-24) fire; hybrid fake-completer codegen→values fallback writes 7 not `=1/0`. Script: `research/prove_recalc_gate.py`. |
 | task_0018 | A | **done** | Pin-scope landed (codegen omits init values; values-first keeps them). 275-cell `--path values` temp 0 + codegen sheets: **51.75%** / cell **43.64%** / sheet **69.6%**. +14/−26 vs old hybrid cells. Does not clear 54.75%. Ship stays `/tmp/tinker-400-hybrid`. |
+| task_0019 | A | **in_progress** | **P1 — baseline reconciliation vs official 59.0%**: diff values-first config (prompt, FORMAT_HINT, max_tokens, enable_thinking, parsing, repair, scoring params) against the official one-shot baseline. Report deltas before changing anything. Highest-pp lever; generalizes to holdout. |
+| task_0020 | Orchestrator | **in_progress** | **P1 — container dry-run**: fresh clone, read-only `/data`, env-only config, full unattended run before Sun 09:00. First-time-it-works is pass/fail on the holdout. |
+| task_0021 | Orchestrator | pending | Demo video: recorded Sun 09:00–11:00, uploaded before 12:00 close. Owner: orchestrator; script from SUBMISSION.md ablation + variance framework. |
+| task_0022 | C | pending | De-id-key the docs: rewrite `#N/A` whitelist + skip-list entries as general policies with example ids (holdout-blind judging). |
+| task_0023 | B/C | in_progress | v2 checkpoint evals (step-200 subsample running; v2b training). Promotion bar ≥56.75% full-400 / ≥64% subsample. |
 
 `ts400` loaded old code at start — it is the no-repair baseline. Nobody else edits
 `pipeline.py`. When A edits it, A owns it exclusively.
