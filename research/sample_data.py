@@ -215,8 +215,27 @@ async def sample_task(complete, task: dict, args, sem: asyncio.Semaphore, tmp_di
             "out_tokens": out_tok,
         })
 
-    results = await asyncio.gather(*(one_sample(i) for i in range(args.n)), return_exceptions=True)
-    if any(isinstance(r, SkipTask) for r in results):
+    # Run samples concurrently, but stop as soon as the size gate fires — it is
+    # deterministic for a task, so all remaining samples would also exceed 8k.
+    pending = {asyncio.create_task(one_sample(i)) for i in range(args.n)}
+    too_long_streak = 0
+    while pending:
+        done, pending = await asyncio.wait(pending, return_when=asyncio.FIRST_COMPLETED)
+        for fut in done:
+            try:
+                await fut
+            except asyncio.CancelledError:
+                pass
+            except SkipTask:
+                too_long_streak += 1
+                if too_long_streak >= 2:
+                    for t in pending:
+                        t.cancel()
+                    pending.clear()
+                    break
+            except Exception:
+                pass
+    if too_long_streak:
         _record_skip(tmp_dir.parent, task["id"])
     print(f"{task['id']:<8} {kind:<11} kept {len(kept)}/{args.n}  tok {tok[0]}/{tok[1]}", flush=True)
     return kept[: args.max_per_task]
