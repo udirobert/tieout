@@ -19,6 +19,7 @@ RUN pip install --no-cache-dir \
 WORKDIR /app
 COPY harness/ ./harness/
 COPY research/sb.py ./research/sb.py
+COPY research/baseline/common.py ./research/baseline/common.py
 COPY skills/ ./skills/
 
 ENV PYTHONUNBUFFERED=1
