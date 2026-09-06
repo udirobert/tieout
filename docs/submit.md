@@ -62,16 +62,17 @@ Fill before Devpost. Count must match the video.
 | tieout-4 | worker | Demo fixtures + scripts | idle |
 | tieout-6 | worker | Docs + Devpost | idle |
 | tieout-5 | worker | Demo video | idle |
+| tieout-8 | worker | Demo script verification + docs status | done |
 
-**Total sessions:** 5
+**Total sessions:** 6
 
 ### Devpost — How we used AO
 
 > We used Agent Orchestrator as the development control plane for tieout. One orchestrator
-> session broke work into focused tasks; **4 worker sessions** implemented the exception queue,
+> session broke work into focused tasks; **5 worker sessions** implemented the exception queue,
 > Ylookup CFO demo fixtures, submission docs, and demo video script in isolated git worktrees.
 > The spreadsheet agent runs via Tinker at inference time; AO orchestrated the engineering.
-> The demo video shows the AO dashboard with the total session count of **5**.
+> The demo video shows the AO dashboard with the total session count of **6**.
 
 ---
 
