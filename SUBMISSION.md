@@ -145,7 +145,9 @@ Independent container reproduction (the shipped image, run unattended on the ful
 
 Pipeline in `harness/`, runs in Docker reading `/data` writing `/out`. Env vars:
 `TINKER_API_KEY` (required), `GEMINI_API_KEY` (optional spare), `TINKER_PROJECT_ID`
-(optional), `SOFFICE` (optional path to LibreOffice).
+(optional — **not hardcoded anywhere**; when unset the Tinker SDK uses the calling
+account's default project, so the container runs under your project the same way
+it ran under ours), `SOFFICE` (optional path to LibreOffice).
 
 **Ship entrypoint:** `harness/clone_run.py` (not `pipeline.py`). The Dockerfile
 must `CMD ["python", "harness/clone_run.py", "--dataset-dir", "/data", "--out-dir", "/out"]`.
