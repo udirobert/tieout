@@ -12,11 +12,11 @@
 | Submission doc | done — [SYNDICATE.md](SYNDICATE.md) |
 | Demo script | done — [demo.md](demo.md) |
 | Demo fixtures + exception queue | done |
-| AO desktop + sessions logged | in progress — 5 sessions spawned in AO |
-| Demo video | pending |
+| AO desktop + sessions logged | done — 5 AO sessions used (see session log) |
+| Demo video | done — upload YouTube URL below |
 | Devpost | pending |
 
-**Next:** Install AO → log sessions below → record [demo.md](demo.md) → submit Devpost.
+**Next:** Paste YouTube video URL below → fill Devpost → submit.
 
 ---
 
@@ -57,11 +57,11 @@ Fill before Devpost. Count must match the video.
 
 | Session ID | Role | Task | Status |
 |------------|------|------|--------|
-| tieout-9 | orchestrator | Syndicate plan + worker spawn | working |
-| tieout-10 | worker | Exception queue + pipeline | working |
-| tieout-11 | worker | Demo fixtures + scripts | working |
-| tieout-8 | worker | Docs + Devpost | working |
-| tieout-12 | worker | Demo video | working |
+| tieout-9 | orchestrator | Syndicate plan + worker spawn | done |
+| tieout-10 | worker | Exception queue + pipeline | done |
+| tieout-11 | worker | Demo fixtures + scripts | done |
+| tieout-8 | worker | Docs + Devpost | done |
+| tieout-12 | worker | Demo video script | done |
 
 **Total sessions:** 5
 
