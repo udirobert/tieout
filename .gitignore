@@ -20,6 +20,7 @@ research/data/*.tar.gz
 submissions/
 outputs/
 traces/
+videos/
 run.log
 results.json
 *.xlsx
@@ -29,6 +30,7 @@ results.json
 !research/data/eval/**/run.log
 !research/data/eval/**/traces/
 !research/data/eval/**/traces/**
+research/data/eval/lora_v1/traces/
 
 # OS / editor
 .DS_Store

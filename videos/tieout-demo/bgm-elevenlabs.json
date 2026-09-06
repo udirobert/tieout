@@ -1,9 +1,0 @@
-{
-  "provider": "elevenlabs-music",
-  "model": "music_v2",
-  "duration_ms": 48000,
-  "force_instrumental": true,
-  "prompt": "Restrained high-energy editorial instrumental; warm paper-and-ink mood; muted pulse and soft plucked strings; subtle rise through middle; no vocals; room for narration; confident hackathon demo energy.",
-  "bytes": 768671,
-  "created_at": "2026-09-06T08:08:59.408Z"
-}
