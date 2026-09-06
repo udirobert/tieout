@@ -29,6 +29,12 @@ cd research && uv run python ../harness/exceptions.py review /tmp/syndicate-demo
 
 Live: set `TINKER_API_KEY` from `.env`, then `./demo/run_demo.sh close-tieout-bank-cp`
 
+## Example output
+
+Bank counterparty match: `Matched Sender/Beneficiary` filled where the lookup resolves; empty cells are routed to `exceptions.json` with source-row evidence.
+
+![tieout output screenshot](docs/assets/output-screenshot.png)
+
 ---
 
 ## Layout
