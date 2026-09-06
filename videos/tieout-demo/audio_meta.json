@@ -1,0 +1,1014 @@
+{
+  "tts_provider": "elevenlabs",
+  "voice_id": "JBFqnCBsd6RMkjVDRZzb",
+  "bgm": null,
+  "bgm_pending": false,
+  "voices": [
+    {
+      "id": "00",
+      "frame": 0,
+      "path": "assets/voice/00.wav",
+      "duration_s": 7.338,
+      "words": [
+        {
+          "id": "Private",
+          "text": "Private",
+          "start": 0,
+          "end": 0.348
+        },
+        {
+          "id": "markets",
+          "text": "markets",
+          "start": 0.383,
+          "end": 0.72
+        },
+        {
+          "id": "manage",
+          "text": "manage",
+          "start": 0.789,
+          "end": 1.068
+        },
+        {
+          "id": "thirty",
+          "text": "thirty",
+          "start": 1.103,
+          "end": 1.37
+        },
+        {
+          "id": "trillion",
+          "text": "trillion",
+          "start": 1.416,
+          "end": 1.718
+        },
+        {
+          "id": "dollars",
+          "text": "dollars",
+          "start": 1.765,
+          "end": 2.09
+        },
+        {
+          "id": "—",
+          "text": "—",
+          "start": 2.194,
+          "end": 2.252
+        },
+        {
+          "id": "and",
+          "text": "and",
+          "start": 2.589,
+          "end": 2.705
+        },
+        {
+          "id": "when",
+          "text": "when",
+          "start": 2.74,
+          "end": 2.868
+        },
+        {
+          "id": "the",
+          "text": "the",
+          "start": 2.902,
+          "end": 2.972
+        },
+        {
+          "id": "back",
+          "text": "back",
+          "start": 3.007,
+          "end": 3.146
+        },
+        {
+          "id": "office",
+          "text": "office",
+          "start": 3.181,
+          "end": 3.413
+        },
+        {
+          "id": "needs",
+          "text": "needs",
+          "start": 3.448,
+          "end": 3.622
+        },
+        {
+          "id": "to",
+          "text": "to",
+          "start": 3.657,
+          "end": 3.727
+        },
+        {
+          "id": "grow",
+          "text": "grow,",
+          "start": 3.773,
+          "end": 4.168
+        },
+        {
+          "id": "funds",
+          "text": "funds",
+          "start": 4.272,
+          "end": 4.516
+        },
+        {
+          "id": "are",
+          "text": "are",
+          "start": 4.551,
+          "end": 4.632
+        },
+        {
+          "id": "more",
+          "text": "more",
+          "start": 4.656,
+          "end": 4.783
+        },
+        {
+          "id": "likely",
+          "text": "likely",
+          "start": 4.818,
+          "end": 5.05
+        },
+        {
+          "id": "to",
+          "text": "to",
+          "start": 5.085,
+          "end": 5.143
+        },
+        {
+          "id": "hire",
+          "text": "hire",
+          "start": 5.19,
+          "end": 5.364
+        },
+        {
+          "id": "more",
+          "text": "more",
+          "start": 5.399,
+          "end": 5.538
+        },
+        {
+          "id": "people",
+          "text": "people",
+          "start": 5.573,
+          "end": 5.828
+        },
+        {
+          "id": "than",
+          "text": "than",
+          "start": 5.863,
+          "end": 5.991
+        },
+        {
+          "id": "improve",
+          "text": "improve",
+          "start": 6.026,
+          "end": 6.339
+        },
+        {
+          "id": "their",
+          "text": "their",
+          "start": 6.374,
+          "end": 6.525
+        },
+        {
+          "id": "systems",
+          "text": "systems.",
+          "start": 6.56,
+          "end": 7.338
+        }
+      ]
+    },
+    {
+      "id": "01",
+      "frame": 1,
+      "path": "assets/voice/01.wav",
+      "duration_s": 8.173,
+      "words": [
+        {
+          "id": "Thinking",
+          "text": "Thinking",
+          "start": 0,
+          "end": 0.325
+        },
+        {
+          "id": "Machines",
+          "text": "Machines",
+          "start": 0.36,
+          "end": 0.697
+        },
+        {
+          "id": "proof",
+          "text": "proof",
+          "start": 0.743,
+          "end": 0.94
+        },
+        {
+          "id": "point",
+          "text": "point:",
+          "start": 1.01,
+          "end": 1.405
+        },
+        {
+          "id": "fine-tune",
+          "text": "fine-tune",
+          "start": 2.009,
+          "end": 2.554
+        },
+        {
+          "id": "a",
+          "text": "a",
+          "start": 2.589,
+          "end": 2.612
+        },
+        {
+          "id": "small",
+          "text": "small",
+          "start": 2.647,
+          "end": 2.856
+        },
+        {
+          "id": "model",
+          "text": "model",
+          "start": 2.914,
+          "end": 3.135
+        },
+        {
+          "id": "on",
+          "text": "on",
+          "start": 3.193,
+          "end": 3.274
+        },
+        {
+          "id": "expert",
+          "text": "expert",
+          "start": 3.332,
+          "end": 3.646
+        },
+        {
+          "id": "data",
+          "text": "data,",
+          "start": 3.68,
+          "end": 4.133
+        },
+        {
+          "id": "and",
+          "text": "and",
+          "start": 4.238,
+          "end": 4.354
+        },
+        {
+          "id": "it",
+          "text": "it",
+          "start": 4.4,
+          "end": 4.47
+        },
+        {
+          "id": "beats",
+          "text": "beats",
+          "start": 4.516,
+          "end": 4.737
+        },
+        {
+          "id": "frontier",
+          "text": "frontier",
+          "start": 4.783,
+          "end": 5.178
+        },
+        {
+          "id": "AI",
+          "text": "AI",
+          "start": 5.248,
+          "end": 5.55
+        },
+        {
+          "id": "on",
+          "text": "on",
+          "start": 5.596,
+          "end": 5.666
+        },
+        {
+          "id": "financial",
+          "text": "financial",
+          "start": 5.724,
+          "end": 6.107
+        },
+        {
+          "id": "judgment",
+          "text": "judgment",
+          "start": 6.153,
+          "end": 6.536
+        },
+        {
+          "id": "—",
+          "text": "—",
+          "start": 6.653,
+          "end": 6.722
+        },
+        {
+          "id": "for",
+          "text": "for",
+          "start": 6.85,
+          "end": 6.954
+        },
+        {
+          "id": "a",
+          "text": "a",
+          "start": 6.989,
+          "end": 7.012
+        },
+        {
+          "id": "fraction",
+          "text": "fraction",
+          "start": 7.047,
+          "end": 7.326
+        },
+        {
+          "id": "of",
+          "text": "of",
+          "start": 7.361,
+          "end": 7.419
+        },
+        {
+          "id": "the",
+          "text": "the",
+          "start": 7.454,
+          "end": 7.523
+        },
+        {
+          "id": "cost",
+          "text": "cost.",
+          "start": 7.558,
+          "end": 8.173
+        }
+      ]
+    },
+    {
+      "id": "02",
+      "frame": 2,
+      "path": "assets/voice/02.wav",
+      "duration_s": 11.749,
+      "words": [
+        {
+          "id": "This",
+          "text": "This",
+          "start": 0,
+          "end": 0.197
+        },
+        {
+          "id": "weekend",
+          "text": "weekend",
+          "start": 0.255,
+          "end": 0.569
+        },
+        {
+          "id": "we",
+          "text": "we",
+          "start": 0.604,
+          "end": 0.685
+        },
+        {
+          "id": "replicated",
+          "text": "replicated",
+          "start": 0.743,
+          "end": 1.196
+        },
+        {
+          "id": "that",
+          "text": "that",
+          "start": 1.231,
+          "end": 1.393
+        },
+        {
+          "id": "with",
+          "text": "with",
+          "start": 1.44,
+          "end": 1.579
+        },
+        {
+          "id": "spreadsheets",
+          "text": "spreadsheets",
+          "start": 1.614,
+          "end": 2.148
+        },
+        {
+          "id": "—",
+          "text": "—",
+          "start": 2.264,
+          "end": 2.322
+        },
+        {
+          "id": "the",
+          "text": "the",
+          "start": 2.368,
+          "end": 2.473
+        },
+        {
+          "id": "actual",
+          "text": "actual",
+          "start": 2.519,
+          "end": 2.752
+        },
+        {
+          "id": "back-office",
+          "text": "back-office",
+          "start": 2.81,
+          "end": 3.251
+        },
+        {
+          "id": "grind",
+          "text": "grind.",
+          "start": 3.274,
+          "end": 3.75
+        },
+        {
+          "id": "Every",
+          "text": "Every",
+          "start": 4.191,
+          "end": 4.435
+        },
+        {
+          "id": "team",
+          "text": "team",
+          "start": 4.47,
+          "end": 4.656
+        },
+        {
+          "id": "used",
+          "text": "used",
+          "start": 4.737,
+          "end": 4.899
+        },
+        {
+          "id": "the",
+          "text": "the",
+          "start": 4.923,
+          "end": 4.992
+        },
+        {
+          "id": "same",
+          "text": "same",
+          "start": 5.027,
+          "end": 5.213
+        },
+        {
+          "id": "model",
+          "text": "model,",
+          "start": 5.248,
+          "end": 5.654
+        },
+        {
+          "id": "Qwen",
+          "text": "Qwen",
+          "start": 5.805,
+          "end": 6.06
+        },
+        {
+          "id": "three",
+          "text": "three",
+          "start": 6.118,
+          "end": 6.281
+        },
+        {
+          "id": "point",
+          "text": "point",
+          "start": 6.327,
+          "end": 6.513
+        },
+        {
+          "id": "eight",
+          "text": "eight",
+          "start": 6.56,
+          "end": 6.722
+        },
+        {
+          "id": "twenty-seven",
+          "text": "twenty-seven",
+          "start": 6.745,
+          "end": 7.268
+        },
+        {
+          "id": "B",
+          "text": "B.",
+          "start": 7.314,
+          "end": 7.674
+        },
+        {
+          "id": "The",
+          "text": "The",
+          "start": 8.011,
+          "end": 8.104
+        },
+        {
+          "id": "benchmark",
+          "text": "benchmark",
+          "start": 8.15,
+          "end": 8.533
+        },
+        {
+          "id": "to",
+          "text": "to",
+          "start": 8.58,
+          "end": 8.638
+        },
+        {
+          "id": "beat",
+          "text": "beat:",
+          "start": 8.696,
+          "end": 9.102
+        },
+        {
+          "id": "fifty-nine",
+          "text": "fifty-nine",
+          "start": 9.439,
+          "end": 9.88
+        },
+        {
+          "id": "percent",
+          "text": "percent,",
+          "start": 9.915,
+          "end": 10.333
+        },
+        {
+          "id": "straight",
+          "text": "straight",
+          "start": 10.437,
+          "end": 10.716
+        },
+        {
+          "id": "out",
+          "text": "out",
+          "start": 10.751,
+          "end": 10.855
+        },
+        {
+          "id": "of",
+          "text": "of",
+          "start": 10.89,
+          "end": 10.948
+        },
+        {
+          "id": "the",
+          "text": "the",
+          "start": 10.983,
+          "end": 11.053
+        },
+        {
+          "id": "box",
+          "text": "box.",
+          "start": 11.088,
+          "end": 11.749
+        }
+      ]
+    },
+    {
+      "id": "03",
+      "frame": 3,
+      "path": "assets/voice/03.wav",
+      "duration_s": 4.458,
+      "words": [
+        {
+          "id": "So",
+          "text": "So",
+          "start": 0,
+          "end": 0.139
+        },
+        {
+          "id": "we",
+          "text": "we",
+          "start": 0.174,
+          "end": 0.244
+        },
+        {
+          "id": "fine-tuned",
+          "text": "fine-tuned",
+          "start": 0.302,
+          "end": 0.778
+        },
+        {
+          "id": "it",
+          "text": "it.",
+          "start": 0.813,
+          "end": 0.975
+        },
+        {
+          "id": "Six",
+          "text": "Six",
+          "start": 1.254,
+          "end": 1.463
+        },
+        {
+          "id": "hundred",
+          "text": "hundred",
+          "start": 1.509,
+          "end": 1.73
+        },
+        {
+          "id": "training",
+          "text": "training",
+          "start": 1.765,
+          "end": 2.032
+        },
+        {
+          "id": "runs",
+          "text": "runs.",
+          "start": 2.078,
+          "end": 2.403
+        },
+        {
+          "id": "This",
+          "text": "This",
+          "start": 2.508,
+          "end": 2.659
+        },
+        {
+          "id": "was",
+          "text": "was",
+          "start": 2.694,
+          "end": 2.786
+        },
+        {
+          "id": "supposed",
+          "text": "supposed",
+          "start": 2.821,
+          "end": 3.1
+        },
+        {
+          "id": "to",
+          "text": "to",
+          "start": 3.123,
+          "end": 3.17
+        },
+        {
+          "id": "be",
+          "text": "be",
+          "start": 3.204,
+          "end": 3.274
+        },
+        {
+          "id": "the",
+          "text": "the",
+          "start": 3.309,
+          "end": 3.379
+        },
+        {
+          "id": "part",
+          "text": "part",
+          "start": 3.413,
+          "end": 3.599
+        },
+        {
+          "id": "that",
+          "text": "that",
+          "start": 3.634,
+          "end": 3.75
+        },
+        {
+          "id": "works",
+          "text": "works.",
+          "start": 3.796,
+          "end": 4.458
+        }
+      ]
+    },
+    {
+      "id": "04",
+      "frame": 4,
+      "path": "assets/voice/04.wav",
+      "duration_s": 8.266,
+      "words": [
+        {
+          "id": "So",
+          "text": "So",
+          "start": 0,
+          "end": 0.128
+        },
+        {
+          "id": "we",
+          "text": "we",
+          "start": 0.174,
+          "end": 0.255
+        },
+        {
+          "id": "tested",
+          "text": "tested",
+          "start": 0.302,
+          "end": 0.604
+        },
+        {
+          "id": "it",
+          "text": "it",
+          "start": 0.639,
+          "end": 0.708
+        },
+        {
+          "id": "two",
+          "text": "two",
+          "start": 0.743,
+          "end": 0.871
+        },
+        {
+          "id": "ways",
+          "text": "ways",
+          "start": 0.929,
+          "end": 1.254
+        },
+        {
+          "id": "—",
+          "text": "—",
+          "start": 1.358,
+          "end": 1.405
+        },
+        {
+          "id": "same",
+          "text": "same",
+          "start": 1.533,
+          "end": 1.776
+        },
+        {
+          "id": "model",
+          "text": "model,",
+          "start": 1.811,
+          "end": 2.171
+        },
+        {
+          "id": "same",
+          "text": "same",
+          "start": 2.276,
+          "end": 2.485
+        },
+        {
+          "id": "everything",
+          "text": "everything",
+          "start": 2.519,
+          "end": 2.891
+        },
+        {
+          "id": "—",
+          "text": "—",
+          "start": 2.995,
+          "end": 3.042
+        },
+        {
+          "id": "reasoning",
+          "text": "reasoning",
+          "start": 3.379,
+          "end": 3.715
+        },
+        {
+          "id": "off",
+          "text": "off,",
+          "start": 3.773,
+          "end": 4.087
+        },
+        {
+          "id": "reasoning",
+          "text": "reasoning",
+          "start": 4.214,
+          "end": 4.54
+        },
+        {
+          "id": "on",
+          "text": "on.",
+          "start": 4.598,
+          "end": 4.957
+        },
+        {
+          "id": "One",
+          "text": "One",
+          "start": 5.341,
+          "end": 5.55
+        },
+        {
+          "id": "config",
+          "text": "config",
+          "start": 5.596,
+          "end": 5.968
+        },
+        {
+          "id": "swap",
+          "text": "swap",
+          "start": 6.026,
+          "end": 6.258
+        },
+        {
+          "id": "outperformed",
+          "text": "outperformed",
+          "start": 6.316,
+          "end": 6.827
+        },
+        {
+          "id": "the",
+          "text": "the",
+          "start": 6.861,
+          "end": 6.931
+        },
+        {
+          "id": "entire",
+          "text": "entire",
+          "start": 6.966,
+          "end": 7.314
+        },
+        {
+          "id": "fine-tune",
+          "text": "fine-tune.",
+          "start": 7.361,
+          "end": 8.266
+        }
+      ]
+    },
+    {
+      "id": "05",
+      "frame": 5,
+      "path": "assets/voice/05.wav",
+      "duration_s": 4.551,
+      "words": [
+        {
+          "id": "If",
+          "text": "If",
+          "start": 0,
+          "end": 0.128
+        },
+        {
+          "id": "you're",
+          "text": "you're",
+          "start": 0.163,
+          "end": 0.337
+        },
+        {
+          "id": "building",
+          "text": "building",
+          "start": 0.36,
+          "end": 0.627
+        },
+        {
+          "id": "on",
+          "text": "on",
+          "start": 0.673,
+          "end": 0.743
+        },
+        {
+          "id": "a",
+          "text": "a",
+          "start": 0.778,
+          "end": 0.801
+        },
+        {
+          "id": "small",
+          "text": "small",
+          "start": 0.848,
+          "end": 1.057
+        },
+        {
+          "id": "model",
+          "text": "model,",
+          "start": 1.091,
+          "end": 1.393
+        },
+        {
+          "id": "check",
+          "text": "check",
+          "start": 1.463,
+          "end": 1.66
+        },
+        {
+          "id": "that",
+          "text": "that",
+          "start": 1.695,
+          "end": 1.823
+        },
+        {
+          "id": "first",
+          "text": "first.",
+          "start": 1.881,
+          "end": 2.322
+        },
+        {
+          "id": "It's",
+          "text": "It's",
+          "start": 2.508,
+          "end": 2.682
+        },
+        {
+          "id": "free",
+          "text": "free,",
+          "start": 2.717,
+          "end": 3.019
+        },
+        {
+          "id": "and",
+          "text": "and",
+          "start": 3.053,
+          "end": 3.158
+        },
+        {
+          "id": "it",
+          "text": "it",
+          "start": 3.204,
+          "end": 3.251
+        },
+        {
+          "id": "might",
+          "text": "might",
+          "start": 3.286,
+          "end": 3.448
+        },
+        {
+          "id": "be",
+          "text": "be",
+          "start": 3.483,
+          "end": 3.564
+        },
+        {
+          "id": "the",
+          "text": "the",
+          "start": 3.599,
+          "end": 3.669
+        },
+        {
+          "id": "whole",
+          "text": "whole",
+          "start": 3.704,
+          "end": 3.901
+        },
+        {
+          "id": "gap",
+          "text": "gap.",
+          "start": 3.936,
+          "end": 4.551
+        }
+      ]
+    },
+    {
+      "id": "06",
+      "frame": 6,
+      "path": "assets/voice/06.wav",
+      "duration_s": 3.529,
+      "words": [
+        {
+          "id": "We",
+          "text": "We",
+          "start": 0,
+          "end": 0.139
+        },
+        {
+          "id": "shipped",
+          "text": "shipped",
+          "start": 0.174,
+          "end": 0.406
+        },
+        {
+          "id": "it",
+          "text": "it",
+          "start": 0.441,
+          "end": 0.511
+        },
+        {
+          "id": "as",
+          "text": "as",
+          "start": 0.546,
+          "end": 0.627
+        },
+        {
+          "id": "tieout",
+          "text": "tieout.",
+          "start": 0.673,
+          "end": 1.173
+        },
+        {
+          "id": "Nine",
+          "text": "Nine",
+          "start": 1.382,
+          "end": 1.602
+        },
+        {
+          "id": "points",
+          "text": "points",
+          "start": 1.637,
+          "end": 1.858
+        },
+        {
+          "id": "clear",
+          "text": "clear,",
+          "start": 1.892,
+          "end": 2.241
+        },
+        {
+          "id": "no",
+          "text": "no",
+          "start": 2.345,
+          "end": 2.461
+        },
+        {
+          "id": "training",
+          "text": "training",
+          "start": 2.508,
+          "end": 2.786
+        },
+        {
+          "id": "required",
+          "text": "required.",
+          "start": 2.844,
+          "end": 3.529
+        }
+      ]
+    }
+  ],
+  "sfx": [],
+  "total_duration_s": 48.064
+}

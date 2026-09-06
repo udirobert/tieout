@@ -3,6 +3,8 @@
 Research-track entry for Ylookup x Encode AI Hackathon (5–6 Sept 2026, Encode Hub).
 Task: SpreadsheetBench Verified, 400 tasks. Given workbook + instruction, return workbook with answer cells filled.
 
+**Demo video:** [tweet with walkthrough](https://x.com/UNgethe/status/2096550517878989285) · **Write-up:** [Nine Points, Then We Trained](https://medium.com/@ungethe/nine-points-then-we-trained-0bb2784446fc) (Medium)
+
 Upstream starter lives untouched in `research/` (from https://github.com/ylookup/encode-hackathon).
 All team code lives outside `research/`. Hacking started Sat 12:00 — this repo carries
 everything from that point (skeletons + docs committed at hack start, all implementation since).

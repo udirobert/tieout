@@ -47,6 +47,12 @@ const JOBS = [
     prompt:
       "Wide matte illustration of a busy analyst desk viewed from slightly above: open laptop showing a blank spreadsheet grid with highlighted orange cells, coffee mug, sticky notes with NO readable text, papers stacked, warm office light. Flat editorial collage style, no people, no text, no logos, plain warm paper background at edges.",
   },
+  {
+    name: "prop-city-skyline",
+    aspect_ratio: "16:9",
+    prompt:
+      "Wide 16:9 editorial matte illustration of an abstract private-markets city skyline, dark charcoal towers of varied heights reaching upward, cream paper sky #f5f0e8, subtle green #2d8a4e window accents glowing on a few towers, flat paper grain collage style, soft even light, NO text letters words logos watermarks, no people, clean silhouette against warm cream background.",
+  },
 ];
 
 function parseArgs(argv) {
@@ -161,6 +167,17 @@ const jobs = args.only ? JOBS.filter((j) => args.only.includes(j.name)) : JOBS;
 await mkdir(RAW, { recursive: true });
 
 for (const job of jobs) {
+  const assetPng = join(ASSETS, `${job.name}.png`);
+  const rawJpg = join(RAW, `${job.name}.jpg`);
+  const rawPng = join(RAW, `${job.name}.png`);
+  if (existsSync(assetPng)) {
+    console.log(`skip (already in assets/): ${job.name}`);
+    continue;
+  }
+  if (existsSync(rawJpg) || existsSync(rawPng)) {
+    console.log(`skip (already in raw-assets/): ${job.name}`);
+    continue;
+  }
   const started = Date.now();
   console.log(`→ ${job.name}`);
   const created = await createImage(key, job);

@@ -1,131 +1,126 @@
-<!doctype html>
-<html>
-  <head><meta charset="UTF-8" /></head>
-  <body>
-    <template>
-      <style>
-        @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=IBM+Plex+Sans:wght@400;600;700&display=swap");
-        #root {
-          position: absolute; inset: 0; overflow: hidden;
-          font-family: "IBM Plex Sans", system-ui, sans-serif;
-          color: #1a1a1a; background: #f5f0e8;
-        }
-        .dither {
-          position: absolute; inset: -4%;
-          background-color: #f5f0e8;
-          background-image:
-            repeating-conic-gradient(#e8e0d4 0% 25%, transparent 0% 50%) 0 0 / 5px 5px,
-            repeating-conic-gradient(transparent 0% 25%, #e8e0d4 0% 50%) 2.5px 2.5px / 5px 5px;
-        }
-        .bloom {
-          position: absolute; top: 10%; left: 58%;
-          width: 640px; height: 640px; border-radius: 50%;
-          background: radial-gradient(circle, rgba(45,138,78,0.28) 0%, rgba(45,138,78,0) 68%);
-        }
-        .title-row {
-          position: absolute; top: 10%; left: 6%; right: 6%;
-          display: flex; justify-content: space-between; align-items: center;
-        }
-        .title-row h2 { font-size: 36px; font-weight: 700; max-width: 720px; line-height: 1.15; }
-        .open-badge {
-          font-family: "IBM Plex Mono", monospace; font-size: 13px;
-          letter-spacing: 0.1em; text-transform: uppercase;
-          padding: 10px 16px; border-radius: 999px;
-          background: rgba(45,138,78,0.12); color: #2d8a4e;
-          border: 1px solid rgba(45,138,78,0.25); white-space: nowrap;
-        }
-        .track-badge {
-          position: absolute; top: 18%; left: 6%;
-          font-family: "IBM Plex Mono", monospace; font-size: 12px;
-          letter-spacing: 0.12em; text-transform: uppercase;
-          padding: 8px 14px; border: 2px solid #1a1a1a;
-          background: #fffaf3; transform: rotate(-1deg);
-        }
-        .chart-wrap {
-          position: absolute; left: 6%; right: 6%; top: 28%;
-          height: 42%; display: flex; align-items: flex-end; gap: 40px; padding: 0 20px;
-        }
-        .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 14px; }
-        .bar {
-          width: 100%; max-width: 200px; border-radius: 12px 12px 4px 4px;
-          transform-origin: bottom center; position: relative; overflow: hidden;
-        }
-        .bar::after {
-          content: ""; position: absolute; inset: 0;
-          background-image: repeating-conic-gradient(rgba(255,255,255,0.15) 0% 25%, transparent 0% 50%) 0 0 / 4px 4px;
-          mix-blend-mode: overlay;
-        }
-        .bar.grey { height: 380px; background: linear-gradient(180deg, #c4bcb0, #b8b0a4); }
-        .bar.orange { height: 300px; background: linear-gradient(180deg, #ef9456, #e07a3a); }
-        .bar.green { height: 346px; background: linear-gradient(180deg, #3aa862, #2d8a4e); box-shadow: 0 0 40px rgba(45,138,78,0.35); }
-        .bar-label {
-          font-family: "IBM Plex Mono", monospace; font-size: 13px;
-          letter-spacing: 0.08em; text-transform: uppercase;
-          color: #6b6560; text-align: center; line-height: 1.3;
-        }
-        .bar-val { font-family: "IBM Plex Mono", monospace; font-size: 32px; font-weight: 700; }
-        .hero-stat {
-          position: absolute; top: 74%; left: 6%;
-          font-family: "IBM Plex Mono", monospace;
-          font-size: 88px; font-weight: 700; letter-spacing: -0.04em; color: #2d8a4e;
-        }
-        .delta {
-          position: absolute; top: 76%; left: 34%;
-          font-size: 30px; font-weight: 700; color: #e07a3a;
-          padding: 8px 18px; border: 2px solid #e07a3a; border-radius: 6px;
-          transform: rotate(-1deg); background: #fffaf3;
-          box-shadow: 4px 5px 0 rgba(224,122,58,0.25);
-        }
-      </style>
-      <div id="root" data-composition-id="frame-03-results" data-width="1920" data-height="1080">
-        <div class="dither" id="dither"></div>
-        <div class="bloom" id="bloom"></div>
-        <div class="title-row">
-          <h2 id="title">Research track · same benchmark</h2>
-          <div class="open-badge" id="badge">Open Qwen3.8-27B</div>
-        </div>
-        <div class="track-badge" id="track">✓ tieout · SpreadsheetBench Verified</div>
-        <div class="chart-wrap">
-          <div class="bar-col">
-            <div class="bar-val" id="v0">74.67%</div>
-            <div class="bar grey" id="b0"></div>
-            <div class="bar-label">WML reference</div>
-          </div>
-          <div class="bar-col">
-            <div class="bar-val" id="v1">59.0%</div>
-            <div class="bar orange" id="b1"></div>
-            <div class="bar-label">Official floor</div>
-          </div>
-          <div class="bar-col">
-            <div class="bar-val" id="v2">68.00%</div>
-            <div class="bar green" id="b2"></div>
-            <div class="bar-label">tieout ship</div>
-          </div>
-        </div>
-        <div class="hero-stat" id="hero">68.00%</div>
-        <div class="delta" id="delta">+9pp vs floor</div>
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"></head><body><template>
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=IBM+Plex+Sans:wght@400;600;700;800&display=swap");
+  #root{position:absolute;inset:0;overflow:hidden;font-family:"IBM Plex Sans",system-ui,sans-serif;color:#1a1a1a;background:linear-gradient(180deg,#fff4ea,#f5f0e8)}
+  .warm{position:absolute;inset:0;background:radial-gradient(circle at 50% 72%,rgba(224,122,58,0.26),transparent 58%);pointer-events:none;z-index:1}
+  .dither{position:absolute;inset:-4%;opacity:0.22;background-image:repeating-conic-gradient(#e8e0d4 0% 25%,transparent 0% 50%) 0 0/5px 5px;z-index:1}
+  .kicker{position:absolute;top:40px;left:72px;font-family:"IBM Plex Mono",monospace;font-size:14px;letter-spacing:0.14em;text-transform:uppercase;color:#a04812;font-weight:700;z-index:5}
+  .kicker::after{content:"";display:block;width:72px;height:3px;background:#a04812;margin-top:10px}
+  h2{position:absolute;top:92px;left:72px;font-size:40px;font-weight:800;letter-spacing:-0.02em;z-index:5}
+  h2 span{color:#e07a3a}
+  .lbl{position:absolute;top:152px;left:72px;font-family:"IBM Plex Mono",monospace;font-size:14px;letter-spacing:0.1em;text-transform:uppercase;color:#6b6560;z-index:5}
+  .run-counter{position:absolute;top:88px;right:72px;text-align:right;z-index:5;padding:14px 18px;background:#fffaf3;border:3px solid #1a1a1a;border-radius:10px;box-shadow:6px 7px 0 rgba(224,122,58,0.22);display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+  .run-counter .num{font-family:"IBM Plex Mono",monospace;font-size:52px;font-weight:700;color:#c45a1a;letter-spacing:-0.04em;line-height:1;display:block}
+  .run-counter .sub{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#6b6560;margin-top:0;display:block}
+  .logs-left,.logs-right{position:absolute;top:200px;bottom:236px;width:268px;display:flex;flex-direction:column;gap:12px;z-index:4}
+  .logs-left{left:72px}.logs-right{right:72px}
+  .log{padding:14px 16px;background:#fffaf3;border:2px solid #1a1a1a;border-radius:8px;box-shadow:4px 5px 0 rgba(26,26,26,0.07);font-family:"IBM Plex Mono",monospace}
+  .log .hi{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#6b6560;margin-bottom:6px}
+  .log .body{font-size:13px;font-weight:700;color:#1a1a1a;line-height:1.35}
+  .log.fail{border-color:#c45a1a;background:#fff4ea}
+  .log.fail .body{color:#c45a1a}
+  .chrome{position:absolute;left:360px;right:360px;top:196px;bottom:228px;background:#fffaf3;border:3px solid #1a1a1a;border-radius:14px;box-shadow:7px 9px 0 rgba(224,122,58,0.18);display:flex;flex-direction:column;z-index:3;overflow:hidden}
+  .chrome-head{flex-shrink:0;display:flex;justify-content:space-between;align-items:center;padding:10px 18px;border-bottom:2px solid rgba(26,26,26,0.1);background:#fff;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#6b6560;font-weight:700}
+  .lora-tag{padding:4px 8px;border:2px solid #c45a1a;background:#fff4ea;color:#c45a1a;border-radius:4px;font-size:10px;letter-spacing:0.1em}
+  .chrome-body{flex:1;position:relative;min-height:0;display:flex;align-items:flex-end;justify-content:center;padding:16px 28px 20px}
+  .hash{position:absolute;inset:12px 18px 20px;background-image:repeating-linear-gradient(180deg,transparent 0,transparent 47px,rgba(26,26,26,0.05) 47px,rgba(26,26,26,0.05) 48px);pointer-events:none}
+  .floor59{position:absolute;left:20px;right:20px;bottom:400px;height:0;border-top:2px dashed #e07a3a;z-index:4}
+  .floor59 span{position:absolute;right:0;top:-20px;font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#a04812;background:#fffaf3;padding:0 6px}
+  .chips{position:absolute;left:18px;top:16px;bottom:28px;width:132px;display:flex;flex-direction:column;justify-content:flex-end;gap:8px;z-index:5}
+  .chips-r{position:absolute;right:18px;top:16px;bottom:28px;width:132px;display:flex;flex-direction:column;justify-content:center;gap:8px;z-index:5}
+  .chip{padding:7px 10px;background:#fff4ea;border:2px solid #1a1a1a;border-radius:6px;font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:700;letter-spacing:0.04em;color:#1a1a1a;box-shadow:3px 3px 0 rgba(26,26,26,0.08)}
+  .chip.fail{border-color:#c45a1a;color:#c45a1a}
+  .chip .k{display:block;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:#6b6560;margin-bottom:2px}
+  .bar-col{display:flex;flex-direction:column;align-items:center;gap:10px;width:220px;height:100%;justify-content:flex-end;position:relative;z-index:3}
+  .bar{width:200px;border-radius:12px 12px 4px 4px;transform-origin:bottom center;background:linear-gradient(180deg,#ff9f56,#e07a3a);box-shadow:0 0 40px rgba(224,122,58,0.35);position:relative;overflow:hidden;display:block}
+  .bar::after{content:"";position:absolute;inset:0;background-image:repeating-conic-gradient(rgba(255,255,255,0.15) 0% 25%,transparent 0% 50%) 0 0/4px 4px}
+  .pct{font-family:"IBM Plex Mono",monospace;font-size:52px;font-weight:700;color:#c45a1a;letter-spacing:-0.04em}
+  .bar-lbl{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#6b6560;font-weight:700}
+  .ticks{position:absolute;left:360px;right:360px;bottom:200px;display:flex;justify-content:center;gap:20px;font-family:"IBM Plex Mono",monospace;font-size:13px;color:#6b6560;z-index:5}
+  .tick{padding:8px 16px;border:2px solid rgba(26,26,26,0.15);border-radius:6px;background:#fffaf3;font-weight:700}
+  .tick.on{border-color:#e07a3a;background:#fff4ea;color:#c45a1a}
+  .analyst-sm{position:absolute;left:250px;bottom:218px;height:230px;z-index:6;pointer-events:none;filter:drop-shadow(4px 6px 0 rgba(26,26,26,0.1))}
+  .analyst-sm img{height:100%;width:auto;display:block;object-fit:contain}
+</style>
+<div data-hf-id="hf-suo9" id="root" data-composition-id="frame-03-results" data-width="1920" data-height="1080" data-duration="4.578">
+  <div data-hf-id="hf-lyg2" class="warm" id="warm"></div>
+  <div data-hf-id="hf-vu9z" class="dither" id="dither" data-layout-allow-overflow="true"></div>
+  <div data-hf-id="hf-eix7" class="kicker" id="kicker">03 · False win</div>
+  <h2 data-hf-id="hf-rc5q" id="title">LoRA fine-tune · <span data-hf-id="hf-bmu5">600 training runs</span></h2>
+  <div data-hf-id="hf-06hf" class="lbl" id="lbl">This was supposed to be the part that works.</div>
+  <div data-hf-id="hf-ix87" class="run-counter" id="rc"><div data-hf-id="hf-7703" class="num" id="rnum">100</div><div data-hf-id="hf-edie" class="sub">training runs</div></div>
+  <div data-hf-id="hf-588y" class="logs-left" id="logsL">
+    <div data-hf-id="hf-8p5d" class="log" id="l1"><div data-hf-id="hf-v9ux" class="hi">run · LoRA</div><div data-hf-id="hf-sil2" class="body">rank=16 · α=32 · lr=2e-4</div></div>
+    <div data-hf-id="hf-euv6" class="log" id="l2"><div data-hf-id="hf-2u5f" class="hi">epoch tick</div><div data-hf-id="hf-4tkg" class="body">epoch 3/12 · loss↓ slow</div></div>
+    <div data-hf-id="hf-vuj3" class="log fail" id="l3"><div data-hf-id="hf-9d69" class="hi">note</div><div data-hf-id="hf-526v" class="body">Still under 59% floor</div></div>
+  </div>
+  <div data-hf-id="hf-ovfn" class="logs-right" id="logsR">
+    <div data-hf-id="hf-wws3" class="log" id="r1"><div data-hf-id="hf-lptf" class="hi">checkpoint</div><div data-hf-id="hf-xbii" class="body">ckpt-100 · 52% held</div></div>
+    <div data-hf-id="hf-o8w8" class="log" id="r2"><div data-hf-id="hf-1s9f" class="hi">checkpoint</div><div data-hf-id="hf-wrg2" class="body">ckpt-300 · +2pp only</div></div>
+    <div data-hf-id="hf-lo45" class="log fail" id="r3"><div data-hf-id="hf-6hlp" class="hi">failure</div><div data-hf-id="hf-iw12" class="body">600 runs · plateau 55%</div></div>
+  </div>
+  <div data-hf-id="hf-1m56" class="chrome" id="chrome">
+    <div data-hf-id="hf-chd" class="chrome-head" id="chromeHead">run log · plateau<span data-hf-id="hf-lrt" class="lora-tag" id="loraTag">LoRA r16</span></div>
+    <div data-hf-id="hf-cbb" class="chrome-body" id="chromeBody">
+      <div data-hf-id="hf-hsh" class="hash" id="hash"></div>
+      <div data-hf-id="hf-flr" class="floor59" id="floor59"><span data-hf-id="hf-fls">59% floor</span></div>
+      <div data-hf-id="hf-chp" class="chips" id="chips" data-layout-allow-occlusion="" data-layout-allow-overlap="">
+        <div data-hf-id="hf-c1" class="chip fail" id="chip1"><span data-hf-id="hf-c1k" class="k">epoch 2</span>loss spike</div>
+        <div data-hf-id="hf-c2" class="chip fail" id="chip2"><span data-hf-id="hf-c2k" class="k">epoch 7</span>stall 53%</div>
+        <div data-hf-id="hf-c3" class="chip" id="chip3"><span data-hf-id="hf-c3k" class="k">ckpt-400</span>+0.4pp</div>
       </div>
-      <script>
-        window.__timelines = window.__timelines || {};
-        const tl = gsap.timeline({ paused: true });
-        gsap.set("#title,#badge,#track,.bar-val,#hero,#delta,#bloom", { opacity: 0 });
-        gsap.set(".bar", { scaleY: 0 });
-        tl.fromTo("#root", { scale: 0.92, filter: "blur(16px)" }, { scale: 1, filter: "blur(0px)", duration: 0.45, ease: "power3.out" }, 0);
-        tl.fromTo("#title", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power2.out" }, 0.15);
-        tl.fromTo("#badge", { x: 30, opacity: 0 }, { x: 0, opacity: 1, duration: 0.28, ease: "power3.out" }, 0.35);
-        tl.fromTo("#track", { y: -400, opacity: 0 }, { y: 0, opacity: 1, duration: 0.32, ease: "power4.out" }, 0.5);
-        tl.to("#b0", { scaleY: 1, duration: 0.45, ease: "power2.out" }, 0.65);
-        tl.fromTo("#v0", { y: 10, opacity: 0 }, { y: 0, opacity: 1, duration: 0.2 }, 0.7);
-        tl.to("#b1", { scaleY: 1, duration: 0.4, ease: "power2.out" }, 1.1);
-        tl.fromTo("#v1", { y: 10, opacity: 0 }, { y: 0, opacity: 1, duration: 0.2 }, 1.15);
-        tl.to("#b2", { scaleY: 1, duration: 0.5, ease: "power3.out" }, 1.55);
-        tl.fromTo("#v2", { y: 10, opacity: 0 }, { y: 0, opacity: 1, duration: 0.2 }, 1.65);
-        tl.fromTo("#bloom", { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.6, ease: "power2.out" }, 1.7);
-        tl.fromTo("#hero", { scale: 0.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(1.6)" }, 1.95);
-        tl.fromTo("#delta", { y: -600, opacity: 0, rotation: 4 }, { y: 0, opacity: 1, rotation: -1, duration: 0.32, ease: "power4.out" }, 2.25);
-        tl.to("#bloom", { scale: 1.08, duration: 2, ease: "sine.inOut", yoyo: true, repeat: 1 }, 2.5);
-        window.__timelines["frame-03-results"] = tl;
-      </script>
-    </template>
-  </body>
-</html>
+      <div data-hf-id="hf-chr" class="chips-r" id="chipsR">
+        <div data-hf-id="hf-c4" class="chip fail" id="chip4"><span data-hf-id="hf-c4k" class="k">failed</span>ep 11 underfit</div>
+        <div data-hf-id="hf-c5" class="chip" id="chip5"><span data-hf-id="hf-c5k" class="k">note</span>no decode audit</div>
+      </div>
+      <div data-hf-id="hf-coo6" class="bar-col"><div data-hf-id="hf-w59o" class="pct" id="pct">—</div><div data-hf-id="hf-nbs4" class="bar" id="bar"></div><div data-hf-id="hf-sbvw" class="bar-lbl" data-layout-allow-overlap="true">Fine-tune progress</div></div>
+    </div>
+  </div>
+  <div data-hf-id="hf-5hg9" class="analyst-sm" id="analystSm" data-layout-allow-overlap="" data-layout-allow-occlusion="">
+    <img data-hf-id="hf-yt57" src="assets/char-analyst-overwhelmed.png" alt="">
+  </div>
+  <div data-hf-id="hf-jlbm" class="ticks" id="ticks"><div data-hf-id="hf-66xb" class="tick" id="t1">100</div><div data-hf-id="hf-vqe4" class="tick" id="t2">300</div><div data-hf-id="hf-blc0" class="tick" id="t3">600</div></div>
+</div>
+<script>
+window.__timelines=window.__timelines||{};
+const tl=gsap.timeline({paused:true});
+const bar=document.getElementById("bar");
+const rnum=document.getElementById("rnum");
+const pct=document.getElementById("pct");
+gsap.set(bar,{height:0,scaleY:1});
+gsap.set("#kicker,#title,#lbl,#rc,#ticks,#warm,#chrome,#logsL,#logsR,#dither,#analystSm,#floor59,#loraTag",{opacity:0});
+gsap.set("#l1,#l2,#l3,#r1,#r2,#r3,#chip1,#chip2,#chip3,#chip4,#chip5",{opacity:0,y:10});
+tl.fromTo("#warm",{opacity:0},{opacity:1,duration:0.3},0);
+tl.fromTo("#dither",{opacity:0.1},{opacity:0.22,duration:0.3},0);
+tl.fromTo("#kicker",{x:-12,opacity:0},{x:0,opacity:1,duration:0.18},0.04);
+tl.fromTo("#title",{y:14,opacity:0},{y:0,opacity:1,duration:0.25},0.08);
+tl.fromTo("#lbl",{opacity:0},{opacity:1,duration:0.2},0.2);
+tl.fromTo("#rc",{scale:0.9,opacity:0},{scale:1,opacity:1,duration:0.25},0.15);
+tl.fromTo("#chrome",{y:18,opacity:0},{y:0,opacity:1,duration:0.28},0.28);
+tl.fromTo("#loraTag",{opacity:0},{opacity:1,duration:0.16},0.34);
+tl.fromTo("#floor59",{opacity:0},{opacity:1,duration:0.2},0.38);
+tl.fromTo("#l1",{y:10,opacity:0},{y:0,opacity:1,duration:0.18},0.35);
+tl.fromTo("#r1",{y:10,opacity:0},{y:0,opacity:1,duration:0.18},0.38);
+tl.to(bar,{height:160,duration:0.5,ease:"power1.out"},0.4);
+tl.call(()=>{rnum.textContent="100";pct.textContent="52%";document.getElementById("t1").classList.add("on");},[],0.5);
+tl.fromTo("#chip1",{y:10,opacity:0},{y:0,opacity:1,duration:0.16},0.55);
+tl.fromTo("#chip4",{y:10,opacity:0},{y:0,opacity:1,duration:0.16},0.6);
+tl.fromTo("#l2",{y:10,opacity:0},{y:0,opacity:1,duration:0.18},0.7);
+tl.fromTo("#r2",{y:10,opacity:0},{y:0,opacity:1,duration:0.18},0.75);
+tl.to(bar,{height:260,duration:0.5,ease:"power1.out"},0.9);
+tl.call(()=>{rnum.textContent="300";pct.textContent="54%";document.getElementById("t2").classList.add("on");},[],1.0);
+tl.fromTo("#chip2",{y:10,opacity:0},{y:0,opacity:1,duration:0.16},1.05);
+tl.fromTo("#chip5",{y:10,opacity:0},{y:0,opacity:1,duration:0.16},1.1);
+tl.fromTo("#l3",{y:10,opacity:0},{y:0,opacity:1,duration:0.18},1.2);
+tl.fromTo("#r3",{y:10,opacity:0},{y:0,opacity:1,duration:0.18},1.25);
+tl.to(bar,{height:340,duration:0.6,ease:"power2.out"},1.4);
+tl.fromTo("#chip3",{y:10,opacity:0},{y:0,opacity:1,duration:0.16},1.45);
+tl.fromTo("#analystSm",{y:40,opacity:0,scale:0.9},{y:0,opacity:1,scale:1,duration:0.4,ease:"power3.out"},1.35);
+tl.call(()=>{rnum.textContent="600";pct.textContent="55%";document.getElementById("t3").classList.add("on");},[],1.5);
+tl.fromTo("#ticks",{y:10,opacity:0},{y:0,opacity:1,duration:0.2},1.6);
+tl.to(bar,{boxShadow:"0 0 60px rgba(224,122,58,0.5)",duration:0.6,ease:"sine.inOut",yoyo:true,repeat:-1},1.8);
+tl.to("#dither",{x:5,duration:1.8,ease:"sine.inOut",yoyo:true,repeat:-1},2.0);
+window.__timelines["frame-03-results"]=tl;
+</script>
+</template></body></html>

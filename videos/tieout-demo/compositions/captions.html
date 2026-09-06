@@ -1,0 +1,127 @@
+<template>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style data-brand-tokens="">
+  :root {
+    --cap-ink: #1a1a1a;
+    --cap-canvas: #fffaf3;
+    --cap-accent: #2d8a4e;
+    --cap-accent-2: #e07a3a;
+    --font-display: "IBM Plex Sans", system-ui, sans-serif;
+    --font-body: "IBM Plex Sans", system-ui, sans-serif;
+    --cap-band-top: 880px;
+    --cap-band-height: 160px;
+  }
+</style>
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap");
+  #captions-root { position: absolute; inset: 0; pointer-events: none; }
+  .caption-layer { position: absolute; inset: 0; z-index: 30; pointer-events: none; }
+  .caption-stage {
+    position: absolute; left: 0; right: 0;
+    top: var(--cap-band-top, 880px);
+    height: var(--cap-band-height, 160px);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .caption-group {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0;
+  }
+  .caption-pill {
+    max-width: 72%;
+    padding: 16px 36px 18px;
+    background: var(--cap-canvas);
+    border: 2px solid rgba(26,26,26,0.14);
+    border-radius: 8px;
+    box-shadow: 6px 8px 0 rgba(26,26,26,0.08);
+  }
+  .caption-line {
+    display: flex; flex-wrap: wrap; justify-content: center;
+    gap: 0.1em 0.28em;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(28px, 2.4vw, 38px);
+    line-height: 1.22;
+    letter-spacing: -0.02em;
+  }
+  .caption-word {
+    display: inline-block;
+    padding: 0 0.02em 0.05em;
+    color: color-mix(in srgb, var(--cap-ink) 42%, var(--cap-canvas));
+    border-bottom: 3px solid transparent;
+  }
+  .caption-word.is-active {
+    color: var(--cap-ink);
+    border-bottom: 3px solid var(--cap-accent);
+  }
+  .caption-word.is-spoken {
+    color: var(--cap-ink);
+    border-bottom: 3px solid transparent;
+  }
+  .caption-word.cap-brand { color: var(--cap-accent); font-weight: 700; }
+  .caption-word.cap-num { font-family: "IBM Plex Mono", monospace; font-weight: 700; }
+</style>
+<div data-hf-id="hf-n16z" id="captions-root" data-composition-id="captions" data-start="0" data-duration="48.904" data-width="1920" data-height="1080">
+  <div data-hf-id="hf-9flp" class="caption-layer" aria-hidden="true">
+    <div data-hf-id="hf-ajrg" id="caption-stage" class="caption-stage"></div>
+  </div>
+</div>
+<script>
+  var GROUPS = [{"id": "caption-group-0", "frame": 0, "start": 0.0, "end": 1.068, "text": "Private markets manage", "words": [{"id": "caption-word-0-0", "text": "Private", "start": 0.0, "end": 0.348}, {"id": "caption-word-0-1", "text": "markets", "start": 0.383, "end": 0.72}, {"id": "caption-word-0-2", "text": "manage", "start": 0.789, "end": 1.068}]}, {"id": "caption-group-1", "frame": 0, "start": 1.103, "end": 2.09, "text": "thirty trillion dollars", "words": [{"id": "caption-word-1-0", "text": "thirty", "start": 1.103, "end": 1.37}, {"id": "caption-word-1-1", "text": "trillion", "start": 1.416, "end": 1.718}, {"id": "caption-word-1-2", "text": "dollars", "start": 1.765, "end": 2.09}]}, {"id": "caption-group-2", "frame": 0, "start": 2.194, "end": 2.868, "text": "\u2014 and when", "words": [{"id": "caption-word-2-0", "text": "\u2014", "start": 2.194, "end": 2.252}, {"id": "caption-word-2-1", "text": "and", "start": 2.589, "end": 2.705}, {"id": "caption-word-2-2", "text": "when", "start": 2.74, "end": 2.868}]}, {"id": "caption-group-3", "frame": 0, "start": 2.902, "end": 3.413, "text": "the back office", "words": [{"id": "caption-word-3-0", "text": "the", "start": 2.902, "end": 2.972}, {"id": "caption-word-3-1", "text": "back", "start": 3.007, "end": 3.146}, {"id": "caption-word-3-2", "text": "office", "start": 3.181, "end": 3.413}]}, {"id": "caption-group-4", "frame": 0, "start": 3.448, "end": 4.168, "text": "needs to grow,", "words": [{"id": "caption-word-4-0", "text": "needs", "start": 3.448, "end": 3.622}, {"id": "caption-word-4-1", "text": "to", "start": 3.657, "end": 3.727}, {"id": "caption-word-4-2", "text": "grow,", "start": 3.773, "end": 4.168}]}, {"id": "caption-group-5", "frame": 0, "start": 4.272, "end": 4.783, "text": "funds are more", "words": [{"id": "caption-word-5-0", "text": "funds", "start": 4.272, "end": 4.516}, {"id": "caption-word-5-1", "text": "are", "start": 4.551, "end": 4.632}, {"id": "caption-word-5-2", "text": "more", "start": 4.656, "end": 4.783}]}, {"id": "caption-group-6", "frame": 0, "start": 4.818, "end": 5.364, "text": "likely to hire", "words": [{"id": "caption-word-6-0", "text": "likely", "start": 4.818, "end": 5.05}, {"id": "caption-word-6-1", "text": "to", "start": 5.085, "end": 5.143}, {"id": "caption-word-6-2", "text": "hire", "start": 5.19, "end": 5.364}]}, {"id": "caption-group-7", "frame": 0, "start": 5.399, "end": 5.991, "text": "more people than", "words": [{"id": "caption-word-7-0", "text": "more", "start": 5.399, "end": 5.538}, {"id": "caption-word-7-1", "text": "people", "start": 5.573, "end": 5.828}, {"id": "caption-word-7-2", "text": "than", "start": 5.863, "end": 5.991}]}, {"id": "caption-group-8", "frame": 0, "start": 6.026, "end": 7.338, "text": "improve their systems.", "words": [{"id": "caption-word-8-0", "text": "improve", "start": 6.026, "end": 6.339}, {"id": "caption-word-8-1", "text": "their", "start": 6.374, "end": 6.525}, {"id": "caption-word-8-2", "text": "systems.", "start": 6.56, "end": 7.338}]}, {"id": "caption-group-9", "frame": 1, "start": 7.458, "end": 8.398, "text": "Thinking Machines proof", "words": [{"id": "caption-word-9-0", "text": "Thinking", "start": 7.458, "end": 7.783}, {"id": "caption-word-9-1", "text": "Machines", "start": 7.818, "end": 8.155}, {"id": "caption-word-9-2", "text": "proof", "start": 8.201, "end": 8.398}]}, {"id": "caption-group-10", "frame": 1, "start": 8.468, "end": 8.863, "text": "point:", "words": [{"id": "caption-word-10-0", "text": "point:", "start": 8.468, "end": 8.863}]}, {"id": "caption-group-11", "frame": 1, "start": 9.467, "end": 10.314, "text": "fine-tune a small", "words": [{"id": "caption-word-11-0", "text": "fine-tune", "start": 9.467, "end": 10.012}, {"id": "caption-word-11-1", "text": "a", "start": 10.047, "end": 10.07}, {"id": "caption-word-11-2", "text": "small", "start": 10.105, "end": 10.314}]}, {"id": "caption-group-12", "frame": 1, "start": 10.372, "end": 11.104, "text": "model on expert", "words": [{"id": "caption-word-12-0", "text": "model", "start": 10.372, "end": 10.593}, {"id": "caption-word-12-1", "text": "on", "start": 10.651, "end": 10.732}, {"id": "caption-word-12-2", "text": "expert", "start": 10.79, "end": 11.104}]}, {"id": "caption-group-13", "frame": 1, "start": 11.138, "end": 11.928, "text": "data, and it", "words": [{"id": "caption-word-13-0", "text": "data,", "start": 11.138, "end": 11.591}, {"id": "caption-word-13-1", "text": "and", "start": 11.696, "end": 11.812}, {"id": "caption-word-13-2", "text": "it", "start": 11.858, "end": 11.928}]}, {"id": "caption-group-14", "frame": 1, "start": 11.974, "end": 13.008, "text": "beats frontier AI", "words": [{"id": "caption-word-14-0", "text": "beats", "start": 11.974, "end": 12.195}, {"id": "caption-word-14-1", "text": "frontier", "start": 12.241, "end": 12.636}, {"id": "caption-word-14-2", "text": "AI", "start": 12.706, "end": 13.008}]}, {"id": "caption-group-15", "frame": 1, "start": 13.054, "end": 13.994, "text": "on financial judgment", "words": [{"id": "caption-word-15-0", "text": "on", "start": 13.054, "end": 13.124}, {"id": "caption-word-15-1", "text": "financial", "start": 13.182, "end": 13.565}, {"id": "caption-word-15-2", "text": "judgment", "start": 13.611, "end": 13.994}]}, {"id": "caption-group-16", "frame": 1, "start": 14.111, "end": 14.47, "text": "\u2014 for a", "words": [{"id": "caption-word-16-0", "text": "\u2014", "start": 14.111, "end": 14.18}, {"id": "caption-word-16-1", "text": "for", "start": 14.308, "end": 14.412}, {"id": "caption-word-16-2", "text": "a", "start": 14.447, "end": 14.47}]}, {"id": "caption-group-17", "frame": 1, "start": 14.505, "end": 14.981, "text": "fraction of the", "words": [{"id": "caption-word-17-0", "text": "fraction", "start": 14.505, "end": 14.784}, {"id": "caption-word-17-1", "text": "of", "start": 14.819, "end": 14.877}, {"id": "caption-word-17-2", "text": "the", "start": 14.912, "end": 14.981}]}, {"id": "caption-group-18", "frame": 1, "start": 15.016, "end": 15.631, "text": "cost.", "words": [{"id": "caption-word-18-0", "text": "cost.", "start": 15.016, "end": 15.631}]}, {"id": "caption-group-19", "frame": 2, "start": 15.751, "end": 16.436, "text": "This weekend we", "words": [{"id": "caption-word-19-0", "text": "This", "start": 15.751, "end": 15.948}, {"id": "caption-word-19-1", "text": "weekend", "start": 16.006, "end": 16.32}, {"id": "caption-word-19-2", "text": "we", "start": 16.355, "end": 16.436}]}, {"id": "caption-group-20", "frame": 2, "start": 16.494, "end": 17.33, "text": "replicated that with", "words": [{"id": "caption-word-20-0", "text": "replicated", "start": 16.494, "end": 16.947}, {"id": "caption-word-20-1", "text": "that", "start": 16.982, "end": 17.144}, {"id": "caption-word-20-2", "text": "with", "start": 17.191, "end": 17.33}]}, {"id": "caption-group-21", "frame": 2, "start": 17.365, "end": 18.073, "text": "spreadsheets \u2014", "words": [{"id": "caption-word-21-0", "text": "spreadsheets", "start": 17.365, "end": 17.899}, {"id": "caption-word-21-1", "text": "\u2014", "start": 18.015, "end": 18.073}]}, {"id": "caption-group-22", "frame": 2, "start": 18.119, "end": 19.002, "text": "the actual back-office", "words": [{"id": "caption-word-22-0", "text": "the", "start": 18.119, "end": 18.224}, {"id": "caption-word-22-1", "text": "actual", "start": 18.27, "end": 18.503}, {"id": "caption-word-22-2", "text": "back-office", "start": 18.561, "end": 19.002}]}, {"id": "caption-group-23", "frame": 2, "start": 19.025, "end": 19.501, "text": "grind.", "words": [{"id": "caption-word-23-0", "text": "grind.", "start": 19.025, "end": 19.501}]}, {"id": "caption-group-24", "frame": 2, "start": 19.942, "end": 20.65, "text": "Every team used", "words": [{"id": "caption-word-24-0", "text": "Every", "start": 19.942, "end": 20.186}, {"id": "caption-word-24-1", "text": "team", "start": 20.221, "end": 20.407}, {"id": "caption-word-24-2", "text": "used", "start": 20.488, "end": 20.65}]}, {"id": "caption-group-25", "frame": 2, "start": 20.674, "end": 21.405, "text": "the same model,", "words": [{"id": "caption-word-25-0", "text": "the", "start": 20.674, "end": 20.743}, {"id": "caption-word-25-1", "text": "same", "start": 20.778, "end": 20.964}, {"id": "caption-word-25-2", "text": "model,", "start": 20.999, "end": 21.405}]}, {"id": "caption-group-26", "frame": 2, "start": 21.556, "end": 22.264, "text": "Qwen three point", "words": [{"id": "caption-word-26-0", "text": "Qwen", "start": 21.556, "end": 21.811}, {"id": "caption-word-26-1", "text": "three", "start": 21.869, "end": 22.032}, {"id": "caption-word-26-2", "text": "point", "start": 22.078, "end": 22.264}]}, {"id": "caption-group-27", "frame": 2, "start": 22.311, "end": 23.425, "text": "eight twenty-seven B.", "words": [{"id": "caption-word-27-0", "text": "eight", "start": 22.311, "end": 22.473}, {"id": "caption-word-27-1", "text": "twenty-seven", "start": 22.496, "end": 23.019}, {"id": "caption-word-27-2", "text": "B.", "start": 23.065, "end": 23.425}]}, {"id": "caption-group-28", "frame": 2, "start": 23.762, "end": 24.389, "text": "The benchmark to", "words": [{"id": "caption-word-28-0", "text": "The", "start": 23.762, "end": 23.855}, {"id": "caption-word-28-1", "text": "benchmark", "start": 23.901, "end": 24.284}, {"id": "caption-word-28-2", "text": "to", "start": 24.331, "end": 24.389}]}, {"id": "caption-group-29", "frame": 2, "start": 24.447, "end": 26.084, "text": "beat: fifty-nine percent,", "words": [{"id": "caption-word-29-0", "text": "beat:", "start": 24.447, "end": 24.853}, {"id": "caption-word-29-1", "text": "fifty-nine", "start": 25.19, "end": 25.631}, {"id": "caption-word-29-2", "text": "percent,", "start": 25.666, "end": 26.084}]}, {"id": "caption-group-30", "frame": 2, "start": 26.188, "end": 26.699, "text": "straight out of", "words": [{"id": "caption-word-30-0", "text": "straight", "start": 26.188, "end": 26.467}, {"id": "caption-word-30-1", "text": "out", "start": 26.502, "end": 26.606}, {"id": "caption-word-30-2", "text": "of", "start": 26.641, "end": 26.699}]}, {"id": "caption-group-31", "frame": 2, "start": 26.734, "end": 27.5, "text": "the box.", "words": [{"id": "caption-word-31-0", "text": "the", "start": 26.734, "end": 26.804}, {"id": "caption-word-31-1", "text": "box.", "start": 26.839, "end": 27.5}]}, {"id": "caption-group-32", "frame": 3, "start": 27.62, "end": 28.398, "text": "So we fine-tuned", "words": [{"id": "caption-word-32-0", "text": "So", "start": 27.62, "end": 27.759}, {"id": "caption-word-32-1", "text": "we", "start": 27.794, "end": 27.864}, {"id": "caption-word-32-2", "text": "fine-tuned", "start": 27.922, "end": 28.398}]}, {"id": "caption-group-33", "frame": 3, "start": 28.433, "end": 29.35, "text": "it. Six hundred", "words": [{"id": "caption-word-33-0", "text": "it.", "start": 28.433, "end": 28.595}, {"id": "caption-word-33-1", "text": "Six", "start": 28.874, "end": 29.083}, {"id": "caption-word-33-2", "text": "hundred", "start": 29.129, "end": 29.35}]}, {"id": "caption-group-34", "frame": 3, "start": 29.385, "end": 30.023, "text": "training runs.", "words": [{"id": "caption-word-34-0", "text": "training", "start": 29.385, "end": 29.652}, {"id": "caption-word-34-1", "text": "runs.", "start": 29.698, "end": 30.023}]}, {"id": "caption-group-35", "frame": 3, "start": 30.128, "end": 30.72, "text": "This was supposed", "words": [{"id": "caption-word-35-0", "text": "This", "start": 30.128, "end": 30.279}, {"id": "caption-word-35-1", "text": "was", "start": 30.314, "end": 30.406}, {"id": "caption-word-35-2", "text": "supposed", "start": 30.441, "end": 30.72}]}, {"id": "caption-group-36", "frame": 3, "start": 30.743, "end": 30.999, "text": "to be the", "words": [{"id": "caption-word-36-0", "text": "to", "start": 30.743, "end": 30.79}, {"id": "caption-word-36-1", "text": "be", "start": 30.824, "end": 30.894}, {"id": "caption-word-36-2", "text": "the", "start": 30.929, "end": 30.999}]}, {"id": "caption-group-37", "frame": 3, "start": 31.033, "end": 32.078, "text": "part that works.", "words": [{"id": "caption-word-37-0", "text": "part", "start": 31.033, "end": 31.219}, {"id": "caption-word-37-1", "text": "that", "start": 31.254, "end": 31.37}, {"id": "caption-word-37-2", "text": "works.", "start": 31.416, "end": 32.078}]}, {"id": "caption-group-38", "frame": 4, "start": 32.198, "end": 32.802, "text": "So we tested", "words": [{"id": "caption-word-38-0", "text": "So", "start": 32.198, "end": 32.326}, {"id": "caption-word-38-1", "text": "we", "start": 32.372, "end": 32.453}, {"id": "caption-word-38-2", "text": "tested", "start": 32.5, "end": 32.802}]}, {"id": "caption-group-39", "frame": 4, "start": 32.837, "end": 33.452, "text": "it two ways", "words": [{"id": "caption-word-39-0", "text": "it", "start": 32.837, "end": 32.906}, {"id": "caption-word-39-1", "text": "two", "start": 32.941, "end": 33.069}, {"id": "caption-word-39-2", "text": "ways", "start": 33.127, "end": 33.452}]}, {"id": "caption-group-40", "frame": 4, "start": 33.556, "end": 34.369, "text": "\u2014 same model,", "words": [{"id": "caption-word-40-0", "text": "\u2014", "start": 33.556, "end": 33.603}, {"id": "caption-word-40-1", "text": "same", "start": 33.731, "end": 33.974}, {"id": "caption-word-40-2", "text": "model,", "start": 34.009, "end": 34.369}]}, {"id": "caption-group-41", "frame": 4, "start": 34.474, "end": 35.24, "text": "same everything \u2014", "words": [{"id": "caption-word-41-0", "text": "same", "start": 34.474, "end": 34.683}, {"id": "caption-word-41-1", "text": "everything", "start": 34.717, "end": 35.089}, {"id": "caption-word-41-2", "text": "\u2014", "start": 35.193, "end": 35.24}]}, {"id": "caption-group-42", "frame": 4, "start": 35.577, "end": 36.285, "text": "reasoning off,", "words": [{"id": "caption-word-42-0", "text": "reasoning", "start": 35.577, "end": 35.913}, {"id": "caption-word-42-1", "text": "off,", "start": 35.971, "end": 36.285}]}, {"id": "caption-group-43", "frame": 4, "start": 36.412, "end": 37.155, "text": "reasoning on.", "words": [{"id": "caption-word-43-0", "text": "reasoning", "start": 36.412, "end": 36.738}, {"id": "caption-word-43-1", "text": "on.", "start": 36.796, "end": 37.155}]}, {"id": "caption-group-44", "frame": 4, "start": 37.539, "end": 38.456, "text": "One config swap", "words": [{"id": "caption-word-44-0", "text": "One", "start": 37.539, "end": 37.748}, {"id": "caption-word-44-1", "text": "config", "start": 37.794, "end": 38.166}, {"id": "caption-word-44-2", "text": "swap", "start": 38.224, "end": 38.456}]}, {"id": "caption-group-45", "frame": 4, "start": 38.514, "end": 39.512, "text": "outperformed the entire", "words": [{"id": "caption-word-45-0", "text": "outperformed", "start": 38.514, "end": 39.025}, {"id": "caption-word-45-1", "text": "the", "start": 39.059, "end": 39.129}, {"id": "caption-word-45-2", "text": "entire", "start": 39.164, "end": 39.512}]}, {"id": "caption-group-46", "frame": 4, "start": 39.559, "end": 40.464, "text": "fine-tune.", "words": [{"id": "caption-word-46-0", "text": "fine-tune.", "start": 39.559, "end": 40.464}]}, {"id": "caption-group-47", "frame": 5, "start": 40.584, "end": 41.211, "text": "If you're building", "words": [{"id": "caption-word-47-0", "text": "If", "start": 40.584, "end": 40.712}, {"id": "caption-word-47-1", "text": "you're", "start": 40.747, "end": 40.921}, {"id": "caption-word-47-2", "text": "building", "start": 40.944, "end": 41.211}]}, {"id": "caption-group-48", "frame": 5, "start": 41.257, "end": 41.641, "text": "on a small", "words": [{"id": "caption-word-48-0", "text": "on", "start": 41.257, "end": 41.327}, {"id": "caption-word-48-1", "text": "a", "start": 41.362, "end": 41.385}, {"id": "caption-word-48-2", "text": "small", "start": 41.432, "end": 41.641}]}, {"id": "caption-group-49", "frame": 5, "start": 41.675, "end": 42.407, "text": "model, check that", "words": [{"id": "caption-word-49-0", "text": "model,", "start": 41.675, "end": 41.977}, {"id": "caption-word-49-1", "text": "check", "start": 42.047, "end": 42.244}, {"id": "caption-word-49-2", "text": "that", "start": 42.279, "end": 42.407}]}, {"id": "caption-group-50", "frame": 5, "start": 42.465, "end": 43.603, "text": "first. It's free,", "words": [{"id": "caption-word-50-0", "text": "first.", "start": 42.465, "end": 42.906}, {"id": "caption-word-50-1", "text": "It's", "start": 43.092, "end": 43.266}, {"id": "caption-word-50-2", "text": "free,", "start": 43.301, "end": 43.603}]}, {"id": "caption-group-51", "frame": 5, "start": 43.637, "end": 44.032, "text": "and it might", "words": [{"id": "caption-word-51-0", "text": "and", "start": 43.637, "end": 43.742}, {"id": "caption-word-51-1", "text": "it", "start": 43.788, "end": 43.835}, {"id": "caption-word-51-2", "text": "might", "start": 43.87, "end": 44.032}]}, {"id": "caption-group-52", "frame": 5, "start": 44.067, "end": 44.485, "text": "be the whole", "words": [{"id": "caption-word-52-0", "text": "be", "start": 44.067, "end": 44.148}, {"id": "caption-word-52-1", "text": "the", "start": 44.183, "end": 44.253}, {"id": "caption-word-52-2", "text": "whole", "start": 44.288, "end": 44.485}]}, {"id": "caption-group-53", "frame": 5, "start": 44.52, "end": 45.135, "text": "gap.", "words": [{"id": "caption-word-53-0", "text": "gap.", "start": 44.52, "end": 45.135}]}];
+  var DURATION = 48.904;
+  (function () {
+    var stage = document.getElementById("caption-stage");
+    GROUPS.forEach(function (group, g) {
+      var groupEl = document.createElement("div");
+      groupEl.className = "caption-group";
+      groupEl.id = "caption-group-" + g;
+      var pill = document.createElement("div");
+      pill.className = "caption-pill";
+      var line = document.createElement("div");
+      line.className = "caption-line";
+      (group.words || []).forEach(function (w, i) {
+        var span = document.createElement("span");
+        span.className = "caption-word";
+        span.id = "caption-word-" + g + "-" + i;
+        span.textContent = String(w.text);
+        line.appendChild(span);
+      });
+      pill.appendChild(line);
+      groupEl.appendChild(pill);
+      stage.appendChild(groupEl);
+    });
+    window.__timelines = window.__timelines || {};
+    var tl = gsap.timeline({ paused: true });
+    GROUPS.forEach(function (group, g) {
+      var groupEl = document.getElementById("caption-group-" + g);
+      var words = group.words || [];
+      var next = GROUPS[g + 1];
+      var isLast = g === GROUPS.length - 1;
+      var start = Math.max(0, Number(group.start));
+      var end = isLast ? DURATION : Math.min(Number(next.start), Number(group.end) + 0.28);
+      if (end <= start) end = start + 0.01;
+      tl.set(groupEl, { opacity: 1 }, start);
+      tl.set(groupEl, { opacity: 0 }, end);
+      words.forEach(function (w, i) {
+        var el = document.getElementById("caption-word-" + g + "-" + i);
+        var at = Math.max(start, Number(w.start));
+        tl.set(el, { className: "caption-word" }, start);
+        tl.set(el, { className: "caption-word is-active" }, at);
+        tl.fromTo(el, { scale: 0.98 }, { scale: 1, duration: 0.14, ease: "power1.out" }, at);
+        if (i + 1 < words.length) {
+          var nextAt = Math.max(start, Number(words[i + 1].start));
+          tl.set(el, { className: "caption-word is-spoken" }, nextAt);
+        }
+      });
+      if (words.length) {
+        var lastEl = document.getElementById("caption-word-" + g + "-" + (words.length - 1));
+        var lastSpoken = Math.min(end, Number(words[words.length - 1].end) + 0.08);
+        tl.set(lastEl, { className: "caption-word is-spoken" }, lastSpoken);
+      }
+    });
+    tl.set("#captions-root", { opacity: 0 }, 45.255);
+    tl.to({}, { duration: DURATION }, 0);
+    window.__timelines["captions"] = tl;
+  })();
+</script>
+</template>

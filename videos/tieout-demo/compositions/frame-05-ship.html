@@ -1,102 +1,200 @@
 <!doctype html>
-<html>
-  <head><meta charset="UTF-8" /></head>
-  <body>
-    <template>
-      <style>
-        @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=IBM+Plex+Sans:wght@400;600;700&display=swap");
-        #root {
-          position: absolute; inset: 0; overflow: hidden;
-          font-family: "IBM Plex Sans", system-ui, sans-serif;
-          color: #1a1a1a; background: #f5f0e8;
-        }
-        .dither {
-          position: absolute; inset: -4%;
-          background-color: #f5f0e8;
-          background-image:
-            repeating-conic-gradient(#e8e0d4 0% 25%, transparent 0% 50%) 0 0 / 5px 5px,
-            repeating-conic-gradient(transparent 0% 25%, #e8e0d4 0% 50%) 2.5px 2.5px / 5px 5px;
-        }
-        h2 {
-          position: absolute; top: 10%; left: 6%;
-          font-size: 42px; font-weight: 700;
-        }
-        .terminal {
-          position: absolute; top: 22%; left: 6%; right: 6%;
-          background: #1a1a1a; color: #f5f0e8;
-          border-radius: 14px; padding: 28px 30px;
-          font-family: "IBM Plex Mono", monospace;
-          font-size: 22px; line-height: 1.55;
-          box-shadow: 0 24px 56px rgba(26,26,26,0.2);
-        }
-        .prompt { color: #2d8a4e; }
-        .cursor {
-          display: inline-block; width: 12px; height: 22px;
-          background: #2d8a4e; vertical-align: middle; margin-left: 4px;
-        }
-        .stats-row {
-          position: absolute; top: 52%; left: 6%; right: 6%;
-          display: flex; gap: 24px;
-        }
-        .stat-card {
-          flex: 1; padding: 24px 20px;
-          background: #fffaf3; border: 2px solid #1a1a1a;
-          border-radius: 10px; box-shadow: 6px 8px 0 rgba(26,26,26,0.08);
-        }
-        .stat-card .num {
-          font-family: "IBM Plex Mono", monospace;
-          font-size: 48px; font-weight: 700; letter-spacing: -0.04em;
-          color: #2d8a4e; margin-bottom: 6px;
-        }
-        .stat-card .lbl {
-          font-family: "IBM Plex Mono", monospace;
-          font-size: 12px; letter-spacing: 0.1em;
-          text-transform: uppercase; color: #6b6560;
-        }
-        .checklist {
-          position: absolute; top: 76%; left: 6%;
-          display: flex; gap: 28px;
-          font-family: "IBM Plex Mono", monospace;
-          font-size: 14px; letter-spacing: 0.06em;
-          text-transform: uppercase; color: #6b6560;
-        }
-        .checklist span::before { content: "✓ "; color: #1f6b38; }
-      </style>
-      <div id="root" data-composition-id="frame-05-ship" data-width="1920" data-height="1080">
-        <div class="dither" id="dither"></div>
-        <h2 id="title">Holdout ready.</h2>
-        <div class="terminal" id="term">
-          <span class="prompt">$</span> docker run --rm -v /data:/data:ro tieout \
-          <br />&nbsp;&nbsp;→ predictions.jsonl · outputs/ · traces/ · run.log<span class="cursor" id="cursor"></span>
+<html><head><meta charset="UTF-8" /></head><body><template>
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=IBM+Plex+Sans:wght@400;600;700;800&display=swap");
+  #root{position:absolute;inset:0;overflow:hidden;font-family:"IBM Plex Sans",system-ui,sans-serif;color:#1a1a1a;background:#f5f0e8}
+  .dither{position:absolute;inset:-4%;opacity:0.28;background-image:repeating-conic-gradient(#e8e0d4 0% 25%,transparent 0% 50%) 0 0/5px 5px;z-index:1}
+  .kicker{position:absolute;top:40px;left:72px;font-family:"IBM Plex Mono",monospace;font-size:14px;letter-spacing:0.14em;text-transform:uppercase;color:#1f6b38;font-weight:700;z-index:5}
+  .kicker::after{content:"";display:block;width:72px;height:3px;background:#1f6b38;margin-top:10px}
+  h2{position:absolute;top:92px;left:72px;right:72px;font-size:44px;font-weight:800;letter-spacing:-0.03em;line-height:1.1;z-index:5;max-width:1200px}
+  h2 span{color:#2d8a4e}
+  .cards{position:absolute;left:72px;right:72px;top:190px;bottom:240px;display:grid;grid-template-columns:repeat(3,1fr);gap:28px;z-index:4}
+  .card{background:#fffaf3;border:3px solid #1a1a1a;border-radius:14px;padding:22px 22px 20px;display:flex;flex-direction:column;box-shadow:7px 9px 0 rgba(26,26,26,0.08);position:relative;overflow:hidden;min-height:0}
+  .card.c1{box-shadow:7px 9px 0 rgba(45,138,78,0.2)}
+  .card.c2{box-shadow:7px 9px 0 rgba(224,122,58,0.2)}
+  .card.c3{box-shadow:7px 9px 0 rgba(26,26,26,0.1)}
+  .num{font-family:"IBM Plex Mono",monospace;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;color:#6b6560;font-weight:700;margin-bottom:12px;flex-shrink:0}
+  .card h3{font-size:26px;font-weight:800;letter-spacing:-0.02em;line-height:1.15;margin:12px 0 8px;flex-shrink:0}
+  .card p{font-size:16px;font-weight:600;color:#6b6560;line-height:1.35;flex-shrink:0}
+  .card .punch{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:#2d8a4e;font-weight:700;margin-top:10px;flex-shrink:0}
+  .device{flex:1;min-height:0;background:#fff;border:2px solid #1a1a1a;border-radius:12px;padding:14px 14px 12px;display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden}
+  .dev-head{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:#6b6560;font-weight:700;display:flex;justify-content:space-between;z-index:2}
+  .dev-head b{color:#2d8a4e;font-weight:700}
+  /* Valve / decode-path pipe framing the switch */
+  .valve-rail{position:absolute;left:10px;right:10px;top:42%;height:10px;background:linear-gradient(90deg,#d4ccc0,#e8e0d4,#d4ccc0);border:2px solid rgba(26,26,26,0.2);border-radius:999px;z-index:1;pointer-events:none}
+  .valve-rail::before,.valve-rail::after{content:"";position:absolute;top:-6px;width:14px;height:18px;border:2px solid rgba(26,26,26,0.25);border-radius:4px;background:#fffaf3}
+  .valve-rail::before{left:8px}.valve-rail::after{right:8px}
+  .valve-glow{position:absolute;left:52%;right:10px;top:42%;height:10px;background:rgba(45,138,78,0.35);border-radius:999px;z-index:1;pointer-events:none}
+  .big-tog{display:flex;align-items:center;justify-content:center;gap:14px;padding:14px 0 6px;position:relative;z-index:2}
+  .tog-side{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;font-weight:700;color:#b8b0a4}
+  .tog-side.on{color:#2d8a4e}
+  .switch{width:96px;height:46px;border-radius:999px;border:3px solid #2d8a4e;background:rgba(45,138,78,0.18);position:relative;flex-shrink:0;box-shadow:inset 0 0 0 2px rgba(255,250,243,0.5)}
+  .knob{position:absolute;top:4px;left:4px;width:32px;height:32px;border-radius:50%;background:#2d8a4e;border:2px solid #1a1a1a}
+  .micro{display:flex;flex-direction:column;gap:6px;margin-top:auto;position:relative;z-index:2}
+  .mrow{display:flex;justify-content:space-between;align-items:center;padding:7px 10px;background:#fffaf3;border:1px solid rgba(26,26,26,0.12);border-radius:6px;font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:700}
+  .mrow span:first-child{color:#6b6560;letter-spacing:0.08em;text-transform:uppercase;font-size:10px}
+  .mrow span:last-child{color:#1a1a1a}
+  .mrow.hi span:last-child{color:#2d8a4e}
+  /* Gap bridge metaphor — Measure card */
+  .bridge{flex:1;min-height:0;border:2px solid #1a1a1a;border-radius:12px;overflow:hidden;background:linear-gradient(180deg,#fffaf3 0%,#f0ebe3 100%);position:relative;padding:12px 12px 10px}
+  .bridge-sky{position:absolute;inset:0;background:
+    linear-gradient(180deg,rgba(232,224,212,0.35) 0%,transparent 55%),
+    repeating-linear-gradient(90deg,transparent 0 18px,rgba(26,26,26,0.035) 18px 19px),
+    repeating-linear-gradient(0deg,transparent 0 18px,rgba(26,26,26,0.035) 18px 19px);
+    pointer-events:none}
+  .cliffs{position:relative;z-index:2;display:flex;align-items:flex-end;justify-content:space-between;height:100%;min-height:0;padding:0 4px 4px;gap:8px}
+  .cliff{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;width:78px;flex-shrink:0}
+  .cliff-lbl{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-bottom:6px}
+  .cliff-lbl.floor{color:#c45a1a}
+  .cliff-lbl.ship{color:#1f6b38}
+  .cliff-face{width:100%;border:2px solid #1a1a1a;border-bottom:none;border-radius:8px 8px 0 0;position:relative}
+  .cliff.floor .cliff-face{height:54px;background:linear-gradient(180deg,#d4ccc0,#b8b0a4)}
+  .cliff.ship .cliff-face{height:88px;background:linear-gradient(180deg,#3aa862,#2d8a4e);box-shadow:0 0 18px rgba(45,138,78,0.28)}
+  .cliff-pct{position:absolute;top:8px;left:0;right:0;text-align:center;font-family:"IBM Plex Mono",monospace;font-size:18px;font-weight:700;letter-spacing:-0.03em}
+  .cliff.floor .cliff-pct{color:#fffaf3;text-shadow:0 1px 0 rgba(26,26,26,0.25)}
+  .cliff.ship .cliff-pct{color:#fffaf3}
+  .span-zone{flex:1;align-self:stretch;position:relative;min-width:0;display:flex;flex-direction:column;justify-content:center;padding:0 2px}
+  .beam{position:relative;height:22px;margin-top:18px;background:linear-gradient(90deg,#2d8a4e,#3aa862);border:2px solid #1a1a1a;border-radius:6px;box-shadow:0 3px 0 rgba(26,26,26,0.12);display:flex;align-items:center;justify-content:center;z-index:3}
+  .beam span{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;font-weight:700;color:#fffaf3}
+  .beam-cap{position:absolute;top:-28px;left:50%;transform:translateX(-50%);font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;color:#2d8a4e;white-space:nowrap;background:rgba(255,250,243,0.92);padding:3px 8px;border:1.5px solid #2d8a4e;border-radius:999px}
+  .detour{position:absolute;left:8%;right:8%;bottom:28%;height:36px;border:2px dashed rgba(196,90,26,0.55);border-bottom:none;border-radius:40px 40px 0 0;z-index:1;pointer-events:none}
+  .detour-lbl{position:absolute;left:50%;top:-16px;transform:translateX(-50%);font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;color:#c45a1a;white-space:nowrap;opacity:0.85}
+  .gap-ticket{position:absolute;top:8px;right:8px;z-index:4;padding:6px 10px;background:#fffaf3;border:2px solid #1a1a1a;border-radius:6px;box-shadow:3px 4px 0 rgba(224,122,58,0.25);text-align:center}
+  .gap-ticket strong{display:block;font-family:"IBM Plex Mono",monospace;font-size:18px;font-weight:700;color:#2d8a4e;letter-spacing:-0.03em;line-height:1}
+  .gap-ticket span{display:block;margin-top:2px;font-family:"IBM Plex Mono",monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:#6b6560;font-weight:700}
+  /* Then card — training mountain vs free path */
+  .checks-wrap{flex:1;min-height:0;display:flex;flex-direction:column;position:relative}
+  .mtn{position:absolute;right:4px;bottom:4px;width:110px;height:72px;z-index:0;pointer-events:none;opacity:0.22}
+  .mtn svg{width:100%;height:100%;display:block}
+  .free-path{position:absolute;left:8px;bottom:14px;right:118px;height:3px;background:linear-gradient(90deg,#2d8a4e,rgba(45,138,78,0.15));border-radius:2px;z-index:0;opacity:0.35}
+  .checks{flex:1;min-height:0;display:flex;flex-direction:column;gap:8px;position:relative;z-index:1}
+  .ck{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:#fff;border:2px solid rgba(26,26,26,0.12);border-radius:8px;font-size:15px;font-weight:700;line-height:1.3;color:#1a1a1a}
+  .ck .box{width:18px;height:18px;border:2px solid #1a1a1a;border-radius:4px;flex-shrink:0;margin-top:1px;background:#fff;position:relative}
+  .ck.done .box{background:#2d8a4e;border-color:#2d8a4e}
+  .ck.done .box::after{content:"";position:absolute;left:4px;top:1px;width:6px;height:10px;border:solid #fffaf3;border-width:0 2px 2px 0;transform:rotate(45deg)}
+  .ck.mute{color:#6b6560;background:#fffaf3}
+  .ck.last{border-color:#2d8a4e;background:rgba(45,138,78,0.08);color:#1f6b38}
+  .ck .sub{display:block;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:#6b6560;font-weight:700;margin-top:3px}
+  .rail{position:absolute;left:72px;right:72px;bottom:220px;padding-top:12px;border-top:1px solid rgba(26,26,26,0.12);font-size:17px;font-weight:600;color:#6b6560;z-index:5}
+  .rail em{font-style:normal;color:#1a1a1a;font-weight:700}
+  .free{position:absolute;top:48px;right:72px;font-family:"IBM Plex Mono",monospace;font-size:12px;padding:10px 16px;border:2px solid #2d8a4e;background:rgba(45,138,78,0.1);color:#1f6b38;font-weight:700;border-radius:999px;z-index:5}
+  .card-fig{position:absolute;right:8px;bottom:8px;height:108px;z-index:2;pointer-events:none;filter:drop-shadow(3px 4px 0 rgba(26,26,26,0.1));opacity:0.92}
+  .card-fig img{height:100%;width:auto;display:block;object-fit:contain}
+</style>
+<div id="root" data-composition-id="frame-05-ship" data-width="1920" data-height="1080" data-duration="4.671">
+  <div class="dither" id="dither" data-layout-allow-overflow="true"></div>
+  <div class="kicker" id="kicker">05 · Utility</div>
+  <div class="free" id="free">It's free</div>
+  <h2 id="title">Audit inference <span>before</span> you fine-tune</h2>
+  <div class="cards">
+    <div class="card c1" id="c1">
+      <div class="num">01 · Toggle</div>
+      <div class="device" id="shipDevice">
+        <div class="dev-head">Decode-path valve <b>thinking</b></div>
+        <div class="valve-rail" id="valveRail"></div>
+        <div class="valve-glow" id="valveGlow"></div>
+        <div class="big-tog">
+          <span class="tog-side">Off</span>
+          <div class="switch" id="shipSwitch"><div class="knob" id="shipKnob"></div></div>
+          <span class="tog-side on">On</span>
         </div>
-        <div class="stats-row">
-          <div class="stat-card" id="s1"><div class="num">400</div><div class="lbl">verified tasks</div></div>
-          <div class="stat-card" id="s2"><div class="num">68%</div><div class="lbl">pass rate</div></div>
-          <div class="stat-card" id="s3"><div class="num">1</div><div class="lbl">docker run</div></div>
-        </div>
-        <div class="checklist" id="checks">
-          <span>predictions</span>
-          <span>outputs</span>
-          <span>traces</span>
-          <span>fsync → exit 0</span>
+        <div class="micro" id="shipMicro">
+          <div class="mrow"><span>model</span><span>Qwen3.8-27B</span></div>
+          <div class="mrow"><span>thinking</span><span>on</span></div>
+          <div class="mrow hi"><span>delta</span><span>+13pp</span></div>
         </div>
       </div>
-      <script>
-        window.__timelines = window.__timelines || {};
-        const tl = gsap.timeline({ paused: true });
-        gsap.set("#title,#term,#s1,#s2,#s3,#checks,#cursor", { opacity: 0 });
-        gsap.set(".stat-card", { y: 50 });
-        tl.fromTo("#root", { x: -70 }, { x: 0, duration: 0.3, ease: "power3.out" }, 0);
-        tl.fromTo("#title", { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.28, ease: "power2.out" }, 0.1);
-        tl.fromTo("#term", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.38, ease: "power3.out" }, 0.35);
-        tl.fromTo("#cursor", { opacity: 0 }, { opacity: 1, duration: 0.1 }, 0.9);
-        tl.to("#cursor", { opacity: 0, duration: 0.45, repeat: 5, yoyo: true, ease: "steps(1)" }, 0.9);
-        ["#s1","#s2","#s3"].forEach((sel, i) => {
-          tl.fromTo(sel, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.32, ease: "back.out(1.3)" }, 1.0 + i * 0.18);
-        });
-        tl.fromTo("#checks", { y: -400, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power4.out" }, 1.75);
-        window.__timelines["frame-05-ship"] = tl;
-      </script>
-    </template>
-  </body>
-</html>
+      <div class="card-fig" id="shipAgent" data-layout-allow-overlap="" data-layout-allow-occlusion=""><img src="assets/char-specialized-agent.png" alt=""></div>
+      <h3>Toggle thinking on / off</h3>
+      <p>Same model. Same prompts. Open the decode-path valve and watch the score move.</p>
+      <div class="punch">Zero training cost</div>
+    </div>
+    <div class="card c2" id="c2">
+      <div class="num">02 · Measure</div>
+      <div class="bridge" id="shipBridge">
+        <div class="bridge-sky"></div>
+        <div class="gap-ticket" id="gapTicket"><strong>+9pp</strong><span>the gap</span></div>
+        <div class="cliffs">
+          <div class="cliff floor" id="cliffFloor">
+            <div class="cliff-lbl floor">floor</div>
+            <div class="cliff-face"><span class="cliff-pct">59%</span></div>
+          </div>
+          <div class="span-zone" id="spanZone">
+            <div class="detour" id="detour"><span class="detour-lbl">fine-tune detour</span></div>
+            <div class="beam" id="configBeam"><span>config</span><div class="beam-cap" id="beamCap">unlock span</div></div>
+          </div>
+          <div class="cliff ship" id="cliffShip">
+            <div class="cliff-lbl ship">ship</div>
+            <div class="cliff-face"><span class="cliff-pct">68%</span></div>
+          </div>
+        </div>
+      </div>
+      <h3>Measure the gap</h3>
+      <p>If on/off closes most of it, you already found the unlock.</p>
+      <div class="punch" data-layout-allow-overlap="true">Might be the whole gap</div>
+    </div>
+    <div class="card c3" id="c3">
+      <div class="num">03 · Then</div>
+      <div class="checks-wrap" id="shipChecksWrap">
+        <div class="mtn" id="trainMtn" aria-hidden="true">
+          <svg viewBox="0 0 110 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 68 L42 18 L58 38 L78 8 L102 68 Z" fill="#b8b0a4" stroke="#1a1a1a" stroke-width="2"/>
+            <path d="M78 8 L88 28 L102 68" fill="#c4bcb0" stroke="#1a1a1a" stroke-width="1.5"/>
+            <text x="55" y="62" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="8" fill="#6b6560" letter-spacing="0.5">TRAIN</text>
+          </svg>
+        </div>
+        <div class="free-path" id="freePath"></div>
+        <div class="checks" id="shipChecks">
+          <div class="ck done" id="ck1"><span class="box"></span><span>Audit thinking on / off<span class="sub">free · no training</span></span></div>
+          <div class="ck done" id="ck2"><span class="box"></span><span>Measure the on/off gap<span class="sub">same model · same prompts</span></span></div>
+          <div class="ck mute" id="ck3"><span class="box"></span><span>Rule out free inference wins<span class="sub">only after the audit</span></span></div>
+          <div class="ck last" id="ck4"><span class="box"></span><span>Only then fine-tune<span class="sub">last resort, not first</span></span></div>
+        </div>
+      </div>
+      <h3>Only then fine-tune</h3>
+      <p>Train after you’ve ruled out free inference wins — not before.</p>
+      <div class="punch">Last resort, not first</div>
+    </div>
+  </div>
+  <div class="rail" id="rail">Check thinking on/off first — <em>it might be the whole gap.</em></div>
+</div>
+<script>
+window.__timelines=window.__timelines||{};
+const tl=gsap.timeline({paused:true});
+gsap.set("#kicker,#title,#free,#c1,#c2,#c3,#rail,#shipAgent,#shipBridge,#shipDevice,#shipChecks,#shipKnob,#valveRail,#valveGlow,#gapTicket,#configBeam,#cliffFloor,#cliffShip,#detour,#trainMtn,#freePath",{opacity:0});
+gsap.set("#shipKnob",{x:0});
+gsap.set("#ck1,#ck2,#ck3,#ck4",{opacity:0,y:8});
+gsap.set("#configBeam",{scaleX:0.15,transformOrigin:"left center"});
+tl.fromTo("#dither",{opacity:0.12},{opacity:0.28,duration:0.3},0);
+tl.fromTo("#kicker",{x:-12,opacity:0},{x:0,opacity:1,duration:0.18},0.04);
+tl.fromTo("#free",{x:16,opacity:0},{x:0,opacity:1,duration:0.2},0.1);
+tl.fromTo("#title",{y:14,opacity:0},{y:0,opacity:1,duration:0.28},0.12);
+tl.fromTo("#c1",{y:28,opacity:0},{y:0,opacity:1,duration:0.28,ease:"power3.out"},0.28);
+tl.fromTo("#shipDevice",{y:12,opacity:0},{y:0,opacity:1,duration:0.24,ease:"power3.out"},0.38);
+tl.fromTo("#valveRail",{opacity:0},{opacity:1,duration:0.18},0.42);
+tl.fromTo("#shipKnob",{x:0,opacity:1},{x:52,opacity:1,duration:0.22,ease:"power4.out"},0.52);
+tl.fromTo("#valveGlow",{opacity:0,scaleX:0.2},{opacity:1,scaleX:1,duration:0.28,ease:"power2.out",transformOrigin:"left center"},0.55);
+tl.fromTo("#shipAgent",{y:16,opacity:0},{y:0,opacity:1,duration:0.3,ease:"power3.out"},0.58);
+tl.fromTo("#c2",{y:28,opacity:0},{y:0,opacity:1,duration:0.28,ease:"power3.out"},0.4);
+tl.fromTo("#shipBridge",{opacity:0},{opacity:1,duration:0.24,ease:"power2.out"},0.52);
+tl.fromTo("#cliffFloor",{y:12,opacity:0},{y:0,opacity:1,duration:0.22,ease:"power3.out"},0.56);
+tl.fromTo("#cliffShip",{y:12,opacity:0},{y:0,opacity:1,duration:0.22,ease:"power3.out"},0.6);
+tl.fromTo("#detour",{opacity:0},{opacity:0.9,duration:0.2},0.62);
+tl.fromTo("#configBeam",{scaleX:0.15,opacity:0},{scaleX:1,opacity:1,duration:0.36,ease:"power3.out"},0.68);
+tl.fromTo("#gapTicket",{y:-10,opacity:0,rotation:-4},{y:0,opacity:1,rotation:0,duration:0.28,ease:"back.out(1.4)"},0.78);
+tl.fromTo("#c3",{y:28,opacity:0},{y:0,opacity:1,duration:0.28,ease:"power3.out"},0.52);
+tl.fromTo("#trainMtn",{opacity:0,y:8},{opacity:0.22,y:0,duration:0.3},0.58);
+tl.fromTo("#freePath",{scaleX:0,opacity:0},{scaleX:1,opacity:0.35,duration:0.35,ease:"power2.out",transformOrigin:"left center"},0.62);
+tl.fromTo("#shipChecks",{opacity:0},{opacity:1,duration:0.01},0.58);
+tl.fromTo("#ck1",{y:8,opacity:0},{y:0,opacity:1,duration:0.16},0.6);
+tl.fromTo("#ck2",{y:8,opacity:0},{y:0,opacity:1,duration:0.16},0.7);
+tl.fromTo("#ck3",{y:8,opacity:0},{y:0,opacity:1,duration:0.16},0.8);
+tl.fromTo("#ck4",{y:8,opacity:0},{y:0,opacity:1,duration:0.16},0.9);
+tl.fromTo("#rail",{opacity:0},{opacity:1,duration:0.22},0.95);
+tl.to("#c1",{y:"+=2",duration:1.0,ease:"sine.inOut",yoyo:true,repeat:-1},1.1);
+tl.to("#c2",{y:"+=2",duration:1.1,ease:"sine.inOut",yoyo:true,repeat:-1},1.15);
+tl.to("#c3",{y:"+=2",duration:1.2,ease:"sine.inOut",yoyo:true,repeat:-1},1.2);
+tl.to("#dither",{x:6,duration:2.0,ease:"sine.inOut",yoyo:true,repeat:-1},1.3);
+window.__timelines["frame-05-ship"]=tl;
+</script>
+</template></body></html>

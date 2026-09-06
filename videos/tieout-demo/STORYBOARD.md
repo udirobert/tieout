@@ -1,142 +1,60 @@
 ---
 format: 1920x1080
-duration: 42s
-message: Institutional proof made spreadsheet AI real — open models and the right harness put it in reach.
-arc: concept-explainer
-structure: Proven → Mechanism → Replicated → Lesson → Ship → End
-audience: Encode/Ylookup hackathon judges and sponsor
-mode: collaborative
+duration: ~38s
+message: Fine-tuning wasn't the win — inference config was. tieout ships the fix.
+arc: insight-reveal · hackathon proof
+structure: Hook → Proof → Hack → Expectation → Insight → Utility → Close
+audience: Encode/Ylookup judges + Twitter cold viewers
 ---
 
-This video tells hackathon judges and the Thinking Machines sponsor that **institutional
-proof made spreadsheet AI real — and open models with the right harness put it in reach.**
+| Frame | Beat | On screen | VO gist |
+|-------|------|-----------|---------|
+| 0 — Hook | problem | Grid → skyline · $30T counter · headcount motif | $30T private markets · hire > improve systems |
+| 1 — Setup | social_proof | Abstract frontier bars · small model climbs past | TML × Bridgewater · fine-tune beats frontier |
+| 2 — Hack | context | Team cards · same Qwen · 59% tape | Encode weekend · same model · 59% floor |
+| 3 — Expectation | false_win | LoRA bar climbing · 600 runs counter | Fine-tuned 600 runs · supposed to work |
+| 4 — Insight | reveal | Frozen bar · thinking off/on toggle · 55→68 | One config swap beat the fine-tune |
+| 5 — Utility | takeaway | Monochrome note · audit config first | Check inference before you fine-tune |
+| 6 — Close | branding | Cell-grid tieout knot · 68 vs 59 | tieout · nine points · no training |
 
-| Frame | Beat | On screen | Why |
-|-------|------|-----------|-----|
-| 0 — Proven | hook · 6s | PROVEN stamp + benchmark receipt + 74.67% tease | Lands value in outcome language — spreadsheet AI is real, not hype |
-| 1 — They proved it | social_proof · 6s | WML 74.67% count-up + institutional receipt card | Evidence for the claim; names the sponsor's benchmark |
-| 2 — We replicated | benefit_highlight · 8s | Bar race WML / floor / tieout; hero bloom on 68% | Shows democratization is already happening — open Qwen, +9pp |
-| 3 — The lesson | branding · 8s | Kinetic type: your data · task · model | Generalizable takeaway — edge is how you ask, not proprietary stack |
-| 4 — Ship it | cta · 8s | Config parity → Docker → artifacts | Honest ship story: one container, reproducible, holdout-ready |
-| 5 — tieout | branding · 6s | Logo lockup + 68% / 400 / 1 docker run | Clean close for judges |
+## Frame 0 — Hook (~5s)
 
----
+- src: compositions/frame-00-skyline.html
+- Visual: Single cell pull-back → grid → skyline; $1T→$30T; stick figures filing in
+- On screen: `$30T in private markets · Growth = headcount, not process`
 
-## Frame 0 — Proven
+## Frame 1 — Setup (~7s)
 
-- status: built
-- src: compositions/frame-00-hook.html
-- duration: 6s
-- transition_in: cut
-- type: hook
-- persuasion: Authority transfer
-- beat: hook
-- blueprint: kinetic-type-beats
-- focal: PROVEN stamp
-- scene: Benchmark receipt prints from slot; PROVEN stamp SLAM; 74.67% slip lands; spreadsheet pass FG
-- voiceover: Wall Street just proved spreadsheet AI works — seventy-five percent on real Excel tasks.
-- poster: 4
+- src: compositions/frame-01-proof.html
+- Visual: Diamond/circle/hexagon on bars; compact shape climbs past
+- On screen: `Thinking Machines × Bridgewater · fine-tune beats frontier`
 
-Kicker draws. Printer-slot FG seats (structure). Receipt slides up. **PROVEN** stamp SLAMs
-on beat. Kinetic headline: SPREADSHEET AI / IS REAL. Tease slip: 74.67% · Verified 400.
-Caption rail last.
+## Frame 2 — Hack (~6s)
 
-Motion: receipt slide, stamp impact (scale+shake), slip SLAM from above, whip exit blur.
+- src: compositions/frame-02-hack.html
+- Visual: Spreadsheet clones on team cards · Qwen stamp · 59% finish tape
+- On screen: `Ylookup × Encode London · Qwen3.8-27B · 59% floor`
 
-## Frame 1 — They proved it
+## Frame 3 — Expectation (~5s)
 
-- status: built
-- src: compositions/frame-01-they.html
-- duration: 6s
-- transition_in: whip-pan
-- type: social_proof
-- persuasion: Demonstration
-- beat: proof
-- blueprint: stat-counter
-- focal: 74.67%
-- scene: Thinking Machines badge; stat count-up; institutional receipt card with benchmark rows
-- voiceover: Thinking Machines Lab. SpreadsheetBench Verified. Not chat. Execution.
-- poster: 3.5
+- src: compositions/frame-03-results.html
+- Visual: Warm climbing bar · 100→600 run counter
+- On screen: `600 training runs · LoRA fine-tune`
 
-**74.67%** draws with ring. Institutional badge stamps. Receipt card assembles rows:
-Benchmark · Hard accuracy · Method. Caption rail.
+## Frame 4 — Insight (~7s)
 
-Motion: stat draw, STAMPS badge, card rows stagger, texture drift.
+- src: compositions/frame-04-unlock.html
+- Visual: Frozen fine-tune bar · toggle · thinking-on bar shoots past
+- On screen: `Thinking off: 55% · Thinking on: 68%`
 
-## Frame 2 — We replicated
+## Frame 5 — Utility (~4s)
 
-- status: built
-- src: compositions/frame-02-we.html
-- duration: 8s
-- transition_in: blur-through
-- type: benefit_highlight
-- persuasion: Comparison
-- beat: flex
-- blueprint: bar-chart-race
-- focal: 68.00%
-- scene: Three-bar race — WML 74.67% · official floor 59% · tieout 68% open Qwen
-- voiceover: We ran the same benchmark. Open Qwen. Sixty-eight percent — nine points above the floor.
-- poster: 5
+- src: compositions/frame-05-ship.html
+- Visual: Monochrome + green accent · toggle audit note
+- On screen: `Before you fine-tune → audit inference config`
 
-Dithered bar race: grey WML anchor → orange floor → green tieout hero. Green bloom on
-hero only. Open-model badge SNAPS. +9pp callout SLAMs.
+## Frame 6 — Close (~4s)
 
-Motion: bar grow stagger, count-up 68.00%, hero bloom, delta whip-in.
-
-## Frame 3 — The lesson
-
-- status: built
-- src: compositions/frame-03-lesson.html
-- duration: 8s
-- transition_in: whip-pan
-- type: branding
-- persuasion: Enumeration
-- beat: lesson
-- blueprint: kinetic-quote
-- focal: Your task.
-- scene: Three-line kinetic waterfall + sub-block on decode / thinking
-- voiceover: You don't need their stack. Your data. Your task. How you ask.
-- poster: 4
-
-Kinetic type waterfall: three lines whip in from below. Sub-block: thinking on, correct
-decode path. Caption rail.
-
-Motion: waterfall-entry word stagger, sub-block slide, texture drift.
-
-## Frame 4 — Ship it
-
-- status: built
-- src: compositions/frame-04-path.html
-- duration: 8s
-- transition_in: push-slide
-- type: cta
-- persuasion: How-to-process
-- beat: ship
-- blueprint: grid-card-assemble
-- focal: Docker terminal
-- scene: Three-node path — official recipe → open Qwen → Docker artifacts
-- voiceover: One Docker run. Four hundred tasks. Holdout ready.
-- poster: 4.5
-
-Three-node diagram ASSEMBLES: Config parity · Open Qwen3.8 · Docker ship. Terminal
-one-liner ticks. Artifact checklist SNAPS.
-
-Motion: stagger assemble, typewriter on docker command, checklist land.
-
-## Frame 5 — End card
-
-- status: built
-- src: compositions/frame-05-end.html
-- duration: 6s
-- transition_in: crossfade
-- type: branding
-- persuasion: Lockup
-- beat: close
-- focal: tieout logo
-- scene: tieout lockup + stat row
-- voiceover: tieout.
-- poster: 3
-
-Logo lockup SLAMS. Grid texture breathes. Stats row: 68% · 400 · 1 docker run.
-
-Motion: logo sting, ambient breathe on texture.
+- src: compositions/frame-06-end.html
+- Visual: Cell grid cinches into tieout · 68 vs 59
+- On screen: `tieout · 68% vs 59% · no training required`

@@ -36,6 +36,19 @@ const JOBS = [
     prompt: `${IDENTITY} Soft grey fog humanoid, slumped uncertain posture, arms hanging, looking down, generic AI feel, three-quarter pose.`,
   },
   {
+    name: "char-analyst-relief",
+    width: 1024,
+    height: 1536,
+    prompt: `${IDENTITY} Same analyst character relieved and smiling, one hand thumbs-up, other hand loose at side, shoulders relaxed, three-quarter facing viewer.`,
+  },
+  {
+    name: "prop-city-skyline",
+    width: 1536,
+    height: 1024,
+    prompt:
+      "Wide 16:9 editorial matte illustration of abstract private-markets city skyline, dark charcoal towers varied heights, cream paper sky, subtle green window accents, flat paper grain, no text no logos no people.",
+  },
+  {
     name: "prop-spreadsheet-pass",
     width: 1536,
     height: 1024,
@@ -94,7 +107,12 @@ const client = await createClient({ apiKey: key });
 await client.connect();
 await mkdir(RAW, { recursive: true });
 
+const ASSETS = join(ROOT, "assets");
 for (const job of jobs) {
+  if (existsSync(join(ASSETS, `${job.name}.png`)) || existsSync(join(RAW, `${job.name}.jpg`)) || existsSync(join(RAW, `${job.name}.png`))) {
+    console.log(`skip (exists): ${job.name}`);
+    continue;
+  }
   const started = Date.now();
   const [result] = await client.run({
     model: "bytedance:seedream@5.0-pro",

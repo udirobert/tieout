@@ -80,6 +80,10 @@ motion:
   land_not_fade: "opacity 0→1 via gsap.set on arrivals; no 2s soft fades"
   sfx_sync: "every SLAM lands on paper-drop / stamp-thud SFX cue"
   whip_exit: "blur + x-translate between frames"
+  ambient_hold: "after primary reveals, keep 12–24px independent drift on 1–2 layers (dither, slips, cards) — never static holds"
+  build_order: "paper field → structure/occluder → factual primary → support layer → display type"
+  ghost_offset: "one orange voltage duplicate behind hero type per frame max (fondof day-1)"
+  captions: "word-level karaoke rail — gsap.set className only, suppress on end card"
 
 ---
 

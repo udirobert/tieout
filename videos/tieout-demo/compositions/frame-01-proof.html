@@ -1,111 +1,181 @@
-<!doctype html>
-<html>
-  <head><meta charset="UTF-8" /></head>
-  <body>
-    <template>
-      <style>
-        @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=IBM+Plex+Sans:wght@400;600;700&display=swap");
-        #root {
-          position: absolute; inset: 0; overflow: hidden;
-          font-family: "IBM Plex Sans", system-ui, sans-serif;
-          color: #1a1a1a; background: #f5f0e8;
-        }
-        .dither {
-          position: absolute; inset: -4%;
-          background-color: #f5f0e8;
-          background-image:
-            repeating-conic-gradient(#e8e0d4 0% 25%, transparent 0% 50%) 0 0 / 5px 5px,
-            repeating-conic-gradient(transparent 0% 25%, #e8e0d4 0% 50%) 2.5px 2.5px / 5px 5px;
-        }
-        .badge {
-          position: absolute; top: 10%; left: 6%;
-          font-family: "IBM Plex Mono", monospace; font-size: 14px;
-          letter-spacing: 0.14em; text-transform: uppercase; color: #6b6560;
-          padding: 8px 14px; border: 1px solid rgba(26,26,26,0.12);
-          border-radius: 999px; background: rgba(255,252,247,0.85);
-        }
-        .hero-stat {
-          position: absolute; top: 22%; left: 6%;
-          font-family: "IBM Plex Mono", monospace;
-          font-size: 120px; font-weight: 700; letter-spacing: -0.05em; line-height: 1;
-        }
-        .ring {
-          position: absolute; top: 18%; left: 4.5%;
-          width: 280px; height: 280px;
-          border: 3px solid rgba(45,138,78,0.25); border-radius: 50%;
-        }
-        .headline {
-          position: absolute; top: 42%; left: 6%;
-          font-size: 44px; font-weight: 700; max-width: 780px; line-height: 1.15;
-        }
-        .sub {
-          position: absolute; top: 54%; left: 6%;
-          font-size: 26px; color: #6b6560; max-width: 700px;
-        }
-        .proof-card {
-          position: absolute; right: 6%; top: 18%;
-          width: 38%; padding: 28px; border-radius: 6px;
-          background: #fffaf3; border: 2px solid #1a1a1a;
-          box-shadow: 8px 10px 0 rgba(26,26,26,0.12);
-          transform: rotate(1deg);
-        }
-        .proof-card h3 {
-          font-family: "IBM Plex Mono", monospace; font-size: 13px;
-          letter-spacing: 0.12em; text-transform: uppercase;
-          color: #6b6560; margin-bottom: 16px;
-          border-bottom: 1px dashed rgba(26,26,26,0.15); padding-bottom: 12px;
-        }
-        .proof-row {
-          display: flex; justify-content: space-between;
-          padding: 10px 0; border-bottom: 1px solid rgba(26,26,26,0.06);
-          font-size: 20px;
-        }
-        .proof-row:last-child { border-bottom: none; }
-        .proof-row span:last-child { font-family: "IBM Plex Mono", monospace; font-weight: 700; }
-        .pass-wrap {
-          position: absolute; right: 8%; bottom: 10%;
-          width: 320px; height: 220px;
-          border: 2px solid rgba(26,26,26,0.35); padding: 6px;
-          background: #fffaf3; transform: rotate(-2deg);
-          box-shadow: 6px 8px 0 rgba(26,26,26,0.1);
-        }
-        .pass-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
-      </style>
-      <div id="root" data-composition-id="frame-01-proof" data-width="1920" data-height="1080">
-        <div class="dither" id="dither"></div>
-        <div class="badge" id="badge">Thinking Machines · arXiv:2607.20999</div>
-        <div class="ring" id="ring"></div>
-        <div class="hero-stat" id="stat">0.00%</div>
-        <div class="headline" id="headline">Not chat. Execution.</div>
-        <div class="sub" id="sub">SpreadsheetBench Verified — 400 real Excel tasks.</div>
-        <div class="proof-card" id="card">
-          <h3>Benchmark receipt</h3>
-          <div class="proof-row"><span>Lab</span><span>Thinking Machines</span></div>
-          <div class="proof-row"><span>Benchmark</span><span>Verified 400</span></div>
-          <div class="proof-row"><span>Pass rate</span><span>74.67%</span></div>
-        </div>
-        <div class="pass-wrap" id="pass"><img src="raw-assets/prop-spreadsheet-pass.jpg" alt="" /></div>
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"></head><body><template>
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=IBM+Plex+Sans:wght@400;600;700;800&display=swap");
+  #root{position:absolute;inset:0;overflow:hidden;font-family:"IBM Plex Sans",system-ui,sans-serif;color:#1a1a1a;background:linear-gradient(180deg,#f5f0e8,#e8f5ec)}
+  .dither{position:absolute;inset:-4%;opacity:0.3;background-image:repeating-conic-gradient(#e8e0d4 0% 25%,transparent 0% 50%) 0 0/5px 5px;z-index:1}
+  /* Ambient spreadsheet lattice — fills cream void */
+  .lattice{position:absolute;left:56px;right:56px;top:148px;bottom:188px;z-index:2;pointer-events:none;opacity:0.55;background:
+    repeating-linear-gradient(90deg,transparent 0 47px,rgba(26,26,26,0.045) 47px 48px),
+    repeating-linear-gradient(0deg,transparent 0 31px,rgba(26,26,26,0.045) 31px 32px);
+    mask-image:radial-gradient(ellipse 70% 65% at 55% 55%,#000 40%,transparent 85%);
+    -webkit-mask-image:radial-gradient(ellipse 70% 65% at 55% 55%,#000 40%,transparent 85%)}
+  .kicker{position:absolute;top:40px;left:72px;font-family:"IBM Plex Mono",monospace;font-size:14px;letter-spacing:0.14em;text-transform:uppercase;color:#1f6b38;font-weight:700;z-index:5}
+  .kicker::after{content:"";display:block;width:72px;height:3px;background:#1f6b38;margin-top:10px}
+  h2{position:absolute;top:88px;left:72px;right:360px;font-size:36px;font-weight:800;line-height:1.15;max-width:900px;letter-spacing:-0.02em;z-index:5}
+  h2 span{color:#2d8a4e}
+  .tag{position:absolute;top:48px;right:72px;font-family:"IBM Plex Mono",monospace;font-size:12px;padding:10px 16px;border:2px solid #2d8a4e;background:rgba(45,138,78,0.1);color:#1f6b38;font-weight:700;border-radius:999px;z-index:5}
+  /* Cost receipt tear */
+  .cost-tear{position:absolute;left:72px;top:408px;width:300px;padding:12px 16px 18px;background:#fffaf3;border:2px solid #1a1a1a;border-radius:4px 4px 0 0;box-shadow:5px 6px 0 rgba(224,122,58,0.2);z-index:6;transform:rotate(-1.2deg);display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+  .cost-tear::after{content:"";position:absolute;left:-2px;right:-2px;bottom:-10px;height:12px;background:
+    radial-gradient(circle at 8px 0,#fffaf3 6px,transparent 7px) 0 0/16px 12px repeat-x,
+    linear-gradient(#1a1a1a,#1a1a1a) 0 0/16px 2px repeat-x;background-position:0 2px,0 0}
+  .cost-tear .hi{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#6b6560;margin:0;width:100%}
+  .cost-tear strong{display:inline;font-family:"IBM Plex Mono",monospace;font-size:14px;font-weight:700;color:#1a1a1a;letter-spacing:-0.02em;line-height:1.2}
+  .cost-tear .strike{display:inline;color:#a04812;text-decoration:line-through;font-size:12px;font-weight:700;letter-spacing:0.02em;margin:0}
+  .receipt{position:absolute;left:72px;top:172px;width:300px;padding:22px 24px;background:#fffaf3;border:3px solid #1a1a1a;border-radius:12px;box-shadow:7px 9px 0 rgba(45,138,78,0.22);z-index:6}
+  .receipt .hi{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#6b6560;margin-bottom:10px}
+  .receipt .score{font-family:"IBM Plex Mono",monospace;font-size:56px;font-weight:700;color:#2d8a4e;letter-spacing:-0.04em;line-height:1}
+  .receipt .sub{margin-top:8px;font-size:15px;font-weight:600;color:#6b6560;line-height:1.35}
+  .receipt .org{margin-top:14px;padding-top:12px;border-top:1px dashed rgba(26,26,26,0.18);font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:0.06em;color:#1a1a1a;font-weight:700}
+  .chart{position:absolute;left:400px;right:56px;bottom:196px;top:172px;display:flex;flex-direction:column;padding:0;background:rgba(255,250,243,0.92);border:3px solid #1a1a1a;border-radius:14px;box-shadow:6px 8px 0 rgba(26,26,26,0.08);z-index:4;overflow:hidden}
+  .chart::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:0.4;background:
+    repeating-linear-gradient(90deg,transparent 0 39px,rgba(26,26,26,0.04) 39px 40px),
+    repeating-linear-gradient(0deg,transparent 0 27px,rgba(26,26,26,0.04) 27px 28px)}
+  .chart-head{flex-shrink:0;display:flex;justify-content:space-between;align-items:center;padding:12px 22px;border-bottom:2px solid rgba(26,26,26,0.1);background:#fff;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#6b6560;font-weight:700;position:relative;z-index:2}
+  .chart-head em{font-style:normal;color:#1f6b38}
+  .bars{flex:1;display:flex;align-items:flex-end;justify-content:space-between;gap:22px;padding:18px 32px 28px;min-height:0;position:relative;z-index:2}
+  .bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:flex-end;position:relative}
+  /* Frontier monoliths — heavier chrome, muted giants */
+  .bar{width:100%;max-width:132px;border-radius:6px 6px 2px 2px;transform-origin:bottom center;position:relative;display:block}
+  .bar.grey{height:78%;background:linear-gradient(180deg,#9a948c 0%,#b8b0a4 18%,#8a847c 55%,#6e6963 100%);box-shadow:inset -8px 0 0 rgba(26,26,26,0.12),inset 8px 0 0 rgba(255,255,255,0.08),4px 0 0 rgba(26,26,26,0.08)}
+  .bar.mid{height:70%;background:linear-gradient(180deg,#a8a098 0%,#c4bcb0 18%,#968e86 55%,#7a746c 100%);box-shadow:inset -8px 0 0 rgba(26,26,26,0.1),inset 8px 0 0 rgba(255,255,255,0.07),4px 0 0 rgba(26,26,26,0.07)}
+  .bar.light{height:62%;background:linear-gradient(180deg,#b8b0a4 0%,#d0c8bc 18%,#a69e96 55%,#8a847c 100%);box-shadow:inset -8px 0 0 rgba(26,26,26,0.09),inset 8px 0 0 rgba(255,255,255,0.06),4px 0 0 rgba(26,26,26,0.06)}
+  .bar.hero{height:92%;background:linear-gradient(180deg,#3aa862,#2d8a4e);box-shadow:0 0 28px rgba(45,138,78,0.4)}
+  .mono-cap{position:absolute;top:-10px;left:50%;width:78%;max-width:108px;height:10px;margin-left:-39%;background:linear-gradient(180deg,#c4bcb0,#9a948c);border:2px solid rgba(26,26,26,0.35);border-radius:2px;z-index:3;box-shadow:0 2px 0 rgba(26,26,26,0.15)}
+  .mono-base{position:absolute;bottom:-6px;left:50%;width:90%;max-width:120px;height:8px;margin-left:-45%;background:#6e6963;border-radius:2px;opacity:0.55;z-index:1}
+  .pct-lbl{font-family:"IBM Plex Mono",monospace;font-size:16px;font-weight:700;color:#6b6560;letter-spacing:-0.02em}
+  .pct-lbl.hi{color:#1f6b38;font-size:18px}
+  .onbar{position:absolute;top:14px;left:0;right:0;text-align:center;font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:700;color:#fffaf3;letter-spacing:-0.02em;text-shadow:0 1px 0 rgba(26,26,26,0.25)}
+  .shape{position:absolute;top:6px;left:50%;width:36px;height:36px;margin-left:-18px;z-index:4;opacity:0.85;filter:saturate(0.7)}
+  .shape.diamond{background:#8a847c;clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%);box-shadow:0 2px 0 rgba(26,26,26,0.2)}
+  .shape.circle{background:#968e86;border-radius:50%;box-shadow:0 2px 0 rgba(26,26,26,0.2)}
+  .shape.hex{background:#a69e96;clip-path:polygon(25% 0%,75% 0%,100% 50%,75% 100%,25% 100%,0% 50%);box-shadow:0 2px 0 rgba(26,26,26,0.2)}
+  /* Expert-data ladder — climb metaphor */
+  .ladder{position:absolute;left:50%;bottom:36px;width:44px;margin-left:-22px;height:72%;z-index:8;pointer-events:none}
+  .ladder .rail-l,.ladder .rail-r{position:absolute;top:0;bottom:0;width:3px;background:rgba(45,138,78,0.35);border-radius:2px}
+  .ladder .rail-l{left:4px}.ladder .rail-r{right:4px}
+  .ladder .rung{position:absolute;left:4px;right:4px;height:3px;background:rgba(45,138,78,0.45);border-radius:1px}
+  .ladder .rung:nth-child(3){bottom:12%}.ladder .rung:nth-child(4){bottom:28%}.ladder .rung:nth-child(5){bottom:44%}
+  .ladder .rung:nth-child(6){bottom:60%}.ladder .rung:nth-child(7){bottom:76%}.ladder .rung:nth-child(8){bottom:90%}
+  .ladder-tag{position:absolute;left:50%;bottom:4px;transform:translateX(-50%);font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:#1a5c32;font-weight:700;white-space:nowrap;background:#fffaf3;padding:3px 7px;border:1.5px solid #1a5c32;border-radius:4px;z-index:12}
+  .hero-shape{position:absolute;left:50%;bottom:28px;width:40px;height:40px;background:#2d8a4e;border-radius:50%;box-shadow:0 0 36px rgba(45,138,78,0.55);z-index:10;margin-left:-20px;border:2px solid #1a1a1a}
+  .hero-shape::after{content:"";position:absolute;inset:8px;border-radius:50%;border:2px solid rgba(255,250,243,0.45)}
+  .hero-trail{position:absolute;left:50%;bottom:28px;width:5px;height:0;background:linear-gradient(180deg,#2d8a4e,transparent);margin-left:-2.5px;opacity:0.65;z-index:9}
+  .spring{position:absolute;left:50%;bottom:8px;width:56px;height:14px;margin-left:-28px;border:2px solid rgba(45,138,78,0.5);border-top:none;border-radius:0 0 28px 28px;z-index:7;background:rgba(45,138,78,0.08)}
+  .lbl{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#6b6560;font-weight:700}
+  .lbl.hi{color:#1a5c32}
+  .lbl.giant{opacity:0.75}
+  .credit{position:absolute;bottom:200px;left:72px;right:72px;padding-top:12px;border-top:1px solid rgba(26,26,26,0.12);font-family:"IBM Plex Mono",monospace;font-size:13px;letter-spacing:0.1em;text-transform:uppercase;color:#6b6560;z-index:5}
+  .credit em{font-style:normal;color:#1a1a1a;font-weight:700}
+  .agent-cut{position:absolute;right:28px;bottom:188px;height:420px;z-index:7;pointer-events:none;filter:drop-shadow(5px 8px 0 rgba(26,26,26,0.1))}
+  .agent-cut img{height:100%;width:auto;display:block;object-fit:contain}
+  .agent-plinth{position:absolute;right:48px;bottom:196px;width:168px;height:14px;background:rgba(26,26,26,0.08);border-radius:50%;z-index:6;pointer-events:none}
+  .david-tag{position:absolute;right:36px;bottom:600px;z-index:8;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;font-weight:700;color:#1f6b38;padding:6px 10px;background:rgba(255,250,243,0.92);border:2px solid #2d8a4e;border-radius:6px;box-shadow:3px 4px 0 rgba(45,138,78,0.2)}
+</style>
+<div data-hf-id="hf-axpt" id="root" data-composition-id="frame-01-proof" data-width="1920" data-height="1080" data-duration="8.293">
+  <div data-hf-id="hf-vu9z" class="dither" id="dither" data-layout-allow-overflow="true"></div>
+  <div data-hf-id="hf-lat1" class="lattice" id="lattice"></div>
+  <div data-hf-id="hf-i10e" class="kicker" id="kicker">01 · Proof</div>
+  <h2 data-hf-id="hf-r60z" id="title">Fine-tune a small model on expert data — <span data-hf-id="hf-xa3n">beats frontier AI</span> on financial judgment</h2>
+  <div data-hf-id="hf-3as7" class="tag" id="tag">Fraction of the cost</div>
+  <div data-hf-id="hf-tear" class="cost-tear" id="costTear">
+    <div data-hf-id="hf-tear1" class="hi">Cost ticket</div>
+    <div data-hf-id="hf-tear2" class="strike">frontier bill</div>
+    <strong data-hf-id="hf-tear3">fraction paid</strong>
+  </div>
+  <div data-hf-id="hf-65yi" class="receipt" id="receipt">
+    <div data-hf-id="hf-ocl5" class="hi">WML score</div>
+    <div data-hf-id="hf-wu8x" class="score">74.67%</div>
+    <div data-hf-id="hf-pkn9" class="sub">Institutional financial judgment benchmark</div>
+    <div data-hf-id="hf-dkjx" class="org">Thinking Machines × Bridgewater</div>
+  </div>
+  <div data-hf-id="hf-70cy" class="chart" id="chart">
+    <div data-hf-id="hf-chd1" class="chart-head" id="chartHead">WML financial judgment <em data-hf-id="hf-chd2">frontier giants vs specialized</em><span data-hf-id="hf-chd3">verified 400</span></div>
+    <div data-hf-id="hf-bars" class="bars" id="bars">
+      <div data-hf-id="hf-gym5" class="bar-wrap" id="b1">
+        <div data-hf-id="hf-havb" class="shape diamond"></div>
+        <div data-hf-id="hf-58c6" class="pct-lbl" id="p1">62%</div>
+        <div data-hf-id="hf-s5ki" class="bar grey" id="bar1"><div data-hf-id="hf-mc1" class="mono-cap"></div><span data-hf-id="hf-ob1" class="onbar">62</span></div>
+        <div data-hf-id="hf-mb1" class="mono-base"></div>
+        <div data-hf-id="hf-uccq" class="lbl giant" data-layout-allow-overlap="true">Frontier A</div>
       </div>
-      <script>
-        window.__timelines = window.__timelines || {};
-        const tl = gsap.timeline({ paused: true });
-        const counter = { v: 0 };
-        gsap.set("#badge,#ring,#stat,#headline,#sub,#card,#pass", { opacity: 0 });
-        tl.fromTo("#root", { x: 80, filter: "blur(12px)" }, { x: 0, filter: "blur(0px)", duration: 0.32, ease: "power3.out" }, 0);
-        tl.fromTo("#badge", { y: -20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.25, ease: "power2.out" }, 0.2);
-        tl.fromTo("#ring", { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(1.4)" }, 0.35);
-        tl.to(counter, {
-          v: 74.67, duration: 1.0, ease: "power2.out",
-          onUpdate: () => { document.getElementById("stat").textContent = counter.v.toFixed(2) + "%"; }
-        }, 0.45);
-        tl.fromTo("#stat", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power3.out" }, 0.45);
-        tl.fromTo("#headline", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, 1.1);
-        tl.fromTo("#sub", { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power2.out" }, 1.35);
-        tl.fromTo("#card", { y: -500, opacity: 0, rotation: 4 }, { y: 0, opacity: 1, rotation: 1, duration: 0.38, ease: "power4.out" }, 1.5);
-        tl.fromTo("#pass", { x: 40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, 1.85);
-        tl.to("#dither", { backgroundPosition: "12px 8px", duration: 6, ease: "none" }, 0);
-        window.__timelines["frame-01-proof"] = tl;
-      </script>
-    </template>
-  </body>
-</html>
+      <div data-hf-id="hf-kwq6" class="bar-wrap" id="b2">
+        <div data-hf-id="hf-pekl" class="shape circle"></div>
+        <div data-hf-id="hf-gaay" class="pct-lbl" id="p2">58%</div>
+        <div data-hf-id="hf-0oks" class="bar mid" id="bar2"><div data-hf-id="hf-mc2" class="mono-cap"></div><span data-hf-id="hf-ob2" class="onbar">58</span></div>
+        <div data-hf-id="hf-mb2" class="mono-base"></div>
+        <div data-hf-id="hf-uqnr" class="lbl giant" data-layout-allow-overlap="true">Frontier B</div>
+      </div>
+      <div data-hf-id="hf-ouu7" class="bar-wrap" id="b3">
+        <div data-hf-id="hf-46jk" class="shape hex"></div>
+        <div data-hf-id="hf-ahg2" class="pct-lbl" id="p3">55%</div>
+        <div data-hf-id="hf-du43" class="bar light" id="bar3"><div data-hf-id="hf-mc3" class="mono-cap"></div><span data-hf-id="hf-ob3" class="onbar">55</span></div>
+        <div data-hf-id="hf-mb3" class="mono-base"></div>
+        <div data-hf-id="hf-v4ys" class="lbl giant" data-layout-allow-overlap="true">Frontier C</div>
+      </div>
+      <div data-hf-id="hf-e4y2" class="bar-wrap" id="b4">
+        <div data-hf-id="hf-lad" class="ladder" id="ladder">
+          <div data-hf-id="hf-ll" class="rail-l"></div>
+          <div data-hf-id="hf-lr" class="rail-r"></div>
+          <div data-hf-id="hf-r1" class="rung"></div>
+          <div data-hf-id="hf-r2" class="rung"></div>
+          <div data-hf-id="hf-r3" class="rung"></div>
+          <div data-hf-id="hf-r4" class="rung"></div>
+          <div data-hf-id="hf-r5" class="rung"></div>
+          <div data-hf-id="hf-r6" class="rung"></div>
+          <div data-hf-id="hf-ltag" class="ladder-tag" data-layout-allow-occlusion="true" data-layout-allow-overlap="true">expert data</div>
+        </div>
+        <div data-hf-id="hf-spr" class="spring" id="spring"></div>
+        <div data-hf-id="hf-e4yr" class="hero-trail" id="trail"></div>
+        <div data-hf-id="hf-wfty" class="hero-shape" id="hero"></div>
+        <div data-hf-id="hf-p4x" class="pct-lbl hi" id="p4">74.67%</div>
+        <div data-hf-id="hf-b4x" class="bar hero" id="bar4"><span data-hf-id="hf-ob4" class="onbar">75</span></div>
+        <div data-hf-id="hf-l4x" class="lbl hi" data-layout-allow-overlap="true">Specialized</div>
+      </div>
+    </div>
+  </div>
+  <div data-hf-id="hf-pln1" class="agent-plinth" id="plinth"></div>
+  <div data-hf-id="hf-agnt" class="agent-cut" id="agent" data-layout-allow-overlap="" data-layout-allow-occlusion="">
+    <img data-hf-id="hf-agimg" src="assets/char-specialized-agent.png" alt="">
+  </div>
+  <div data-hf-id="hf-dvd" class="david-tag" id="davidTag">small agent · clears giants</div>
+  <div data-hf-id="hf-0fht" class="credit" id="credit">Specialized fine-tune <em data-hf-id="hf-2ym9">clears</em> the frontier pack — without frontier cost.</div>
+</div>
+<script>
+window.__timelines=window.__timelines||{};
+const tl=gsap.timeline({paused:true});
+gsap.set("#kicker,#title,#tag,#receipt,#costTear,#bar1,#bar2,#bar3,#bar4,.shape,#hero,#trail,#credit,#p1,#p2,#p3,#p4,#chart,#agent,#plinth,#chartHead,#lattice,#ladder,#spring,#davidTag",{opacity:0});
+gsap.set(".bar",{scaleY:0});
+gsap.set("#hero",{y:380,opacity:0});
+gsap.set("#costTear",{y:-20,rotation:-6});
+tl.fromTo("#dither",{opacity:0.15},{opacity:0.3,duration:0.35},0);
+tl.fromTo("#lattice",{opacity:0},{opacity:0.55,duration:0.4},0.08);
+tl.fromTo("#kicker",{x:-12,opacity:0},{x:0,opacity:1,duration:0.2},0.05);
+tl.fromTo("#title",{y:16,opacity:0},{y:0,opacity:1,duration:0.3},0.12);
+tl.fromTo("#tag",{x:30,opacity:0},{x:0,opacity:1,duration:0.25},0.25);
+tl.fromTo("#costTear",{y:-24,opacity:0,rotation:-6},{y:0,opacity:1,rotation:-1.2,duration:0.4,ease:"back.out(1.6)"},0.42);
+tl.fromTo("#receipt",{x:-24,opacity:0},{x:0,opacity:1,duration:0.32,ease:"back.out(1.3)"},0.3);
+tl.fromTo("#chart",{y:20,opacity:0},{y:0,opacity:1,duration:0.28},0.35);
+tl.fromTo("#chartHead",{y:-8,opacity:0},{y:0,opacity:1,duration:0.2},0.42);
+["#bar1","#bar2","#bar3"].forEach((b,i)=>tl.to(b,{scaleY:1,duration:0.4,ease:"power2.out"},0.45+i*0.12));
+["#p1","#p2","#p3"].forEach((p,i)=>tl.fromTo(p,{opacity:0,y:8},{opacity:1,y:0,duration:0.18},0.55+i*0.12));
+tl.fromTo(".shape",{y:20,opacity:0},{y:0,opacity:0.85,duration:0.2,stagger:0.1},0.6);
+tl.fromTo("#ladder",{opacity:0,y:10},{opacity:1,y:0,duration:0.28},0.78);
+tl.fromTo("#spring",{opacity:0,scaleX:0.6},{opacity:1,scaleX:1,duration:0.22,ease:"power2.out"},0.85);
+tl.to("#bar4",{scaleY:1,duration:0.55,ease:"power3.out"},0.9);
+tl.fromTo("#p4",{opacity:0,y:10},{opacity:1,y:0,duration:0.2},1.05);
+tl.fromTo("#hero",{y:380,opacity:0,scale:0.55},{y:0,opacity:1,scale:1,duration:0.95,ease:"power3.out"},0.95);
+tl.fromTo("#trail",{height:0,opacity:0},{height:280,opacity:0.65,duration:0.7,ease:"power2.out"},1.0);
+tl.fromTo("#plinth",{opacity:0,scale:0.8},{opacity:1,scale:1,duration:0.3},1.1);
+tl.fromTo("#agent",{y:80,opacity:0,scale:0.92},{y:0,opacity:1,scale:1,duration:0.55,ease:"power3.out"},1.15);
+tl.fromTo("#davidTag",{x:16,opacity:0},{x:0,opacity:1,duration:0.28,ease:"power3.out"},1.45);
+tl.fromTo("#credit",{opacity:0},{opacity:1,duration:0.22},1.55);
+tl.fromTo("#hero",{y:0},{y:4,duration:0.9,ease:"sine.inOut",yoyo:true,repeat:-1},1.95);
+tl.fromTo("#agent",{y:0},{y:4,duration:0.9,ease:"sine.inOut",yoyo:true,repeat:-1},1.95);
+tl.to("#dither",{x:6,duration:2.4,ease:"sine.inOut",yoyo:true,repeat:-1},2.0);
+tl.to("#receipt",{y:"+=3",duration:1.4,ease:"sine.inOut",yoyo:true,repeat:-1},2.1);
+tl.to("#costTear",{y:"+=2",duration:1.6,ease:"sine.inOut",yoyo:true,repeat:-1},2.2);
+window.__timelines["frame-01-proof"]=tl;
+</script>
+</template></body></html>
