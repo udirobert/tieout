@@ -24,6 +24,11 @@ run.log
 results.json
 *.xlsx
 !research/data/download.py
+# Archived eval evidence for judges (force-add under research/data/eval/)
+!research/data/eval/**/results.json
+!research/data/eval/**/run.log
+!research/data/eval/**/traces/
+!research/data/eval/**/traces/**
 
 # OS / editor
 .DS_Store

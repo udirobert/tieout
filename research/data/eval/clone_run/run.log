@@ -1,0 +1,410 @@
+clone-run  model Qwen/Qwen3.8-27B+qwen3_5  renderer qwen3_5 thinking=on  temp 0  max_tokens 16384  tasks 400
+13-1      163.7s  ok  json_err=0  trunc=0  out_tok=9207
+17-35     245.4s  error: JSONDecodeError: Expecting ',' delimiter: line 1 column 7461 (char 7460)  json_err=1  trunc=1  out_tok=16384
+22-47      96.1s  ok  json_err=0  trunc=0  out_tok=7861
+23-24     316.5s  error: JSONDecodeError: Expecting ',' delimiter: line 1 column 5249 (char 5248)  json_err=1  trunc=1  out_tok=16384
+24-23     331.3s  error: JSONDecodeError: Expecting ',' delimiter: line 1 column 25792 (char 25791)  json_err=1  trunc=1  out_tok=16384
+28-7       64.3s  ok  json_err=0  trunc=0  out_tok=3900
+51-12      49.4s  ok  json_err=0  trunc=0  out_tok=3421
+60-7       34.4s  ok  json_err=0  trunc=0  out_tok=2056
+262-17     65.7s  ok  json_err=0  trunc=0  out_tok=4298
+263-1      39.4s  ok  json_err=0  trunc=0  out_tok=2836
+41-47     228.8s  error: JSONDecodeError: Expecting ',' delimiter: line 1 column 7 (char 6)  json_err=1  trunc=0  out_tok=15469
+267-18     16.8s  ok  json_err=0  trunc=0  out_tok=1061
+267-21     15.4s  ok  json_err=0  trunc=0  out_tok=969
+clone-run  model Qwen/Qwen3.8-27B+qwen3_5  renderer qwen3_5 thinking=on  temp 0  max_tokens 16384  tasks 387  resume-skip 13
+280-17     18.3s  ok  json_err=0  trunc=0  out_tok=770
+279-23     48.9s  ok  json_err=0  trunc=0  out_tok=1607
+269-43     59.4s  ok  json_err=0  trunc=0  out_tok=2294
+283-32    104.6s  ok  json_err=0  trunc=0  out_tok=3357
+269-44    132.4s  ok  json_err=0  trunc=0  out_tok=5058
+290-1     155.9s  ok  json_err=0  trunc=0  out_tok=5847
+333-29     20.0s  ok  json_err=0  trunc=0  out_tok=1343
+304-35    131.6s  ok  json_err=0  trunc=0  out_tok=6353
+384-4      18.6s  ok  json_err=0  trunc=0  out_tok=1010
+297-42    174.0s  error: ValueError: no JSON object or array in reply: 'Let me analyze this task. The user wants to combine data from multiple sheets (sindh, punjab, baluchistan, Khyber Pakhto'  json_err=1  trunc=0  out_tok=6861
+290-27    294.4s  error: JSONDecodeError: Expecting ',' delimiter: line 1 column 17443 (char 17442)  json_err=1  trunc=1  out_tok=16384
+433-47     91.9s  ok  json_err=0  trunc=0  out_tok=7251
+341-40    182.1s  ok  json_err=0  trunc=0  out_tok=11464
+455-35     62.0s  ok  json_err=0  trunc=0  out_tok=3389
+469-9      30.6s  ok  json_err=0  trunc=0  out_tok=1243
+472-15     12.9s  ok  json_err=0  trunc=0  out_tok=418
+547-18     44.3s  ok  json_err=0  trunc=0  out_tok=1593
+493-18     47.8s  ok  json_err=0  trunc=0  out_tok=1744
+66-24      36.4s  ok  json_err=0  trunc=0  out_tok=1619
+477-45    142.8s  ok  json_err=0  trunc=0  out_tok=6464
+408-5     279.1s  error: ValueError: no JSON object or array in reply: 'Let me analyze the instruction carefully:\n\n1. Calculate the sum of values in Column D for rows where Column E contains a'  json_err=1  trunc=1  out_tok=16384
+79-7        7.9s  ok  json_err=0  trunc=0  out_tok=408
+73-45      71.1s  ok  json_err=0  trunc=0  out_tok=4891
+82-38      25.2s  ok  json_err=0  trunc=0  out_tok=1847
+82-30      34.9s  ok  json_err=0  trunc=0  out_tok=2753
+84-40      15.8s  ok  json_err=0  trunc=0  out_tok=1019
+61-4      175.6s  ok  json_err=0  trunc=0  out_tok=8345
+97-36      35.0s  ok  json_err=0  trunc=0  out_tok=1480
+109-21     47.5s  ok  json_err=0  trunc=0  out_tok=1703
+80-42     220.6s  error: ValueError: no JSON object or array in reply: 'Let me analyze this task carefully.\n\nThe user wants to consolidate data from sheets Jack, Henry, and Richard into the Co'  json_err=1  trunc=0  out_tok=8249
+105-24    166.7s  ok  json_err=0  trunc=0  out_tok=7119
+130-9      68.0s  ok  json_err=0  trunc=0  out_tok=4733
+91-34     299.8s  ok  json_err=0  trunc=0  out_tok=15757
+147-48     52.5s  ok  json_err=0  trunc=0  out_tok=2320
+142-19    154.1s  ok  json_err=0  trunc=0  out_tok=7294
+118-50    315.4s  ok  json_err=0  trunc=0  out_tok=15514
+156-14     94.0s  ok  json_err=0  trunc=0  out_tok=5282
+160-6      59.0s  ok  json_err=0  trunc=0  out_tok=2813
+168-17     13.4s  ok  json_err=0  trunc=0  out_tok=934
+157-4     240.9s  error: JSONDecodeError: Expecting ',' delimiter: line 1 column 21673 (char 21672)  json_err=1  trunc=0  out_tok=14464
+146-49    352.1s  error: JSONDecodeError: Expecting value: line 1 column 2 (char 1)  json_err=1  trunc=1  out_tok=16384
+178-22     31.4s  ok  json_err=0  trunc=0  out_tok=1487
+165-23    239.8s  ok  json_err=0  trunc=0  out_tok=15165
+170-13    250.5s  ok  json_err=0  trunc=0  out_tok=13366
+177-6     145.4s  ok  json_err=0  trunc=0  out_tok=8944
+203-15     28.4s  ok  json_err=0  trunc=0  out_tok=2218
+230-16     60.7s  ok  json_err=0  trunc=0  out_tok=5028
+191-40    212.8s  error: ValueError: no JSON object or array in reply: 'Let me analyze the workbook and the instruction carefully.\n\nThe instruction asks to sort varying blocks of numbers on Sh'  json_err=1  trunc=1  out_tok=16384
+236-22     26.3s  ok  json_err=0  trunc=0  out_tok=1926
+208-20    115.6s  ok  json_err=0  trunc=0  out_tok=9804
+108-24     46.4s  ok  json_err=0  trunc=0  out_tok=3774
+120-24     18.9s  ok  json_err=0  trunc=0  out_tok=1006
+194-19    244.2s  error: JSONDecodeError: Expecting ',' delimiter: line 1 column 6236 (char 6235)  json_err=1  trunc=1  out_tok=16384
+141-20     57.0s  ok  json_err=0  trunc=0  out_tok=2037
+250-20    143.6s  ok  json_err=0  trunc=0  out_tok=8941
+142-12     65.5s  ok  json_err=0  trunc=0  out_tok=2354
+188-39     46.5s  ok  json_err=0  trunc=0  out_tok=1700
+192-22     62.7s  ok  json_err=0  trunc=0  out_tok=2635
+227-40     23.2s  ok  json_err=0  trunc=0  out_tok=922
+254-34    272.4s  error: ValueError: no JSON object or array in reply: 'Let me analyze this problem. I need to find a combination of values from the "Before" sheet that sums to a value between'  json_err=1  trunc=0  out_tok=14167
+302-1      17.6s  ok  json_err=0  trunc=0  out_tok=880
+325-44     60.0s  ok  json_err=0  trunc=0  out_tok=3072
+334-11     14.4s  ok  json_err=0  trunc=0  out_tok=731
+341-14     28.0s  ok  json_err=0  trunc=0  out_tok=2162
+209-30    209.6s  error: JSONDecodeError: Expecting ',' delimiter: line 1 column 19121 (char 19120)  json_err=1  trunc=0  out_tok=10430
+343-20     29.4s  ok  json_err=0  trunc=0  out_tok=2067
+183-8     309.7s  error: ValueError: no JSON object or array in reply: 'Let me analyze the workbook and the instruction carefully.\n\nThe user wants to calculate weighted averages for columns J,'  json_err=1  trunc=1  out_tok=16384
+359-21     11.1s  ok  json_err=0  trunc=0  out_tok=740
+367-23     15.7s  ok  json_err=0  trunc=0  out_tok=1111
+370-43     60.0s  ok  json_err=0  trunc=0  out_tok=3460
+353-29    118.4s  ok  json_err=0  trunc=0  out_tok=8994
+247-24    324.1s  error: JSONDecodeError: Expecting ',' delimiter: line 1 column 4903 (char 4902)  json_err=1  trunc=1  out_tok=16384
+374-31     31.9s  ok  json_err=0  trunc=0  out_tok=1180
+374-18     43.3s  ok  json_err=0  trunc=0  out_tok=1875
+379-36     25.0s  ok  json_err=0  trunc=0  out_tok=939
+382-10     22.0s  ok  json_err=0  trunc=0  out_tok=675
+388-47     42.5s  ok  json_err=0  trunc=0  out_tok=1739
+382-29     75.7s  ok  json_err=0  trunc=0  out_tok=3349
+387-16     84.3s  ok  json_err=0  trunc=0  out_tok=3957
+353-6     278.7s  error: JSONDecodeError: Expecting ',' delimiter: line 1 column 5247 (char 5246)  json_err=1  trunc=1  out_tok=16384
+399-14     51.6s  ok  json_err=0  trunc=0  out_tok=3003
+408-39     38.5s  ok  json_err=0  trunc=0  out_tok=2844
+398-14    113.8s  ok  json_err=0  trunc=0  out_tok=4904
+395-36    136.2s  ok  json_err=0  trunc=0  out_tok=6217
+414-20     18.9s  ok  json_err=0  trunc=0  out_tok=665
+416-15     35.4s  ok  json_err=0  trunc=0  out_tok=1713
+416-27     41.8s  ok  json_err=0  trunc=0  out_tok=1763
+409-45     89.3s  ok  json_err=0  trunc=0  out_tok=3443
+438-18     23.4s  ok  json_err=0  trunc=0  out_tok=810
+440-24     43.6s  ok  json_err=0  trunc=0  out_tok=1657
+402-43    223.9s  ok  json_err=0  trunc=0  out_tok=10663
+463-17     33.4s  ok  json_err=0  trunc=0  out_tok=1468
+448-11    117.4s  ok  json_err=0  trunc=0  out_tok=4908
+423-16    162.2s  ok  json_err=0  trunc=0  out_tok=7459
+488-14     54.9s  ok  json_err=0  trunc=0  out_tok=2291
+496-15     42.6s  ok  json_err=0  trunc=0  out_tok=2258
+486-17    125.7s  ok  json_err=0  trunc=0  out_tok=6519
+493-5      75.2s  ok  json_err=0  trunc=0  out_tok=3704
+516-46     20.2s  ok  json_err=0  trunc=0  out_tok=1451
+496-34     70.3s  ok  json_err=0  trunc=0  out_tok=2993
+510-3      65.2s  ok  json_err=0  trunc=0  out_tok=4013
+534-26     67.8s  ok  json_err=0  trunc=0  out_tok=4009
+545-35    109.1s  ok  json_err=0  trunc=0  out_tok=7159
+547-43     50.7s  ok  json_err=0  trunc=0  out_tok=4173
+535-20    213.6s  error: JSONDecodeError: Expecting value: line 1 column 2 (char 1)  json_err=1  trunc=0  out_tok=12550
+560-12     21.1s  ok  json_err=0  trunc=0  out_tok=1448
+531-18    252.6s  error: ValueError: no JSON object or array in reply: "Let me analyze this task carefully.\n\nThe user wants to transpose data from the 'Data' tab into the format shown on the '"  json_err=1  trunc=1  out_tok=16384
+524-31    271.0s  ok  json_err=0  trunc=0  out_tok=12515
+585-41     15.7s  ok  json_err=0  trunc=0  out_tok=1073
+12307       9.4s  ok  json_err=0  trunc=0  out_tok=578
+599-9      19.9s  ok  json_err=0  trunc=0  out_tok=1365
+15380      14.9s  ok  json_err=0  trunc=0  out_tok=987
+30930      89.0s  ok  json_err=0  trunc=0  out_tok=4409
+567-21    137.8s  ok  json_err=0  trunc=0  out_tok=7252
+31202      95.9s  ok  json_err=0  trunc=0  out_tok=4383
+37900      16.6s  ok  json_err=0  trunc=0  out_tok=391
+33722      73.0s  ok  json_err=0  trunc=0  out_tok=2870
+34033      73.0s  ok  json_err=0  trunc=0  out_tok=2734
+38074      71.4s  ok  json_err=0  trunc=0  out_tok=2673
+38462      31.6s  ok  json_err=0  trunc=0  out_tok=938
+38703      32.4s  ok  json_err=0  trunc=0  out_tok=1213
+38823      35.4s  ok  json_err=0  trunc=0  out_tok=1164
+38969      45.7s  ok  json_err=0  trunc=0  out_tok=1721
+38985      41.7s  ok  json_err=0  trunc=0  out_tok=1776
+38537     118.8s  ok  json_err=0  trunc=0  out_tok=4644
+39046      31.7s  ok  json_err=0  trunc=0  out_tok=1404
+577-40    334.4s  ok  json_err=0  trunc=0  out_tok=15460
+39903      18.4s  ok  json_err=0  trunc=0  out_tok=1055
+39667      27.4s  ok  json_err=0  trunc=0  out_tok=1219
+39515      46.8s  ok  json_err=0  trunc=0  out_tok=2602
+40478      13.6s  ok  json_err=0  trunc=0  out_tok=947
+41601       9.9s  ok  json_err=0  trunc=0  out_tok=630
+41410      17.1s  ok  json_err=0  trunc=0  out_tok=977
+41691       5.9s  ok  json_err=0  trunc=0  out_tok=280
+39931      43.7s  ok  json_err=0  trunc=0  out_tok=3585
+41969       7.7s  ok  json_err=0  trunc=0  out_tok=443
+42198      19.9s  ok  json_err=0  trunc=0  out_tok=1326
+39432     107.6s  ok  json_err=0  trunc=0  out_tok=7720
+44389      24.2s  ok  json_err=0  trunc=0  out_tok=1708
+45300      15.1s  ok  json_err=0  trunc=0  out_tok=1027
+46167       7.5s  ok  json_err=0  trunc=0  out_tok=386
+45635      23.7s  ok  json_err=0  trunc=0  out_tok=1772
+46240      10.7s  ok  json_err=0  trunc=0  out_tok=726
+47798      13.5s  ok  json_err=0  trunc=0  out_tok=620
+45896      42.0s  ok  json_err=0  trunc=0  out_tok=2588
+47842      21.1s  ok  json_err=0  trunc=0  out_tok=1157
+48080      13.5s  ok  json_err=0  trunc=0  out_tok=895
+48257       6.6s  ok  json_err=0  trunc=0  out_tok=426
+48365       7.2s  ok  json_err=0  trunc=0  out_tok=439
+47766      87.2s  ok  json_err=0  trunc=0  out_tok=7193
+48588      24.8s  ok  json_err=0  trunc=0  out_tok=1857
+48608      23.9s  ok  json_err=0  trunc=0  out_tok=1817
+48620      27.4s  ok  json_err=0  trunc=0  out_tok=1377
+42526     173.0s  ok  json_err=0  trunc=0  out_tok=9598
+48745      16.9s  ok  json_err=0  trunc=0  out_tok=1145
+48643      34.8s  ok  json_err=0  trunc=0  out_tok=1849
+48924      22.9s  ok  json_err=0  trunc=0  out_tok=1643
+48975      24.3s  ok  json_err=0  trunc=0  out_tok=1864
+48982      21.1s  ok  json_err=0  trunc=0  out_tok=630
+47933     221.5s  error: JSONDecodeError: Expecting ',' delimiter: line 1 column 4637 (char 4636)  json_err=1  trunc=1  out_tok=16384
+49036      49.4s  ok  json_err=0  trunc=0  out_tok=1485
+48921     219.0s  ok  json_err=0  trunc=0  out_tok=11476
+48969     223.5s  ok  json_err=0  trunc=0  out_tok=9931
+49237      19.6s  ok  json_err=0  trunc=0  out_tok=750
+49300      32.2s  ok  json_err=0  trunc=0  out_tok=1367
+49196     121.4s  ok  json_err=0  trunc=0  out_tok=4504
+49333      56.3s  ok  json_err=0  trunc=0  out_tok=2191
+49801      11.4s  ok  json_err=0  trunc=0  out_tok=142
+50088      13.1s  ok  json_err=0  trunc=0  out_tok=511
+48983     307.8s  ok  json_err=0  trunc=0  out_tok=12904
+50526      14.5s  ok  json_err=0  trunc=0  out_tok=804
+50682      61.4s  ok  json_err=0  trunc=0  out_tok=2977
+50193     168.3s  ok  json_err=0  trunc=0  out_tok=12286
+50796      13.0s  ok  json_err=0  trunc=0  out_tok=535
+49667     230.0s  error: ValidationError: 1 validation error for Answer
+cells.0
+  Input should be a valid dictionary or instance of CellValue [type=model_type, input_value=2, input_type=int]
+    For further information  json_err=0  trunc=1  out_tok=16384
+50916      65.8s  ok  json_err=0  trunc=0  out_tok=3267
+50952      56.1s  ok  json_err=0  trunc=0  out_tok=2579
+50768     115.5s  ok  json_err=0  trunc=0  out_tok=7090
+50324     269.2s  ok  json_err=0  trunc=0  out_tok=15213
+51289      20.2s  ok  json_err=0  trunc=0  out_tok=871
+51262      40.3s  ok  json_err=0  trunc=0  out_tok=1926
+51431      16.0s  ok  json_err=0  trunc=0  out_tok=306
+51359      38.7s  ok  json_err=0  trunc=0  out_tok=1444
+51586      23.6s  ok  json_err=0  trunc=0  out_tok=879
+52216      54.4s  ok  json_err=0  trunc=0  out_tok=2722
+52917      18.9s  ok  json_err=0  trunc=0  out_tok=813
+53167      24.5s  ok  json_err=0  trunc=0  out_tok=1233
+52807      89.1s  ok  json_err=0  trunc=0  out_tok=3303
+52575      96.4s  ok  json_err=0  trunc=0  out_tok=5664
+54242       9.0s  ok  json_err=0  trunc=0  out_tok=565
+54144      33.8s  ok  json_err=0  trunc=0  out_tok=1652
+54675      19.0s  ok  json_err=0  trunc=0  out_tok=833
+1563       37.6s  ok  json_err=0  trunc=0  out_tok=1665
+51090     267.2s  ok  json_err=0  trunc=0  out_tok=10435
+54590     114.9s  ok  json_err=0  trunc=0  out_tok=5998
+1818       83.1s  ok  json_err=0  trunc=0  out_tok=2578
+1925       73.7s  ok  json_err=0  trunc=0  out_tok=2418
+3413       23.2s  ok  json_err=0  trunc=0  out_tok=878
+3002       46.6s  ok  json_err=0  trunc=0  out_tok=2088
+2768      104.2s  ok  json_err=0  trunc=0  out_tok=4609
+3911       87.0s  ok  json_err=0  trunc=0  out_tok=4542
+4714       83.0s  ok  json_err=0  trunc=0  out_tok=5665
+5835       72.8s  ok  json_err=0  trunc=0  out_tok=3441
+7665        7.9s  ok  json_err=0  trunc=0  out_tok=479
+54196     319.9s  error: JSONDecodeError: Expecting ',' delimiter: line 1 column 5033 (char 5032)  json_err=1  trunc=1  out_tok=16384
+8942       13.0s  ok  json_err=0  trunc=0  out_tok=764
+9111       17.7s  ok  json_err=0  trunc=0  out_tok=1273
+7902       39.2s  ok  json_err=0  trunc=0  out_tok=3126
+6698      107.7s  ok  json_err=0  trunc=0  out_tok=7002
+9391       82.3s  ok  json_err=0  trunc=0  out_tok=4488
+9448       93.9s  ok  json_err=0  trunc=0  out_tok=4834
+9726       23.4s  ok  json_err=0  trunc=0  out_tok=1064
+10452      20.2s  ok  json_err=0  trunc=0  out_tok=988
+10747      16.9s  ok  json_err=0  trunc=0  out_tok=1044
+6239      212.3s  ok  json_err=0  trunc=0  out_tok=13748
+11276      47.9s  ok  json_err=0  trunc=0  out_tok=3763
+12864      15.7s  ok  json_err=0  trunc=0  out_tok=1108
+11842     107.1s  ok  json_err=0  trunc=0  out_tok=8456
+13284      66.2s  ok  json_err=0  trunc=0  out_tok=5527
+15387      15.5s  ok  json_err=0  trunc=0  out_tok=514
+16511      25.8s  ok  json_err=0  trunc=0  out_tok=1023
+9569      245.9s  error: ValueError: no JSON object or array in reply: 'Let me analyze this problem carefully.\n\nThe user wants to find the earliest non-zero value in each row, specifically wit'  json_err=1  trunc=0  out_tok=15570
+18645      16.5s  ok  json_err=0  trunc=0  out_tok=420
+17111      60.8s  ok  json_err=0  trunc=0  out_tok=2417
+18935      17.2s  ok  json_err=0  trunc=0  out_tok=617
+31628      13.9s  ok  json_err=0  trunc=0  out_tok=536
+15671     147.7s  ok  json_err=0  trunc=0  out_tok=6713
+31915      34.5s  ok  json_err=0  trunc=0  out_tok=1243
+31011     117.6s  ok  json_err=0  trunc=0  out_tok=4870
+14240     303.6s  ok  json_err=0  trunc=0  out_tok=12860
+32255      22.1s  ok  json_err=0  trunc=0  out_tok=1158
+32293      10.1s  ok  json_err=0  trunc=0  out_tok=430
+32023      99.3s  ok  json_err=0  trunc=0  out_tok=5564
+32093      80.1s  ok  json_err=0  trunc=0  out_tok=4510
+32562      17.8s  ok  json_err=0  trunc=0  out_tok=1320
+32438      37.6s  ok  json_err=0  trunc=0  out_tok=1764
+32612      51.2s  ok  json_err=0  trunc=0  out_tok=4147
+32337     104.7s  ok  json_err=0  trunc=0  out_tok=7074
+32902      19.1s  ok  json_err=0  trunc=0  out_tok=1373
+33157      15.8s  ok  json_err=0  trunc=0  out_tok=1091
+32789      78.4s  ok  json_err=0  trunc=0  out_tok=6639
+34210      17.4s  ok  json_err=0  trunc=0  out_tok=1180
+35742      12.6s  ok  json_err=0  trunc=0  out_tok=853
+31746     290.4s  error: ValueError: no JSON object or array in reply: 'Let me analyze this problem carefully.\n\nThe instruction says:\n- Contract duration is 81 months\n- If a saving of £4165 oc'  json_err=1  trunc=1  out_tok=16384
+35747      17.6s  ok  json_err=0  trunc=0  out_tok=1131
+36097      32.4s  ok  json_err=0  trunc=0  out_tok=2534
+36764      24.9s  ok  json_err=0  trunc=0  out_tok=1808
+37086      11.4s  ok  json_err=0  trunc=0  out_tok=733
+35739      63.5s  ok  json_err=0  trunc=0  out_tok=5207
+36191      46.1s  ok  json_err=0  trunc=0  out_tok=3545
+37378       8.3s  ok  json_err=0  trunc=0  out_tok=459
+37554      19.1s  ok  json_err=0  trunc=0  out_tok=1300
+36277      46.8s  ok  json_err=0  trunc=0  out_tok=2089
+37456      49.8s  ok  json_err=0  trunc=0  out_tok=4101
+39190      23.4s  ok  json_err=0  trunc=0  out_tok=1726
+40757       8.0s  ok  json_err=0  trunc=0  out_tok=419
+37229      99.0s  ok  json_err=0  trunc=0  out_tok=8362
+40959      11.7s  ok  json_err=0  trunc=0  out_tok=716
+40892      17.3s  ok  json_err=0  trunc=0  out_tok=1243
+41265      13.8s  ok  json_err=0  trunc=0  out_tok=963
+41348      17.1s  ok  json_err=0  trunc=0  out_tok=1221
+41420      16.5s  ok  json_err=0  trunc=0  out_tok=1111
+41589       7.0s  ok  json_err=0  trunc=0  out_tok=369
+42181      20.9s  ok  json_err=0  trunc=0  out_tok=1529
+42354      12.4s  ok  json_err=0  trunc=0  out_tok=828
+41978      82.0s  ok  json_err=0  trunc=0  out_tok=6891
+37462     191.1s  error: JSONDecodeError: Expecting ',' delimiter: line 1 column 4874 (char 4873)  json_err=1  trunc=1  out_tok=16384
+42930      24.0s  ok  json_err=0  trunc=0  out_tok=975
+43589       7.9s  ok  json_err=0  trunc=0  out_tok=521
+43436      68.5s  ok  json_err=0  trunc=0  out_tok=3713
+44266      40.0s  ok  json_err=0  trunc=0  out_tok=1608
+44628      14.5s  ok  json_err=0  trunc=0  out_tok=496
+45063      18.7s  ok  json_err=0  trunc=0  out_tok=684
+45372      72.1s  ok  json_err=0  trunc=0  out_tok=2499
+42216     278.9s  error: ValidationError: 29 validation errors for Answer
+cells.0
+  Input should be a valid dictionary or instance of CellValue [type=model_type, input_value=0, input_type=int]
+    For further informati  json_err=0  trunc=1  out_tok=16384
+45944      55.5s  ok  json_err=0  trunc=0  out_tok=1879
+42515     308.7s  error: ValueError: no JSON object or array in reply: 'Let me analyze this problem carefully.\n\nThe user has a foreign exchange rate table (TABLE 2) in columns E, F, G. They wa'  json_err=1  trunc=1  out_tok=16384
+46897      10.0s  ok  json_err=0  trunc=0  out_tok=409
+46121      35.7s  ok  json_err=0  trunc=0  out_tok=2275
+48527      29.6s  ok  json_err=0  trunc=0  out_tok=1345
+49945       5.7s  ok  json_err=0  trunc=0  out_tok=331
+49857      16.8s  ok  json_err=0  trunc=0  out_tok=1170
+50250      12.9s  ok  json_err=0  trunc=0  out_tok=897
+50486       7.7s  ok  json_err=0  trunc=0  out_tok=434
+44296     262.8s  error: JSONDecodeError: Expecting ',' delimiter: line 1 column 4723 (char 4722)  json_err=1  trunc=0  out_tok=13140
+50521      20.6s  ok  json_err=0  trunc=0  out_tok=1523
+50683      11.4s  ok  json_err=0  trunc=0  out_tok=817
+50811       6.8s  ok  json_err=0  trunc=0  out_tok=387
+50631      66.9s  ok  json_err=0  trunc=0  out_tok=5551
+51249       7.8s  ok  json_err=0  trunc=0  out_tok=465
+45738     237.1s  error: JSONDecodeError: Expecting ',' delimiter: line 1 column 9792 (char 9791)  json_err=1  trunc=1  out_tok=16384
+51354      19.5s  ok  json_err=0  trunc=0  out_tok=838
+50971      61.5s  ok  json_err=0  trunc=0  out_tok=5069
+51556      26.2s  ok  json_err=0  trunc=0  out_tok=1965
+51680      18.5s  ok  json_err=0  trunc=0  out_tok=1287
+52050      39.6s  ok  json_err=0  trunc=0  out_tok=3137
+52220      28.6s  ok  json_err=0  trunc=0  out_tok=2144
+52532      11.2s  ok  json_err=0  trunc=0  out_tok=726
+52541       9.0s  ok  json_err=0  trunc=0  out_tok=496
+52233      47.4s  ok  json_err=0  trunc=0  out_tok=3875
+50051     212.6s  error: JSONDecodeError: Expecting value: line 1 column 87 (char 86)  json_err=1  trunc=1  out_tok=16384
+53117      47.5s  ok  json_err=0  trunc=0  out_tok=3781
+53383       9.3s  ok  json_err=0  trunc=0  out_tok=537
+53449       7.8s  ok  json_err=0  trunc=0  out_tok=517
+53647      13.8s  ok  json_err=0  trunc=0  out_tok=875
+52305     112.1s  ok  json_err=0  trunc=0  out_tok=9509
+54085       5.6s  ok  json_err=0  trunc=0  out_tok=251
+54274       8.5s  ok  json_err=0  trunc=0  out_tok=491
+54474      20.3s  ok  json_err=0  trunc=0  out_tok=755
+54513       3.8s  ok  json_err=0  trunc=0  out_tok=196
+52964     130.1s  ok  json_err=0  trunc=0  out_tok=10203
+54667      45.1s  ok  json_err=0  trunc=0  out_tok=1991
+54638      72.4s  ok  json_err=0  trunc=0  out_tok=4661
+54717      49.0s  ok  json_err=0  trunc=0  out_tok=3103
+53161     194.9s  ok  json_err=0  trunc=0  out_tok=13300
+55060      17.7s  ok  json_err=0  trunc=0  out_tok=651
+55049      47.0s  ok  json_err=0  trunc=0  out_tok=2160
+53994     208.6s  ok  json_err=0  trunc=0  out_tok=14821
+55817      23.2s  ok  json_err=0  trunc=0  out_tok=1570
+55085     149.8s  ok  json_err=0  trunc=0  out_tok=6998
+55979      10.1s  ok  json_err=0  trunc=0  out_tok=334
+55965     113.2s  ok  json_err=0  trunc=0  out_tok=4376
+56274      37.4s  ok  json_err=0  trunc=0  out_tok=1454
+56225      91.0s  ok  json_err=0  trunc=0  out_tok=3640
+54925     345.5s  error: JSONDecodeError: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)  json_err=1  trunc=1  out_tok=16384
+56378     101.0s  ok  json_err=0  trunc=0  out_tok=3638
+56599      18.0s  ok  json_err=0  trunc=0  out_tok=884
+56920      24.4s  ok  json_err=0  trunc=0  out_tok=1319
+56419     111.3s  ok  json_err=0  trunc=0  out_tok=5592
+57033      19.6s  ok  json_err=0  trunc=0  out_tok=901
+55427     339.1s  ok  json_err=0  trunc=0  out_tok=15594
+57445      11.9s  ok  json_err=0  trunc=0  out_tok=614
+57113      21.5s  ok  json_err=0  trunc=0  out_tok=581
+56921      64.6s  ok  json_err=0  trunc=0  out_tok=4548
+57590      24.5s  ok  json_err=0  trunc=0  out_tok=922
+57743      28.7s  ok  json_err=0  trunc=0  out_tok=1628
+58147      29.7s  ok  json_err=0  trunc=0  out_tok=1279
+58701       6.2s  ok  json_err=0  trunc=0  out_tok=271
+58949      23.7s  ok  json_err=0  trunc=0  out_tok=1587
+58723      29.9s  ok  json_err=0  trunc=0  out_tok=2219
+59196      13.6s  ok  json_err=0  trunc=0  out_tok=593
+42902      13.2s  ok  json_err=0  trunc=0  out_tok=892
+58484      66.9s  ok  json_err=0  trunc=0  out_tok=4796
+59595      41.0s  ok  json_err=0  trunc=0  out_tok=3088
+43213      23.4s  ok  json_err=0  trunc=0  out_tok=1518
+44913       9.0s  ok  json_err=0  trunc=0  out_tok=561
+43657      35.8s  ok  json_err=0  trunc=0  out_tok=2643
+45937      10.1s  ok  json_err=0  trunc=0  out_tok=720
+45707      28.8s  ok  json_err=0  trunc=0  out_tok=1915
+47827      51.5s  ok  json_err=0  trunc=0  out_tok=2087
+57232     219.7s  error: JSONDecodeError: Expecting ',' delimiter: line 1 column 4 (char 3)  json_err=1  trunc=0  out_tok=15024
+46646      75.2s  ok  json_err=0  trunc=0  out_tok=3793
+55260      21.5s  ok  json_err=0  trunc=0  out_tok=999
+55708      14.6s  ok  json_err=0  trunc=0  out_tok=499
+55421      48.4s  ok  json_err=0  trunc=0  out_tok=2102
+55468     127.4s  ok  json_err=0  trunc=0  out_tok=7173
+55976     111.8s  ok  json_err=0  trunc=0  out_tok=5592
+56563      15.6s  ok  json_err=0  trunc=0  out_tok=574
+44017     271.6s  error: JSONDecodeError: Expecting value: line 1 column 2 (char 1)  json_err=1  trunc=1  out_tok=16384
+55977     232.5s  ok  json_err=0  trunc=0  out_tok=10336
+56915     132.2s  ok  json_err=0  trunc=0  out_tok=4912
+57117      13.3s  ok  json_err=0  trunc=0  out_tok=444
+56427     242.6s  ok  json_err=0  trunc=0  out_tok=8214
+56953     122.1s  ok  json_err=0  trunc=0  out_tok=5449
+57558      23.2s  ok  json_err=0  trunc=0  out_tok=1021
+57612      11.2s  ok  json_err=0  trunc=0  out_tok=628
+57354      67.8s  ok  json_err=0  trunc=0  out_tok=2882
+57693      21.4s  ok  json_err=0  trunc=0  out_tok=1559
+56786     354.8s  error: ValueError: no JSON object or array in reply: 'Let me analyze this problem carefully.\n\nThe user wants a 12-month rolling average based on the previous 365 days. The da'  json_err=1  trunc=1  out_tok=16384
+58032      63.8s  ok  json_err=0  trunc=0  out_tok=5362
+58499       5.6s  ok  json_err=0  trunc=0  out_tok=296
+58109      17.8s  ok  json_err=0  trunc=0  out_tok=1292
+58904      19.4s  ok  json_err=0  trunc=0  out_tok=1184
+57262     247.4s  ok  json_err=0  trunc=0  out_tok=14437
+58942      19.4s  ok  json_err=0  trunc=0  out_tok=1355
+59160       9.3s  ok  json_err=0  trunc=0  out_tok=592
+58687      72.8s  ok  json_err=0  trunc=0  out_tok=5486
+59129      36.3s  ok  json_err=0  trunc=0  out_tok=2389
+59224      33.8s  ok  json_err=0  trunc=0  out_tok=2306
+59511      25.4s  ok  json_err=0  trunc=0  out_tok=1867
+59358      52.8s  ok  json_err=0  trunc=0  out_tok=3780
+59639      41.6s  ok  json_err=0  trunc=0  out_tok=2963
+59734      50.6s  ok  json_err=0  trunc=0  out_tok=2351
+59794      33.6s  ok  json_err=0  trunc=0  out_tok=1464
+57989     334.9s  error: JSONDecodeError: Expecting value: line 1 column 2 (char 1)  json_err=1  trunc=1  out_tok=16384
+59884     125.6s  ok  json_err=0  trunc=0  out_tok=6572
+59902     113.6s  ok  json_err=0  trunc=0  out_tok=4935
+total 7361.9s for 387 tasks
+audit  n=400  json_decode_error=33  truncated=25  both=23  ok=365

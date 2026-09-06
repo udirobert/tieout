@@ -132,7 +132,7 @@ Diagnostic VM paths (also archived in repo):
 
 - `predictions.jsonl`: `/tmp/clone-run-400/predictions.jsonl`  →  `research/data/eval/clone_run/predictions.jsonl`
 - `outputs/`: `/tmp/clone-run-400/outputs/`  →  in-repo archive omitted (400 workbooks; predictions.jsonl is the ground truth for the evaluator)
-- `traces/`: `/tmp/clone-run-400/traces/`  →  in-repo archive omitted (one trace per task; available on VM)
+- `traces/`: `/tmp/clone-run-400/traces/`  →  `research/data/eval/clone_run/traces/` (400 tasks, one jsonl per task)
 - `run.log`: `/tmp/clone-run-400/run.log`  →  `research/data/eval/clone_run/run.log`
 - `results.json`: `/tmp/clone-run-400/results.json`  →  `research/data/eval/clone_run/results.json`
 - parse audit: `/tmp/clone-run-400/parse_audit_summary.json` (33 JSONDecodeError, 25 truncated at 16k, 23 both; 365 harness-ok)  →  `research/data/eval/clone_run/parse_audit_summary.json`
