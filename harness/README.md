@@ -2,8 +2,11 @@
 
 `classify -> (sheet: codegen | cell: values-first) -> exec/write -> sanity + optional soffice -> repair <=3 -> fallback -> never blank`
 
-Current brief: `docs/TEAM-BRIEF.md`. Methodology: `research/methodology-notes.md`.
-Tinker Qwen3.8-27B is the default. Thinking off, 16k output tokens, temperature 0.
+**Syndicate demo path:** `pipeline.py --path hybrid` (repair loop + skills + exception routing).  
+**Eval path:** `clone_run.py` (one-shot values-first, 68% SpreadsheetBench headline).  
+Docs: `SYNDICATE.md`, `docs/SYNDICATE-WORKFLOW.md`, `docs/SYNDICATE-DEMO.md`.
+
+Tinker Qwen3.8-27B is the default. 16k output tokens, temperature 0.
 
 ```
 python harness/pipeline.py --dataset-dir /data --out-dir /out

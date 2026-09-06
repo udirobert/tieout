@@ -1,0 +1,403 @@
+model tinker://32b1f51b-c24e-5328-a933-fad55dac789b:train:0/sampler_weights/final  temp 0.0  path hybrid  tasks 400
+22-47      42.0s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+13-1      101.0s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+model tinker://32b1f51b-c24e-5328-a933-fad55dac789b:train:0/sampler_weights/final  temp 0.0  path hybrid  tasks 398  resume-skip 2
+51-12      17.1s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+263-1      18.3s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+267-18     22.7s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+267-21     47.6s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+269-44     54.8s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+280-17     66.1s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+283-32     88.9s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+60-7       97.5s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+290-27    101.8s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+279-23    103.4s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+333-29    115.4s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+269-43    119.3s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+384-4     136.7s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+28-7      151.6s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+433-47    168.5s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+262-17    175.8s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+472-15    187.4s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+304-35    191.3s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+469-9     200.5s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+290-1     203.8s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+493-18    218.3s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+547-18    225.9s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+66-24     253.8s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+477-45    262.2s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+79-7      276.3s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+61-4      311.4s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+82-30     339.7s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+82-38     352.7s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+84-40     373.3s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+97-36     443.1s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+105-24    488.5s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+73-45     528.4s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+118-50    544.5s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+109-21    545.1s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+341-40    556.5s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+41-47     574.6s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+24-23     629.2s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+147-48    644.7s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+130-9     677.2s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+156-14    686.3s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+142-19    693.6s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+146-49    722.5s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+455-35    729.7s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+168-17    749.9s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+160-6     769.6s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+178-22    779.9s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+157-4     801.4s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+203-15    850.5s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+177-6     899.6s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+230-16    929.9s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+23-24     950.2s  error: syntax error: unterminated string literal (detected at line 1) (<unknown>, line 1) (codegen, syntax error: unterminated string literal (detected at line 1) (<unknown>, line 1))
+236-22    974.5s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+254-34    982.1s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+170-13   1016.3s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+91-34    1041.2s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+141-20   1093.1s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+142-12   1101.7s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+120-24   1102.2s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+108-24   1111.6s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+208-20   1116.8s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+408-5    1145.9s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+188-39   1151.4s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+297-42   1152.2s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+183-8    1165.4s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+227-40   1174.8s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+302-1    1186.6s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+334-11   1190.5s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+192-22   1192.2s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+17-35    1224.7s  error: syntax error: unterminated string literal (detected at line 1) (<unknown>, line 1) (codegen, syntax error: unterminated string literal (detected at line 1) (<unknown>, line 1))
+343-20   1227.4s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+325-44   1238.9s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+341-14   1251.2s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+359-21   1253.0s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+367-23   1275.4s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+353-29   1288.9s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+379-36   1296.8s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+374-18   1301.3s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+374-31   1303.9s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+382-10   1324.0s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+382-29   1334.8s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+370-43   1348.1s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+388-47   1378.6s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+387-16   1382.2s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+398-14   1414.1s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+399-14   1419.7s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+408-39   1425.4s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+80-42    1430.7s  error: syntax error: unterminated string literal (detected at line 1) (<unknown>, line 1) (codegen, syntax error: unterminated string literal (detected at line 1) (<unknown>, line 1))
+414-20   1447.9s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+416-15   1467.2s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+416-27   1483.2s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+402-43   1486.3s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+191-40   1512.1s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+423-16   1518.8s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+438-18   1528.0s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+409-45   1535.7s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+440-24   1565.2s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+463-17   1582.8s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+194-19   1593.4s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+395-36   1600.6s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+496-15   1613.5s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+496-34   1642.0s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+516-46   1642.8s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+488-14   1650.1s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+493-5    1664.4s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+448-11   1701.6s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+524-31   1702.4s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+510-3    1702.8s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+534-26   1715.0s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+560-12   1722.1s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+486-17   1760.9s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+250-20   1770.2s  error: syntax error: Exceeds the limit (4300 digits) for integer string conversion: value has 13026 digits; use sys.set_int_max_str_digits() to increase the limit - Consider hexadecimal for huge integ
+585-41   1779.9s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+12307    1784.9s  ok
+15380    1794.7s  ok
+165-23   1794.9s  error: syntax error: unterminated string literal (detected at line 1) (<unknown>, line 1) (codegen, syntax error: unterminated string literal (detected at line 1) (<unknown>, line 1))
+31202    1816.6s  ok
+599-9    1816.6s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+34033    1822.6s  ok
+33722    1824.5s  ok
+30930    1826.4s  ok
+37900    1828.2s  ok
+38074    1830.1s  ok
+38462    1832.1s  ok
+38823    1840.6s  ok
+38703    1840.7s  partial: missing answer cells: ['Sheet1!H2', 'Sheet1!H3', 'Sheet1!H4', 'Sheet1!H5', 'Sheet1!H6', 'Sheet1!H7', 'Sheet1!H8', 'Sheet1!H9'] (values, missing answer cells: ['Sheet1!H2', 'Sheet1!H3', 'Sheet
+38985    1846.4s  ok
+547-43   1846.5s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+39046    1854.8s  ok
+39432    1856.6s  ok
+38969    1858.3s  ok
+38537    1863.1s  ok
+39903    1864.9s  ok
+39667    1866.9s  ok
+39515    1868.8s  ok
+39931    1872.0s  ok
+41410    1875.0s  ok
+41691    1876.7s  ok
+40478    1878.5s  ok
+41969    1880.3s  ok
+42198    1882.2s  ok
+41601    1884.3s  ok
+44389    1886.3s  ok
+45300    1889.6s  ok
+45635    1891.8s  ok
+42526    1894.1s  ok
+46167    1895.7s  ok
+46240    1898.8s  ok
+45896    1904.6s  ok
+47766    1908.4s  ok
+353-6    1908.5s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+47798    1911.8s  ok
+48365    1916.3s  ok
+47842    1918.0s  ok
+48080    1919.8s  ok
+48257    1921.6s  ok
+48608    1923.5s  ok
+48620    1925.8s  ok
+48745    1933.2s  ok
+48643    1939.7s  ok
+48588    1945.9s  ok
+48924    1947.7s  ok
+48969    1949.5s  ok
+48982    1952.2s  ok
+545-35   1952.3s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+48975    1954.3s  ok
+49036    1956.6s  ok
+49237    1959.7s  ok
+567-21   1960.6s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+49300    1962.5s  ok
+49801    1966.9s  ok
+49333    1972.7s  ok
+50088    1975.5s  ok
+48983    1988.3s  ok
+50526    1992.9s  ok
+49196    1995.4s  ok
+50682    1997.5s  ok
+49667    2001.3s  ok
+50193    2002.6s  partial: missing answer cells: ['RS.Food!K6', 'RS.Food!K7', 'RS.Food!K8', 'RS.Food!K9', 'RS.Food!K10', 'RS.Food!K11', 'RS.Food!K12', 'RS.Food!K13'] (values, missing answer cells: ['RS.Food!K6', 'RS.Fo
+50796    2007.7s  ok
+50324    2038.2s  ok
+50768    2038.2s  partial: missing answer cells: ['Sheet1!G12', 'Sheet1!H12', 'Sheet1!F13', 'Sheet1!G13', 'Sheet1!H13', 'Sheet1!H14'] (values, missing answer cells: ['Sheet1!G12', 'Sheet1!H12', 'Sheet1!F13', 'Sheet1!G1
+50952    2039.9s  ok
+50916    2041.9s  ok
+48921    2041.9s  partial: missing answer cells: ['Sheet1!A129', 'Sheet1!A130', 'Sheet1!A131', 'Sheet1!A132', 'Sheet1!A133', 'Sheet1!A134', 'Sheet1!A135', 'Sheet1!A136'] (values, missing answer cells: ['Sheet1!A129', '
+47933    2044.5s  ok
+51262    2046.6s  ok
+51431    2052.0s  ok
+51359    2057.9s  ok
+51289    2062.8s  ok
+52216    2064.8s  ok
+51090    2070.9s  ok
+51586    2072.6s  ok
+247-24   2075.3s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+52575    2080.8s  partial: missing answer cells: ['Sheet2!F2', 'Sheet2!F3', 'Sheet2!F5', 'Sheet2!F6', 'Sheet2!F7', 'Sheet2!F8', 'Sheet2!F9', 'Sheet2!F10'] (values, missing answer cells: ['Sheet2!F2', 'Sheet2!F3', 'Shee
+54590    2083.3s  ok
+54144    2085.1s  ok
+53167    2086.9s  ok
+52917    2088.6s  ok
+54675    2090.3s  ok
+54242    2092.2s  ok
+3413     2101.8s  ok
+52807    2103.6s  ok
+3002     2105.3s  ok
+1925     2107.2s  ok
+2768     2109.1s  ok
+1563     2112.4s  ok
+6698     2118.1s  ok
+6239     2120.1s  ok
+7665     2122.1s  ok
+8942     2125.1s  ok
+3911     2126.9s  ok
+5835     2128.7s  ok
+4714     2130.5s  ok
+7902     2134.6s  ok
+9391     2136.5s  ok
+9726     2138.4s  ok
+9448     2140.4s  ok
+10747    2145.4s  ok
+9111     2147.2s  ok
+10452    2149.0s  ok
+12864    2153.0s  ok
+11276    2157.2s  ok
+1818     2157.3s  partial: missing answer cells: ['Summary!B19', 'Summary!C19', 'Summary!B20', 'Summary!C20', 'Summary!B21', 'Summary!C21', 'Summary!B22', 'Summary!C22'] (values, missing answer cells: ['Summary!B19', '
+15387    2159.0s  ok
+13284    2161.2s  ok
+17111    2166.0s  ok
+18645    2172.0s  ok
+18935    2174.1s  ok
+16511    2175.8s  ok
+31011    2179.7s  ok
+31628    2181.6s  ok
+11842    2186.4s  ok
+14240    2189.4s  ok
+54196    2197.0s  ok
+32023    2199.1s  ok
+31915    2201.0s  ok
+31746    2204.4s  ok
+32293    2209.2s  ok
+32438    2211.1s  ok
+32255    2213.5s  ok
+32093    2215.3s  ok
+32562    2218.5s  ok
+32337    2220.2s  partial: missing answer cells: ['Sheet1!E3', 'Sheet1!E4', 'Sheet1!E5', 'Sheet1!E6', 'Sheet1!E7', 'Sheet1!E8', 'Sheet1!E9'] (values, missing answer cells: ['Sheet1!E3', 'Sheet1!E4', 'Sheet1!E5', 'Sheet
+33157    2222.3s  ok
+32789    2225.0s  ok
+35742    2227.9s  ok
+209-30   2228.0s  error: syntax error: unterminated string literal (detected at line 1) (<unknown>, line 1) (codegen, syntax error: unterminated string literal (detected at line 1) (<unknown>, line 1))
+35747    2229.8s  ok
+32902    2231.6s  ok
+36764    2234.1s  ok
+36097    2235.9s  ok
+37086    2237.6s  ok
+36191    2239.4s  ok
+32612    2241.3s  ok
+34210    2243.4s  ok
+37378    2245.5s  ok
+36277    2251.0s  ok
+37554    2255.4s  ok
+37456    2257.2s  ok
+40757    2258.9s  ok
+39190    2262.2s  ok
+41265    2264.4s  ok
+37229    2264.5s  partial: missing answer cells: ['Sheet1!F3', 'Sheet1!G3', 'Sheet1!F5', 'Sheet1!G5', 'Sheet1!G6', 'Sheet1!C7', 'Sheet1!D7', 'Sheet1!E7'] (values, missing answer cells: ['Sheet1!F3', 'Sheet1!G3', 'Sheet
+40959    2266.4s  ok
+41589    2270.1s  ok
+42181    2274.1s  ok
+41348    2276.7s  ok
+40892    2278.5s  ok
+41978    2280.4s  ok
+42354    2291.0s  ok
+42930    2293.7s  ok
+35739    2295.7s  ok
+42515    2297.5s  ok
+43589    2299.2s  ok
+41420    2301.0s  ok
+43436    2303.1s  ok
+44628    2308.1s  ok
+44266    2310.1s  ok
+45063    2312.1s  ok
+45372    2322.1s  ok
+45944    2324.0s  ok
+46897    2326.9s  ok
+48527    2335.8s  ok
+49857    2339.7s  ok
+49945    2342.5s  ok
+50250    2349.1s  ok
+37462    2352.9s  ok
+50486    2354.9s  ok
+46121    2356.8s  ok
+50521    2358.6s  ok
+50051    2363.1s  ok
+50683    2365.3s  ok
+50811    2369.7s  ok
+50971    2373.5s  ok
+51249    2376.0s  ok
+51354    2378.3s  ok
+51556    2380.3s  ok
+52220    2386.3s  ok
+52050    2388.3s  ok
+50631    2390.4s  ok
+51680    2392.7s  ok
+52233    2395.0s  ok
+44296    2397.4s  ok
+52532    2399.8s  ok
+15671    2405.1s  ok
+52964    2408.1s  ok
+52541    2410.1s  ok
+577-40   2410.3s  error: syntax error: invalid syntax (<unknown>, line 1) (codegen, syntax error: invalid syntax (<unknown>, line 1))
+53383    2417.1s  ok
+53647    2419.4s  ok
+53994    2421.8s  ok
+53449    2424.1s  ok
+54085    2426.5s  ok
+54274    2428.4s  ok
+53117    2430.3s  ok
+54513    2434.7s  ok
+52305    2437.0s  ok
+54474    2439.0s  ok
+54717    2443.4s  ok
+55060    2450.1s  ok
+55085    2456.9s  ok
+54667    2459.0s  ok
+55049    2460.8s  ok
+54925    2463.0s  ok
+55979    2466.2s  ok
+56225    2468.4s  ok
+56274    2475.5s  ok
+55817    2477.6s  ok
+55965    2481.0s  ok
+56599    2483.3s  ok
+56378    2486.0s  ok
+56921    2491.4s  ok
+54638    2493.6s  ok
+45738    2496.0s  ok
+56419    2498.0s  ok
+57113    2500.8s  ok
+57033    2503.1s  ok
+56920    2505.0s  ok
+57590    2506.9s  ok
+57445    2511.3s  ok
+58701    2513.3s  ok
+57743    2515.1s  ok
+58147    2517.1s  ok
+59196    2524.0s  ok
+58484    2527.7s  ok
+58949    2531.3s  ok
+43213    2533.4s  ok
+59595    2535.5s  ok
+53161    2537.3s  ok
+42902    2539.6s  ok
+43657    2543.7s  ok
+58723    2549.2s  ok
+45937    2551.1s  ok
+45707    2551.2s  partial: missing answer cells: ['Sheet1!D2', 'Sheet1!D3', 'Sheet1!D4', 'Sheet1!D5', 'Sheet1!D6', 'Sheet1!D7', 'Sheet1!D8', 'Sheet1!D9'] (values, missing answer cells: ['Sheet1!D2', 'Sheet1!D3', 'Sheet
+44913    2553.1s  ok
+42216    2554.9s  ok
+46646    2556.8s  ok
+55260    2558.5s  ok
+55468    2560.6s  ok
+55708    2563.1s  ok
+55976    2564.9s  ok
+56563    2567.1s  ok
+55977    2573.2s  ok
+47827    2575.6s  ok
+55421    2577.5s  ok
+57117    2582.2s  ok
+56915    2586.6s  ok
+57354    2589.6s  ok
+57558    2593.8s  ok
+57262    2595.7s  ok
+56953    2608.8s  ok
+57232    2611.1s  ok
+57612    2615.0s  ok
+58109    2616.8s  ok
+56427    2617.0s  partial: missing answer cells: ['Taul1!M2', 'Taul1!N2', 'Taul1!O2', 'Taul1!P2', 'Taul1!Q2', 'Taul1!R2', 'Taul1!S2', 'Taul1!H3'] (values, missing answer cells: ['Taul1!M2', 'Taul1!N2', 'Taul1!O2', 'Tau
+58499    2619.9s  ok
+58904    2625.6s  ok
+57693    2629.5s  ok
+58032    2634.2s  ok
+59160    2636.0s  ok
+59129    2637.6s  ok
+58942    2639.3s  ok
+59358    2642.2s  ok
+59224    2645.0s  ok
+59511    2648.7s  ok
+59734    2654.8s  ok
+59639    2668.6s  ok
+9569     2668.6s  partial: missing answer cells: ['Sheet1!AO9', 'Sheet1!AO10', 'Sheet1!AO11', 'Sheet1!AO12', 'Sheet1!AO13', 'Sheet1!AO14', 'Sheet1!AO15', 'Sheet1!AO16'] (values, missing answer cells: ['Sheet1!AO9', 'Sh
+57989    2671.9s  ok
+59902    2675.8s  ok
+59884    2677.4s  ok
+59794    2679.1s  ok
+58687    2710.9s  ok
+56786    2757.2s  ok
+44017    2806.8s  ok
+531-18   2853.3s  error: syntax error: unterminated string literal (detected at line 1) (<unknown>, line 1) (codegen, syntax error: unterminated string literal (detected at line 1) (<unknown>, line 1))
+535-20   2853.3s  error: syntax error: unterminated string literal (detected at line 1) (<unknown>, line 1) (codegen, syntax error: unterminated string literal (detected at line 1) (<unknown>, line 1))
+55427    3548.9s  error: JSONDecodeError: Expecting ',' delimiter: line 1 column 61414 (char 61413) (values, )
+total 3560.8s for 398 tasks

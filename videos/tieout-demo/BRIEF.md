@@ -13,6 +13,9 @@ voice: elevenlabs-george
 style_preset: light-dither-editorial
 ---
 
+> **Encode archive.** Syndicate demo (Track 2, ≤3 min) uses a new script — see
+> `docs/SYNDICATE-DEMO.md`. Do not reuse this Encode insight-reveal spine for Maximor judges.
+
 ## Intent
 
 Event-native hackathon demo for tieout. One spine only:

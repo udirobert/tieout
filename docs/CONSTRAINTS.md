@@ -1,5 +1,8 @@
 # Constraints — space-constrained Mac, external services only
 
+> **Syndicate:** Demo fixtures and video recording may run locally; full SpreadsheetBench
+> eval remains venue/VM-only. See `SYNDICATE.md` and `docs/SESSION-STATUS.md`.
+
 > **Scoring + space rules below still apply.** Inference/role split was updated
 > 2026-09-05: Qwen-only lifted, Tinker is primary, see `docs/TEAM-BRIEF.md`.
 > Do not treat the Gemini-primary / OpenRouter notes in §1 as current.

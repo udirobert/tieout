@@ -1,5 +1,8 @@
 # Failure taxonomy — /tmp/tinker-400 (400 tasks, Qwen3.8-27B, no-repair baseline, 2026-09-05)
 
+> **Syndicate:** Maps to CFO workflow categories in `docs/SYNDICATE-WORKFLOW.md` and skill
+> fragments in `harness/skills.py`. Used for failure clustering and skill injection demos.
+
 Headline: **pass_rate 0.4675, cell_accuracy 0.3728** (cell 132/275 = 48.0%, sheet 55/125 = 44.0%).
 Harness status 373 ok / 14 partial / 13 error. Attempts/task mean 1.15, max 3.
 

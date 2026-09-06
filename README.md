@@ -1,44 +1,104 @@
 # tieout — Every cell tied to its source.
 
-Research-track entry for Ylookup x Encode AI Hackathon (5–6 Sept 2026, Encode Hub).
-Task: SpreadsheetBench Verified, 400 tasks. Given workbook + instruction, return workbook with answer cells filled.
+Autonomous spreadsheet reconciliation for finance close.  
+**Syndicate by Maximor** — Track 2: Autonomous Office of the CFO (Sept 5–6, 2026).
 
-**Demo video:** [tweet with walkthrough](https://x.com/UNgethe/status/2096550517878989285) · **Write-up:** [Nine Points, Then We Trained](https://medium.com/@ungethe/nine-points-then-we-trained-0bb2784446fc) (Medium)
+Given a workbook + natural-language mandate, tieout executes the transform, verifies every
+answer cell, routes exceptions to human review, and archives a full audit trace.
 
-## Scores (SpreadsheetBench Verified 400)
+**Submission:** `SYNDICATE.md` · **Demo script:** `docs/SYNDICATE-DEMO.md` · **Checklist:** `docs/SYNDICATE-REQUIREMENTS.md`  
+**Devpost:** https://syndicate-by-maximor.devpost.com/
+
+---
+
+## The problem
+
+Month-end close, sub-ledger tie-out, invoice reconciliation, and multi-entity consolidation
+still happen in Excel. One wrong cell fails the deliverable. tieout automates the mechanical
+layer — lookups, aggregations, filters, consolidations — with verification and approve-gated
+exceptions for the accountant.
+
+See `docs/SYNDICATE-WORKFLOW.md` for workflow grounding (sub-ledger tie-out, AP recon,
+consolidation).
+
+---
+
+## Quick start (demo)
+
+```bash
+# Build fixtures from ~/Downloads/Ylookup Hackathon Datasets (~44 KB, space-safe)
+python demo/build_fixtures.py
+
+# Dry run (no Tinker credits)
+./demo/run_demo.sh close-tieout-movements-rec
+
+# Live agent — check Tinker credits first (docs/SYNDICATE-REQUIREMENTS.md)
+export TINKER_API_KEY= # set from .env
+./demo/run_demo.sh close-tieout-le-map
+```
+
+Env: `TINKER_API_KEY` (required), `GEMINI_API_KEY` (optional), `SOFFICE` (optional LibreOffice recalc).
+
+---
+
+## Validation (eval suite)
+
+SpreadsheetBench Verified 400 is our **regression harness**, not the product demo.
 
 | Run | pass_rate | cell_accuracy | Where |
 |-----|-----------|---------------|-------|
-| **Ship (clone-run)** | **68.00%** (272/400) | **37.09%** | `research/data/eval/clone_run/` |
+| **Eval (clone-run)** | **68.00%** (272/400) | **37.09%** | `research/data/eval/clone_run/` |
 | Container reproduction | 67.75% (271/400) | 37.00% | `research/data/eval/container400/` |
 
-Ship artifacts: `predictions.jsonl`, `results.json`, `run.log`, `traces/` (400 tasks). Full write-up and ablation table in `SUBMISSION.md`.
+Encode hackathon write-up and ablation table: `SUBMISSION.md`.
 
-Upstream starter lives untouched in `research/` (from https://github.com/ylookup/encode-hackathon).
-All team code lives outside `research/`. Hacking started Sat 12:00 — this repo carries
-everything from that point (skeletons + docs committed at hack start, all implementation since).
+---
 
 ## Layout
 
 ```
 tieout/
-  research/            UPSTREAM, read-only reference (sb.py, evaluate.py, baseline/)
-  harness/             our pipeline: classify -> codegen/values -> exec -> verify -> retry
-  docs/                TEAM-BRIEF.md (current), SESSION-STATUS.md, CONSTRAINTS.md, SETUP.md
-  Dockerfile           submission container (/data ro -> /out)
-  SUBMISSION.md        150–300 word write-up + scores (from research/SUBMISSION_TEMPLATE.md)
-  research/data/eval/clone_run/   ship evidence: predictions.jsonl, results.json, run.log, traces/
+  SYNDICATE.md           Syndicate submission (Track 2 — read this first)
+  SUBMISSION.md          Encode hackathon archive (ablation + scores)
+  demo/                  Finance close demo fixtures (Syndicate)
+  harness/               Agent pipeline: classify → execute → verify → retry
+  docs/
+    SYNDICATE-WORKFLOW.md   CFO workflow grounding
+    SYNDICATE-DEMO.md       3-min demo script + AO session log
+    TAXONOMY.md             Failure buckets → skill categories
+    HACKATHON-NOTES.md      Encode retro (concurrency, repair loop, factorial evals)
+  research/              UPSTREAM SpreadsheetBench starter (read-only)
+  research/data/eval/    Eval artifacts (clone_run, container400, …)
+  Dockerfile             Batch container (/data ro → /out)
 ```
 
-## Design principles
+---
 
-- Tinker Qwen3.8-27B default; thinking off; 16k output tokens; temperature 0
-- Sheet-level: model writes openpyxl → sandbox exec → read back → repair
-- Cell-level: values-first JSON write + repair; codegen as fallback
-- Never blank: always write a line + an xlsx (init copy on total failure)
-- Current plan: `docs/TEAM-BRIEF.md`. Do not follow `docs/PLAN.md` / `docs/PATTERNS.md`.
+## Agent pipeline
 
-## Venue-first rule
+```
+classify → (cell: values-first | sheet: codegen) → exec → verify → retry (≤3) → exception queue
+```
 
-This Mac is space-constrained. No `uv sync`, no dataset download, no LibreOffice,
-no `docker build`, no local weights until the venue. See `docs/CONSTRAINTS.md`.
+- **Demo path:** `harness/pipeline.py --path hybrid` (repair loop + skills)
+- **Eval path:** `harness/clone_run.py` (one-shot values-first, 68% headline)
+- **Skills:** `harness/skills.py` — lookup, aggregation, consolidation, date arithmetic
+- **Traces:** `traces/<id>.jsonl` — audit trail (Neatlogs-friendly)
+
+Details: `harness/README.md`
+
+---
+
+## Built with
+
+AO · Python · openpyxl · Tinker (Qwen3.8-27B) · Neatlogs (traces)
+
+All Syndicate work documented in `SYNDICATE.md` → "How we used AO".
+
+---
+
+## Prior work
+
+- **Encode × Ylookup hackathon** (Sept 5–6, 2026): SpreadsheetBench research track, 68% ship.
+  [Demo video](https://x.com/UNgethe/status/2096550517878989285) ·
+  [Write-up (Medium)](https://medium.com/@ungethe/nine-points-then-we-trained-0bb2784446fc)

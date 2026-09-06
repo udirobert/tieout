@@ -1,0 +1,32 @@
+[
+  {
+    "id": "close-tieout-le-map",
+    "instruction": "You are preparing a fund-administration migration upload. On sheet 'LE Mapping', fill column E (Corvus LE ID) for each legal entity in column B by looking up the matching Corvus LE name in column D. Use the same numeric ID as in the reference mapping \u2014 each row's ID must match its entity. Do not change headers or other columns.",
+    "spreadsheet_path": "spreadsheet/close-tieout-le-map",
+    "instruction_type": "Cell-Level Manipulation",
+    "answer_position": "E3:E22",
+    "answer_sheet": "LE Mapping",
+    "data_position": "E3:E22",
+    "source": "ylookup-anonymised"
+  },
+  {
+    "id": "close-tieout-movements-rec",
+    "instruction": "Pre-upload reconciliation for month-end close. On sheet 'Movements Rec', fill column F (Status) for each row: write 'OK' if Net Movement (column E) is zero (within rounding), otherwise write 'EXCEPTION'. Rows with EXCEPTION require controller review before upload. Do not modify columns A\u2013E.",
+    "spreadsheet_path": "spreadsheet/close-tieout-movements-rec",
+    "instruction_type": "Cell-Level Manipulation",
+    "answer_position": "F2:F13",
+    "answer_sheet": "Movements Rec",
+    "data_position": "F2:F13",
+    "source": "ylookup-anonymised"
+  },
+  {
+    "id": "close-tieout-bank-cp",
+    "instruction": "Bank statement processing for fund treasury close. On sheet 'Staging Sheet', match each Pulled Out Sender/Beneficiary (column J) to the clean vendor name in column K using the 'Vendor Master List' sheet. Write the matched full vendor name in column K. If no match exists, leave column K blank \u2014 those rows will route to the exception queue for review.",
+    "spreadsheet_path": "spreadsheet/close-tieout-bank-cp",
+    "instruction_type": "Cell-Level Manipulation",
+    "answer_position": "K2:K16",
+    "answer_sheet": "Staging Sheet",
+    "data_position": "K2:K16",
+    "source": "ylookup-anonymised"
+  }
+]

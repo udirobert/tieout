@@ -1,0 +1,1 @@
+Bank statement processing for fund treasury close. On sheet 'Staging Sheet', match each Pulled Out Sender/Beneficiary (column J) to the clean vendor name in column K using the 'Vendor Master List' sheet. Write the matched full vendor name in column K. If no match exists, leave column K blank — those rows will route to the exception queue for review.

@@ -1,5 +1,8 @@
 # Team brief — three-way split (2026-09-05)
 
+> **Superseded for Syndicate.** Active plan: `SYNDICATE.md`, `docs/SYNDICATE-DEMO.md`,
+> `docs/SESSION-STATUS.md`. This file preserves the Encode weekend task board.
+
 Adib's ruling: **use any approach you like** — Qwen-only constraint lifted. Deterministic
 tooling (LibreOffice recalc), teacher models, and any inference capacity are in play.
 Everything still ships inside the container contract: `/data` read-only → `/out` with

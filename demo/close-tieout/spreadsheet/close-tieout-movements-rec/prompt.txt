@@ -1,0 +1,1 @@
+Pre-upload reconciliation for month-end close. On sheet 'Movements Rec', fill column F (Status) for each row: write 'OK' if Net Movement (column E) is zero (within rounding), otherwise write 'EXCEPTION'. Rows with EXCEPTION require controller review before upload. Do not modify columns A–E.

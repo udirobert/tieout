@@ -1,4 +1,13 @@
-# Submission: tieout
+# Submission: tieout (Encode × Ylookup — archived)
+
+> **Active submission:** Syndicate by Maximor, Track 2 (Office of the CFO) — see
+> [`SYNDICATE.md`](SYNDICATE.md), [`docs/SYNDICATE-WORKFLOW.md`](docs/SYNDICATE-WORKFLOW.md),
+> [`docs/SYNDICATE-DEMO.md`](docs/SYNDICATE-DEMO.md).
+
+This file preserves the Encode hackathon write-up, scores, and ablation table. The 68%
+SpreadsheetBench result is reused as **background validation** for Syndicate, not the demo story.
+
+---
 
 ## Team
 
@@ -176,6 +185,7 @@ failure it prints the traceback and exits 1. Output contract: `predictions.jsonl
 ## Things to look at
 
 - docs/TEAM-BRIEF.md — current roles and task board
+- docs/HACKATHON-NOTES.md — post-hackathon retro: winning teams' techniques vs. our approach
 - docs/SESSION-STATUS.md — post-ship-call handoff state
 - docs/BASELINE-DELTA.md — why the 12pp gap existed and how the clone-run closed it
 - docs/RESULTS_CHECKLIST.md — ablation log, scoring recipes, variance framework
