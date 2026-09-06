@@ -35,6 +35,13 @@ DATE_TIME_SKILL = (
     "- Maintain exact day/month order and avoid locale-ambiguous formats."
 )
 
+RECONCILIATION_SKILL = (
+    "### Domain Skill: Reconciliation Status\n"
+    "- For each row, compare the key values (e.g., debits vs credits, net movement).\n"
+    "- If the difference is within rounding tolerance (≈ 0.01), mark the row OK.\n"
+    "- Otherwise mark EXCEPTION and stop — do not overwrite source columns."
+)
+
 
 def get_skill_fragment(instruction: str) -> str:
     """Retrieve relevant domain skill fragments based on instruction text.
@@ -76,5 +83,10 @@ def get_skill_fragment(instruction: str) -> str:
         skills.append(FILL_GATED_SKILL)
     if any(k in inst_lower for k in ("date", "time", "day", "month", "year", "hour")):
         skills.append(DATE_TIME_SKILL)
+    if any(
+        k in inst_lower
+        for k in ("reconcil", "exception", "status", "net movement", "debit", "credit")
+    ):
+        skills.append(RECONCILIATION_SKILL)
 
     return "\n\n".join(skills) if skills else ""
