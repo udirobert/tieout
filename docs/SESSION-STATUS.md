@@ -1,6 +1,13 @@
-# Session status / handoff (updated 2026-09-05, post ship-call)
+# Session status / handoff (updated 2026-09-06, container validated)
 
 Read `docs/TEAM-BRIEF.md` then this file.
+
+## ✅ Container validated (2026-09-06, pre-09:00)
+- Image built from pushed repo (10.4GB; torch+CUDA wheels dominate). Entrypoint is `harness/clone_run.py` with the fsync + `os._exit(0)` clean-exit fix; failure path exits 1 with traceback.
+- **Smoke (2 tasks) passed three times over**, final run on the pushed repo: both tasks `ok`, full contract written (`predictions.jsonl`, `outputs/`, `traces/`, `run.log`), container exits cleanly (`--rm` reaped it). The tinker-poller hang found in the first dry-run is fixed.
+- **Full-400 unattended container run is live** (`/tmp/container400`, concurrency 4, temp 0). ETA ~3.5h — lands before the 12:00 freeze. Score check on completion: expect ~68% (±noise).
+- Judges' turnkey `docker run` invocation documented in SUBMISSION.md ("Judges' run" section).
+- Gotcha for anyone rebuilding: `.dockerignore` must NOT exclude `research/baseline/` (`clone_run.py` imports `common.py` from there — the build fails with "COPY failed" if excluded). Fixed and pushed.
 
 ## ⚠ Ship call: clone-run promoted (2026-09-05, ~22:30)
 - **Clone-run promoted to ship headline**: 68.00% / 272/400, cell 73.82%, sheet 55.20%, cell_acc 37.09%.

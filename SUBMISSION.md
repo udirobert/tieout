@@ -148,6 +148,25 @@ must `CMD ["python", "harness/clone_run.py", "--dataset-dir", "/data", "--out-di
 `pipeline.py` is the harness used for the ablation runs (hybrid / codegen / LoRA);
 it is not the ship.
 
+### Judges' run (turnkey)
+
+```bash
+docker build -t tieout .
+docker run --rm --env-file <keys.env> \
+  -v /path/to/holdout:/data:ro \
+  -v /path/to/out:/out \
+  tieout
+```
+
+`keys.env` needs `TINKER_API_KEY` (others optional, see above). The container runs
+all 400 (or all holdout) tasks unattended at temp 0, fsyncs
+`predictions.jsonl` + `run.log`, verifies the output contract, then force-exits 0
+(clean exit is guaranteed — the tinker poller cannot hang the process). On
+failure it prints the traceback and exits 1. Output contract: `predictions.jsonl`,
+`outputs/`, `traces/`, `run.log`. This exact invocation was validated on the full
+400 before submission.
+
+
 ## Things to look at
 
 - docs/TEAM-BRIEF.md — current roles and task board
