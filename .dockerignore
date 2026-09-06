@@ -1,7 +1,7 @@
 research/data/
 research/eval/
 research/sft/
-research/baseline/
+!research/baseline/common.py
 docs/
 *.tar.gz
 .env
