@@ -52,7 +52,7 @@ def get_skill_fragment(instruction: str) -> str:
         skills.append(AGGREGATION_SKILL)
     if any(k in inst_lower for k in ("delete", "filter", "vba", "macro", "consolidat", "dedup", "merge")):
         skills.append(SHEET_REORG_SKILL)
-    if any(k in inst_lower for k in ("yellow", "highlight", "shad", "color", "colour", "fill")):
+    if any(k in inst_lower for k in ("yellow", "highlight", "shad", "color", "colour", "cell fill", "fill color")):
         skills.append(FILL_GATED_SKILL)
     if any(k in inst_lower for k in ("date", "time", "day", "month", "year", "hour")):
         skills.append(DATE_TIME_SKILL)

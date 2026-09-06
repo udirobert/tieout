@@ -6,8 +6,8 @@ Source files stay in `~/Downloads/Ylookup Hackathon Datasets` — not copied who
 ## Build
 
 ```bash
-python demo/build_fixtures.py
-# or: YLOOKUP_DATASETS=/path/to/datasets python demo/build_fixtures.py
+python3 demo/build_fixtures.py
+# or: YLOOKUP_DATASETS=/path/to/datasets python3 demo/build_fixtures.py
 ```
 
 ## Scenarios (built)
@@ -21,12 +21,19 @@ python demo/build_fixtures.py
 ## Run
 
 ```bash
-# Dry run (no Tinker credits)
-./demo/run_demo.sh close-tieout-movements-rec
+# Offline — exception queue (no Tinker, good for video)
+./demo/simulate_demo.sh close-tieout-bank-cp
+./demo/simulate_demo.sh close-tieout-movements-rec /tmp/syndicate-demo golden
 
-# Live agent (requires TINKER_API_KEY — check credits first, see SYNDICATE-REQUIREMENTS.md)
+# Skill improvement loop (no inference)
+./demo/run_skill_demo.sh
+
+# Live agent (requires TINKER_API_KEY — see SYNDICATE-REQUIREMENTS.md)
 export TINKER_API_KEY= # set from .env
-./demo/run_demo.sh close-tieout-le-map
+./demo/run_demo.sh close-tieout-bank-cp
+
+# Human review after run
+cd research && uv run python ../harness/exceptions.py review /tmp/syndicate-demo/exceptions.json
 ```
 
 ## Layout
@@ -53,4 +60,4 @@ Rows that fail verification or have blank matches (by design in source data) rou
 | close-tieout-movements-rec | yes | pending |
 | close-tieout-bank-cp | yes | pending |
 
-Rebuild after editing source datasets: `python demo/build_fixtures.py`
+Rebuild after editing source datasets: `python3 demo/build_fixtures.py`

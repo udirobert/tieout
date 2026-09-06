@@ -91,13 +91,32 @@ def build_le_mapping(src: Path, tasks: list[dict], n_rows: int = 20) -> None:
             init_ws.cell(r, c, val)
             gold_ws.cell(r, c, val)
         if r >= 3:
-            init_ws.cell(r, 5, None)  # blank Corvus LE ID for agent to fill
+            init_ws.cell(r, 5).value = None  # blank Corvus LE ID for agent to fill
+
+    # Add a reference sheet so the lookup is solvable from the workbook.
+    ref_init = init.create_sheet("Corvus LE Reference")
+    ref_gold = gold.create_sheet("Corvus LE Reference")
+    ref_init.cell(1, 1, "Corvus LE")
+    ref_init.cell(1, 2, "Corvus LE ID")
+    ref_gold.cell(1, 1, "Corvus LE")
+    ref_gold.cell(1, 2, "Corvus LE ID")
+    ref_row = 2
+    for r in range(2, ws.max_row + 1):
+        name = ws.cell(r, 4).value
+        cid = ws.cell(r, 5).value
+        if name and cid is not None:
+            ref_init.cell(ref_row, 1, name)
+            ref_init.cell(ref_row, 2, cid)
+            ref_gold.cell(ref_row, 1, name)
+            ref_gold.cell(ref_row, 2, cid)
+            ref_row += 1
 
     instruction = (
         "You are preparing a fund-administration migration upload. On sheet 'LE Mapping', "
         "fill column E (Corvus LE ID) for each legal entity in column B by looking up the "
-        "matching Corvus LE name in column D. Use the same numeric ID as in the reference "
-        "mapping — each row's ID must match its entity. Do not change headers or other columns."
+        "matching Corvus LE name in column D against the 'Corvus LE Reference' sheet. "
+        "Use the numeric ID from the reference. If no match is found, leave column E blank — "
+        "those rows will route to the exception queue for review. Do not change headers or other columns."
     )
     _write_task(
         "close-tieout-le-map",
@@ -142,7 +161,7 @@ def build_movements_rec(src: Path, tasks: list[dict], n_rows: int = 12) -> None:
             init_ws.cell(row_out, c, val)
             gold_ws.cell(row_out, c, val)
         status = "OK" if abs(float(net)) < 0.01 else "EXCEPTION"
-        init_ws.cell(row_out, 6, None)
+        init_ws.cell(row_out, 6).value = None
         gold_ws.cell(row_out, 6, status)
         row_out += 1
 
@@ -198,7 +217,7 @@ def build_bank_counterparty(src: Path, tasks: list[dict], n_rows: int = 15) -> N
             val = staging.cell(r, c).value
             init_ws.cell(row_out, c, val)
             gold_ws.cell(row_out, c, val)
-        init_ws.cell(row_out, 11, None)  # blank match column
+        init_ws.cell(row_out, 11).value = None  # blank match column
         gold_ws.cell(row_out, 11, matched)
         row_out += 1
 

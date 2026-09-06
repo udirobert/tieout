@@ -65,9 +65,9 @@ Update the **Status** column as you complete sessions.
 |---|-----------------|-------------------------|--------|
 | 1 | Workflow mapping | CFO tie-out steps → harness stages; exception policy | pending |
 | 2 | Syndicate docs | `SYNDICATE.md`, this file, `SYNDICATE-WORKFLOW.md` | done |
-| 3 | Demo fixtures | Finance-framed workbooks in `demo/close-tieout/` | pending |
-| 4 | Exception queue | Review UX + evidence rows on flagged cells | pending |
-| 5 | Skill improvement | One lookup failure → `skills.py` fragment → re-run | pending |
+| 3 | Demo fixtures | `demo/build_fixtures.py`, `simulate_demo.sh` | done |
+| 4 | Exception queue | `harness/exceptions.py` + review CLI | done |
+| 5 | Skill improvement | `demo/run_skill_demo.sh` | done |
 | 6 | Demo video script | This storyboard + recording | in progress |
 
 **In the video:** Include 5–10 seconds of AO session recording (screen capture of AO UI or

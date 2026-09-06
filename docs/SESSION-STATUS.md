@@ -17,9 +17,12 @@ Encode hackathon is complete (68% ship). This file tracks Syndicate submission w
 | Demo script + AO log | **done** | `docs/SYNDICATE-DEMO.md` |
 | Syndicate requirements checklist | **done** | `docs/SYNDICATE-REQUIREMENTS.md` (space, AO, credits, Devpost) |
 | Demo fixtures (`demo/close-tieout/`) | **done** | 3 tasks, 44 KB — `python demo/build_fixtures.py` |
-| Exception queue (`exceptions.json` + review) | **pending** | Human loop for demo |
-| Skill improvement example (1 before/after) | **pending** | For demo beat 2:20–2:45 |
-| AO sessions recorded (≥5 in demo video) | **pending** | Update AO table in SYNDICATE-DEMO.md |
+| Exception queue (`exceptions.json` + review) | **done** | `harness/exceptions.py`; `./demo/simulate_demo.sh` |
+| Skill improvement demo | **done** | `./demo/run_skill_demo.sh` |
+| `uv sync` (local runs) | **done** | `cd research && uv sync` |
+| AO integration plan | **done** | `docs/SYNDICATE-AO-INTEGRATION.md` |
+| AO desktop install | **pending** | ~500 MB — confirm disk first |
+| AO sessions (≥4 workers + 1 orchestrator) | **pending** | Log in `docs/AO-SESSION-LOG.md` |
 | 3-min demo video | **pending** | Do not lead with SpreadsheetBench scores |
 | Devpost submission | **pending** | https://syndicate-by-maximor.devpost.com/ |
 

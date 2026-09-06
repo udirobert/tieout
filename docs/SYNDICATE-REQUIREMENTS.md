@@ -12,7 +12,7 @@ Track: **Autonomous Office of the CFO** · Project: **tieout**
 
 | Criterion | Weight | How tieout addresses it |
 |-----------|--------|-------------------------|
-| **AO usage & build process** | 25% | AO sessions for fixtures, docs, exception UX, demo; show AO dashboard + session count in video |
+| **AO usage & build process** | 25% | AO orchestrator + workers build Syndicate pivot; dashboard + session count in video — see `docs/SYNDICATE-AO-INTEGRATION.md` |
 | **Technical execution & reliability** | 25% | Harness verify + retry; never-blank; traces; 68% eval suite validation |
 | **Track fit & real-world value** | 25% | Ylookup anonymised GL/bank datasets; CFO workflows in `SYNDICATE-WORKFLOW.md` |
 | **Demo & usability** | 15% | 3-min video, `demo/run_demo.sh`, exception queue with evidence |

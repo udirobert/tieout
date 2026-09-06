@@ -77,17 +77,22 @@ recurring patterns without retraining the base model.
 
 ## How we used AO
 
-All Syndicate work was built with **AO** (Agent Orchestrator). Judges: AO session recordings
-appear in the demo video and in `docs/SYNDICATE-DEMO.md`.
+> **Integration plan:** [`docs/SYNDICATE-AO-INTEGRATION.md`](docs/SYNDICATE-AO-INTEGRATION.md)  
+> **Session log:** [`docs/AO-SESSION-LOG.md`](docs/AO-SESSION-LOG.md)
+
+AO ([aoagents.dev](https://aoagents.dev/)) supervises **coding agents that build tieout** —
+it is not the spreadsheet inference runtime. Orchestrator sessions plan work; worker sessions
+(Cursor / Claude Code / Codex) implement in isolated git worktrees. **Tinker** runs
+`harness/pipeline.py` at demo time.
 
 | Phase | AO role |
 |-------|---------|
-| **Workflow design** | Mapped Office-of-the-CFO close steps to harness stages; drafted exception-routing policy |
-| **Harness wiring** | Connected classify → execute → verify → retry loop; integrated skills library |
-| **Demo scenarios** | Built finance-framed workbook fixtures and mandate text from our datasets |
-| **Eval suite** | Wired SpreadsheetBench Verified 400 as regression harness (background validation) |
-| **Documentation** | This submission pack, demo script, workflow grounding doc |
-| **Demo video** | Script and storyboard; AO sessions referenced in walkthrough |
+| **Orchestrator** | Break Syndicate pivot into worker tasks; coordinate parallel build |
+| **Workers** | Implement exceptions, fixtures, docs, demo polish (each = one AO session) |
+| **Kanban** | Track sessions for demo video — **total session count required by judges** |
+| **Product demo** | Separate: tieout on Ylookup CFO fixtures via Tinker |
+
+Encode harness work predates AO. Syndicate-specific commits should come from AO worker sessions.
 
 ---
 

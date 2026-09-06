@@ -29,5 +29,13 @@ Pinned answer range: values-first keeps init values; codegen omits them (echo ca
 - `parsing.py` — lenient JSON (keeps `Sheet1!B6`) and codegen fence parser.
 - `verifier.py` — graded cells present + scalars + no `#ERR!`; soffice recalc when `SOFFICE` / LibreOffice exists, silent skip otherwise.
 - `tracer.py` — `traces/<id>.jsonl`, one line per model call. Codegen steps add `tool`/`tool_output`.
+- `exceptions.py` — post-run exception queue (`exceptions.json`) + human review CLI
 
-Greedy decode / temperature 0. Keys via env only (`TINKER_API_KEY`, optional `GEMINI_API_KEY`).
+After each task, `write_exceptions()` flags blank cells, `#N/A`, Excel errors, and review
+sentinels (`EXCEPTION`, `REVIEW`). Review:
+
+```bash
+cd research && uv run python ../harness/exceptions.py review /tmp/syndicate-demo/exceptions.json
+```
+
+Offline demo (no Tinker): `./demo/simulate_demo.sh close-tieout-bank-cp` Keys via env only (`TINKER_API_KEY`, optional `GEMINI_API_KEY`).

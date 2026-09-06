@@ -42,6 +42,7 @@ from prompts import (  # noqa: E402
     codegen_system,
 )
 from serializer import serialize_task_workbook  # noqa: E402
+from exceptions import write_exceptions  # noqa: E402
 from tracer import append_trace  # noqa: E402
 from verifier import (  # noqa: E402
     MAX_ATTEMPTS,
@@ -167,12 +168,13 @@ def _accept(task: dict, out: Path, graded: list[str], written: dict) -> tuple[bo
     return True, reason
 
 
-async def run_values_loop(ctx: dict, attempts: int) -> str:
+async def run_values_loop(ctx: dict, attempts: int) -> tuple[str, dict, str]:
     task, out, complete, out_dir = ctx["task"], ctx["out"], ctx["complete"], ctx["out_dir"]
     prompt = build_values_prompt(task, ctx["wb_serialized"])
     last_reply = ""
     status = "error: no values attempt"
     last_reason = ""
+    last_info: dict = {"graded": ctx["graded_refs"], "written": {}}
     for attempt in range(attempts):
         ctx["step"] += 1
         trace = _new_trace(complete, ctx["step"], prompt)
@@ -182,12 +184,13 @@ async def run_values_loop(ctx: dict, attempts: int) -> str:
             trace.update(response=text, input_tokens=in_tok, output_tokens=out_tok)
             answer = parse_answer(text)
             info = await asyncio.to_thread(write_output, task, answer, out)
+            last_info = info
             ok, reason = _accept(task, out, info["graded"], info["written"])
             last_reason = reason
             if ok:
                 trace["latency_ms"] = int((time.time() - started) * 1000)
                 append_trace(out_dir, task["id"], trace)
-                return "ok"
+                return "ok", last_info, last_reason
             status = f"partial: {reason}"
             last_reply = text
         except Exception as e:  # noqa: BLE001 — best guess, never blank
@@ -204,16 +207,17 @@ async def run_values_loop(ctx: dict, attempts: int) -> str:
                 ctx["graded_refs"],
                 workbook_text=ctx["wb_serialized"],
             )
-    return f"{status} (values, {last_reason})"[:200]
+    return f"{status} (values, {last_reason})"[:200], last_info, last_reason
 
 
-async def run_codegen_loop(ctx: dict, attempts: int) -> str:
+async def run_codegen_loop(ctx: dict, attempts: int) -> tuple[str, dict, str]:
     task, out, complete, out_dir = ctx["task"], ctx["out"], ctx["complete"], ctx["out_dir"]
     prompt = build_codegen_prompt(task, ctx["wb_serialized"], ctx["graded_refs"])
     last_code = ""
     last_stdout = last_stderr = ""
     status = "error: no codegen attempt"
     last_reason = ""
+    last_info: dict = {"graded": ctx["graded_refs"], "written": {}}
     for attempt in range(attempts):
         ctx["step"] += 1
         trace = _new_trace(complete, ctx["step"], prompt)
@@ -243,18 +247,19 @@ async def run_codegen_loop(ctx: dict, attempts: int) -> str:
                 trace["error"] = status
             else:
                 info = await asyncio.to_thread(read_graded, task, out)
+                last_info = info
                 ok, reason = _accept(task, out, info["graded"], info["written"])
                 last_reason = reason
                 if ok:
                     trace["latency_ms"] = int((time.time() - started) * 1000)
                     append_trace(out_dir, task["id"], trace)
-                    return "ok"
+                    return "ok", last_info, last_reason
                 status = f"partial: {reason}"
                 # Recalc-as-gate: #ERR! → stop codegen retries; caller may values-fallback.
                 if is_formula_error_reason(reason):
                     trace["latency_ms"] = int((time.time() - started) * 1000)
                     append_trace(out_dir, task["id"], trace)
-                    return f"{status} (codegen, {last_reason})"[:200]
+                    return f"{status} (codegen, {last_reason})"[:200], last_info, last_reason
         except Exception as e:  # noqa: BLE001 — best guess, never blank
             status = f"error: {type(e).__name__}: {e}"[:200]
             trace["error"] = status
@@ -270,12 +275,12 @@ async def run_codegen_loop(ctx: dict, attempts: int) -> str:
                 last_stderr,
                 ctx["graded_refs"],
             )
-    return f"{status} (codegen, {last_reason})"[:200]
+    return f"{status} (codegen, {last_reason})"[:200], last_info, last_reason
 
 
 async def predict_task(
     complete, task: dict, out_dir: Path, sem: asyncio.Semaphore, path: str = "hybrid"
-) -> str:
+) -> dict:
     out = out_dir / "outputs" / f"{task['id']}.xlsx"
     async with sem:
         wb0 = openpyxl.load_workbook(task["init_xlsx"])
@@ -299,51 +304,60 @@ async def predict_task(
             ),
             "graded_refs": graded_refs,
         }
+        last_info: dict = {"graded": graded_refs, "written": {}}
+        last_reason = ""
         if path == "values" or (path == "hybrid" and kind != "sheet-level"):
-            status = await run_values_loop(ctx, MAX_ATTEMPTS)
+            status, last_info, last_reason = await run_values_loop(ctx, MAX_ATTEMPTS)
         elif path == "codegen":
-            status = await run_codegen_loop(ctx, MAX_ATTEMPTS)
+            status, last_info, last_reason = await run_codegen_loop(ctx, MAX_ATTEMPTS)
         elif path == "hybrid" and kind == "sheet-level":
             # C recalc-as-gate: codegen first; #ERR! after soffice → values-first.
             # No soffice → sanity only (Mac). Never-blank still copies init.
-            status = await run_codegen_loop(ctx, MAX_ATTEMPTS)
+            status, last_info, last_reason = await run_codegen_loop(ctx, MAX_ATTEMPTS)
             if status != "ok" and is_formula_error_reason(status):
                 if out.exists():
                     out.unlink()
                 ctx["wb_serialized"] = serialize_task_workbook(
                     task, include_init_values=True
                 )
-                fallback = await run_values_loop(ctx, MAX_ATTEMPTS)
+                fb_status, fb_info, fb_reason = await run_values_loop(ctx, MAX_ATTEMPTS)
+                last_info = fb_info
+                last_reason = fb_reason
                 status = (
-                    fallback
-                    if fallback == "ok"
-                    else f"{status}; values-fallback: {fallback}"[:200]
+                    fb_status
+                    if fb_status == "ok"
+                    else f"{status}; values-fallback: {fb_status}"[:200]
                 )
         else:
             # auto: hybrid + one-shot cross-path fallback (hurt cell-level on the 400)
             if kind == "sheet-level":
-                status = await run_codegen_loop(ctx, MAX_ATTEMPTS)
+                status, last_info, last_reason = await run_codegen_loop(ctx, MAX_ATTEMPTS)
                 if status != "ok":
                     ctx["wb_serialized"] = serialize_task_workbook(
                         task, include_init_values=True
                     )
-                    fallback = await run_values_loop(ctx, 1)
+                    fb_status, fb_info, fb_reason = await run_values_loop(ctx, 1)
+                    last_info = fb_info
+                    last_reason = fb_reason
                     status = (
-                        fallback
-                        if fallback == "ok"
-                        else f"{status}; values-fallback: {fallback}"[:200]
+                        fb_status
+                        if fb_status == "ok"
+                        else f"{status}; values-fallback: {fb_status}"[:200]
                     )
             else:
-                status = await run_values_loop(ctx, MAX_ATTEMPTS)
+                status, last_info, last_reason = await run_values_loop(ctx, MAX_ATTEMPTS)
                 if status != "ok":
-                    fallback = await run_codegen_loop(ctx, 1)
+                    fb_status, fb_info, fb_reason = await run_codegen_loop(ctx, 1)
+                    last_info = fb_info
+                    last_reason = fb_reason
                     status = (
-                        fallback
-                        if fallback == "ok"
-                        else f"{status}; codegen-fallback: {fallback}"[:200]
+                        fb_status
+                        if fb_status == "ok"
+                        else f"{status}; codegen-fallback: {fb_status}"[:200]
                     )
         _ensure_output(task, out)
-        return status
+        write_exceptions(out_dir, task, status, last_reason, last_info, out)
+        return {"status": status, "reason": last_reason, "info": last_info, "out": str(out)}
 
 
 def _load_env() -> None:
@@ -413,8 +427,9 @@ async def main() -> None:
 
     async def one(task):
         t0 = time.time()
-        status = await predict_task(complete, task, out_dir, sem, path=args.path)
+        result = await predict_task(complete, task, out_dir, sem, path=args.path)
         elapsed_s = round(time.time() - t0, 1)
+        status = result["status"]
         log(f"{task['id']:<8} {elapsed_s:>6}s  {status}")
         line = {
             "id": task["id"],
