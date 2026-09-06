@@ -89,8 +89,8 @@ Reference numbers for one-shot prompting, values not formulas, on all 400: DeepS
 
 ## Docker
 
-If your pipeline is an agent or executes model-written code, it runs inside a Docker container you write. The judges mount a dataset dir read-only at `/data` and take `/out`. See [SUBMISSION.md](SUBMISSION.md).
+If your pipeline is an agent or executes model-written code, it runs inside a Docker container you write. The judges mount a dataset dir read-only at `/data` and take `/out`. See [submission.md](../docs/_archive/encode/submission.md) (archived).
 
 ## Submit
 
-See [SUBMISSION.md](SUBMISSION.md).
+See [submission.md](../docs/_archive/encode/submission.md) (archived).

@@ -1,6 +1,6 @@
 # Team brief — three-way split (2026-09-05)
 
-> **Superseded for Syndicate.** Active plan: `SYNDICATE.md`, `docs/SYNDICATE-DEMO.md`,
+> **Superseded for Syndicate.** Active plan: `docs/SYNDICATE.md`, `docs/SYNDICATE-DEMO.md`,
 > `docs/SESSION-STATUS.md`. This file preserves the Encode weekend task board.
 
 Adib's ruling: **use any approach you like** — Qwen-only constraint lifted. Deterministic

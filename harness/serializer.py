@@ -1,6 +1,6 @@
 """tieout serializer — upstream serialization + fill-aware + pinned answer range.
 
-Formatting-gated tasks (docs/TAXONOMY.md #4) need cell.fill: plain serialization
+Formatting-gated tasks need cell.fill in serializer preview (see methodology notes).
 drops it. When the instruction mentions highlighting/color, append the highlighted
 cells per sheet. The 120x30 / 20k preview can hide the answer range — we always
 append a pinned excerpt of graded cells so truncation never drops them.

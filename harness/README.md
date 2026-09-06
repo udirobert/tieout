@@ -3,8 +3,8 @@
 `classify -> (sheet: codegen | cell: values-first) -> exec/write -> sanity + optional soffice -> repair <=3 -> fallback -> never blank`
 
 **Syndicate demo path:** `pipeline.py --path hybrid` (repair loop + skills + exception routing).  
-**Eval path:** `clone_run.py` (one-shot values-first, 68% SpreadsheetBench headline).  
-Docs: `SYNDICATE.md`, `docs/SYNDICATE-WORKFLOW.md`, `docs/SYNDICATE-DEMO.md`.
+**Eval path:** `clone_run.py` (one-shot values-first, batch eval).  
+Docs: `docs/SYNDICATE.md`, `docs/demo.md`.
 
 Tinker Qwen3.8-27B is the default. 16k output tokens, temperature 0.
 

@@ -1,12 +1,6 @@
 # Submission: tieout (Encode × Ylookup — archived)
 
-> **Active submission:** Syndicate by Maximor, Track 2 (Office of the CFO) — see
-> [`SYNDICATE.md`](SYNDICATE.md), [`docs/DOC-INDEX.md`](docs/DOC-INDEX.md),
-> [`docs/SYNDICATE-WORKFLOW.md`](docs/SYNDICATE-WORKFLOW.md),
-> [`docs/SYNDICATE-DEMO.md`](docs/SYNDICATE-DEMO.md).
-
-This file preserves the Encode hackathon write-up, scores, and ablation table. The 68%
-SpreadsheetBench result is reused as **background validation** for Syndicate, not the demo story.
+> **Archived.** Active submission: [`../SYNDICATE.md`](../SYNDICATE.md), [`../demo.md`](../demo.md).
 
 ---
 
@@ -185,13 +179,8 @@ failure it prints the traceback and exits 1. Output contract: `predictions.jsonl
 
 ## Things to look at
 
-- docs/TEAM-BRIEF.md — current roles and task board
-- docs/HACKATHON-NOTES.md — post-hackathon retro: winning teams' techniques vs. our approach
-- docs/SESSION-STATUS.md — post-ship-call handoff state
-- docs/BASELINE-DELTA.md — why the 12pp gap existed and how the clone-run closed it
-- docs/RESULTS_CHECKLIST.md — ablation log, scoring recipes, variance framework
-- docs/CONSTRAINTS.md — space + credits + scoring params
-- docs/SETUP.md — venue setup order
+- [notes.md](notes.md) — post-hackathon retro + baseline analysis
+- [_archive/](../_archive/) — superseded venue docs (TEAM-BRIEF, SETUP, etc.)
 - research/data/eval/clone_run/ — ship evidence (results.json, predictions.jsonl, run.log, parse_audit)
 - research/data/eval/v2b_subsample/ — fine-tune negative result (step-300 + final, 100-task)
 - research/data/eval/lora_v1/ — LoRA-v1 archive + DIAGNOSIS.md (data-mix starvation evidence)

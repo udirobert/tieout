@@ -41,7 +41,7 @@ for task_id, instruction in cases:
         for line in skill.strip().split("\\n")[:4]:
             print(f"  {line}")
     else:
-        print("Skill injected: (none — add from failure trace in docs/TAXONOMY.md)")
+        print("Skill injected: (none — add from failure trace)")
     print()
 
 print("Live re-run (TINKER_API_KEY): ./demo/run_demo.sh close-tieout-le-map")

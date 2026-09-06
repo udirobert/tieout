@@ -1,6 +1,6 @@
 """tieout skills — category-specific prompt fragments & heuristics (Role C).
 
-Guided by docs/TAXONOMY.md and research/methodology-notes.md (§4.4).
+Guided by `harness/skills.py` categories and `research/methodology-notes.md`.
 Reusable procedural guidance per task pattern (lookup repair, aggregation,
 date arithmetic, sheet filtering, deduplication, fill-gating).
 """

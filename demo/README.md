@@ -30,7 +30,7 @@ python3 demo/build_fixtures.py
 # Skill improvement loop (no inference)
 ./demo/run_skill_demo.sh
 
-# Live agent (requires TINKER_API_KEY — see SYNDICATE-REQUIREMENTS.md)
+# Live agent (requires TINKER_API_KEY — see docs/submit.md)
 export TINKER_API_KEY= # set from .env
 ./demo/run_demo.sh close-tieout-bank-cp
 
@@ -52,8 +52,7 @@ demo/close-tieout/
 ## Human review loop
 
 Rows that fail verification or have blank matches (by design in source data) are written to
-`exceptions.json` after each run. Review via CLI — see `docs/SYNDICATE-WORKFLOW.md` and
-`docs/SYNDICATE-DEMO.md`.
+`exceptions.json` after each run. Review via CLI — see `docs/demo.md`.
 
 ## Status
 

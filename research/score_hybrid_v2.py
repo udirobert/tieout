@@ -47,7 +47,7 @@ def main():
     print("="*50 + "\n")
     
     if args.update_submission:
-        sub_path = ROOT / "SUBMISSION.md"
+        sub_path = ROOT / "docs" / "_archive" / "encode" / "submission.md"
         chk_path = ROOT / "docs/RESULTS_CHECKLIST.md"
         print(f"Updating {sub_path} and {chk_path}...")
         # Update summary block and ablation table
