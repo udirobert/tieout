@@ -13,10 +13,10 @@
 | Demo script | done — [demo.md](demo.md) |
 | Demo fixtures + exception queue | done |
 | AO desktop + sessions logged | done — 5 AO sessions used (see session log) |
-| Demo video | done — upload YouTube URL below |
+| Demo video | done — https://youtu.be/lmOKmOSSbYo |
 | Devpost | pending |
 
-**Next:** Paste YouTube video URL below → fill Devpost → submit.
+**Next:** Fill Devpost using the draft below → submit.
 
 ---
 
@@ -100,7 +100,11 @@ exception queue with source evidence. Full audit trail via `traces/` and `except
 
 ### How we used AO
 
-*(Paste from session log section above — fill N.)*
+> We used Agent Orchestrator as the development control plane for tieout. One orchestrator
+> session broke work into focused tasks; 4 worker sessions implemented the exception queue,
+> Ylookup CFO demo fixtures, submission docs, and demo video script in isolated git worktrees.
+> The spreadsheet agent runs via Tinker at inference time; AO orchestrated the engineering.
+> The demo video shows the AO dashboard with the total session count of 5.
 
 ### How does it work?
 
@@ -111,7 +115,7 @@ exception queue with source evidence. Full audit trail via `traces/` and `except
 
 ### Demo video URL
 
-__TODO__
+https://youtu.be/lmOKmOSSbYo
 
 ### GitHub
 
@@ -143,9 +147,9 @@ __Names__
 
 ## Pre-submit
 
-1. `./demo/simulate_demo.sh close-tieout-bank-cp` — exceptions OK
-2. Demo video uploaded (AO dashboard visible)
-3. Devpost submitted
-4. Social posted
+1. [x] `./demo/simulate_demo.sh close-tieout-bank-cp` — exceptions OK
+2. [x] Demo video uploaded (AO dashboard visible)
+3. [ ] Devpost submitted
+4. [ ] Social posted
 
 **Tinker (optional live run):** check credits before `./demo/run_demo.sh close-tieout-bank-cp`
