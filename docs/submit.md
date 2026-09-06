@@ -140,8 +140,8 @@ __Names__
 
 ### Social
 
-- Discord showcase: posted in #showcase (or #submissions) — see draft below
-- X/LinkedIn pass tagging @aoagents: __TODO__
+- Discord showcase: posted in #showcase (or #submissions)
+- X/LinkedIn pass tagging @aoagents: https://x.com/UNgethe/status/2096714226509209934?s=20
 
 #### Discord showcase draft
 
@@ -169,6 +169,6 @@ Would love feedback and questions!
 1. [x] `./demo/simulate_demo.sh close-tieout-bank-cp` — exceptions OK
 2. [x] Demo video uploaded (AO dashboard visible)
 3. [x] Devpost submitted
-4. [ ] Social posted
+4. [x] Social posted
 
 **Tinker (optional live run):** check credits before `./demo/run_demo.sh close-tieout-bank-cp`
