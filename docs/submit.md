@@ -57,11 +57,11 @@ Fill before Devpost. Count must match the video.
 
 | Session ID | Role | Task | Status |
 |------------|------|------|--------|
-| tieout-1 | orchestrator | Syndicate plan + worker spawn | idle |
-| tieout-3 | worker | Exception queue + pipeline | idle |
-| tieout-4 | worker | Demo fixtures + scripts | idle |
-| tieout-6 | worker | Docs + Devpost | idle |
-| tieout-5 | worker | Demo video | idle |
+| tieout-9 | orchestrator | Syndicate plan + worker spawn | working |
+| tieout-10 | worker | Exception queue + pipeline | working |
+| tieout-11 | worker | Demo fixtures + scripts | working |
+| tieout-8 | worker | Docs + Devpost | working |
+| tieout-12 | worker | Demo video | working |
 
 **Total sessions:** 5
 
