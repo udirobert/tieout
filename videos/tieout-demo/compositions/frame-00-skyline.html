@@ -1,0 +1,124 @@
+<!doctype html>
+<html>
+  <head><meta charset="UTF-8" /></head>
+  <body>
+    <template>
+      <style>
+        @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=IBM+Plex+Sans:wght@400;600;700;800&display=swap");
+        #root {
+          position: absolute;
+          inset: 0;
+          overflow: hidden;
+          font-family: "IBM Plex Sans", system-ui, sans-serif;
+          color: #1a1a1a;
+        }
+        .clip { position: absolute; }
+        #f00-plate {
+          inset: 0;
+          background: linear-gradient(180deg, #ebe4d8 0%, #f5f0e8 42%, #f5f0e8 100%);
+        }
+        #f00-kicker {
+          top: 74px; left: 96px;
+          font-family: "IBM Plex Mono", monospace;
+          font-weight: 500; font-size: 26px;
+          letter-spacing: 0.14em; text-transform: uppercase;
+          color: #6b6560;
+        }
+        #f00-rule {
+          top: 128px; left: 96px; width: 420px; height: 2px;
+          background: #2d8a4e; transform-origin: left center;
+        }
+        #f00-skyline {
+          left: 0; right: 0; bottom: 0; height: 62%;
+          display: flex; align-items: flex-end; justify-content: center;
+          gap: 18px; padding: 0 48px 0;
+        }
+        .f00-tower {
+          background: #1a1a1a;
+          border-radius: 4px 4px 0 0;
+          position: relative;
+          transform-origin: bottom center;
+        }
+        .f00-tower::before {
+          content: "";
+          position: absolute;
+          inset: 12px 10px 16px;
+          background-image:
+            repeating-linear-gradient(0deg, transparent, transparent 14px, rgba(245,240,232,0.22) 14px, rgba(245,240,232,0.22) 16px),
+            repeating-linear-gradient(90deg, transparent, transparent 18px, rgba(245,240,232,0.18) 18px, rgba(245,240,232,0.18) 20px);
+        }
+        #f00-t1 { width: 120px; height: 280px; }
+        #f00-t2 { width: 160px; height: 420px; }
+        #f00-t3 { width: 200px; height: 520px; }
+        #f00-t4 { width: 140px; height: 360px; }
+        #f00-t5 { width: 110px; height: 300px; }
+        #f00-t3::after {
+          content: "";
+          position: absolute;
+          top: 80px; left: 50%; width: 120px; height: 120px;
+          margin-left: -60px;
+          background: rgba(45, 138, 78, 0.35);
+          border: 2px solid rgba(45, 138, 78, 0.6);
+          box-shadow: 0 0 40px rgba(45, 138, 78, 0.25);
+        }
+        #f00-headline {
+          top: 168px; left: 96px; max-width: 880px;
+        }
+        .f00-hline {
+          font-size: 68px; font-weight: 800;
+          line-height: 1.02; letter-spacing: -0.04em;
+        }
+        .f00-hline .w { display: inline-block; margin-right: 0.16em; overflow: hidden; }
+        .f00-hline .accent { color: #2d8a4e; }
+        #f00-sub {
+          top: 360px; left: 96px; max-width: 760px;
+          font-size: 28px; line-height: 1.4; color: #6b6560; font-weight: 600;
+        }
+        #f00-badge {
+          top: 74px; right: 96px;
+          font-family: "IBM Plex Mono", monospace;
+          font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+          padding: 10px 16px; border-radius: 999px;
+          border: 1px solid rgba(26,26,26,0.12);
+          background: rgba(255,252,247,0.9);
+        }
+      </style>
+      <div id="root" data-composition-id="frame-00-skyline" data-width="1920" data-height="1080">
+        <div id="f00-plate" class="clip"></div>
+        <div id="f00-kicker" class="clip">✓ INSTITUTIONAL / 01</div>
+        <div id="f00-rule" class="clip"></div>
+        <div id="f00-badge" class="clip">Private markets · Spreadsheets</div>
+        <div id="f00-headline" class="clip">
+          <div class="f00-hline" id="f00-l1">
+            <span class="w">AI</span><span class="w">CAN</span><span class="w accent">KEEP</span><span class="w accent">UP.</span>
+          </div>
+        </div>
+        <div id="f00-sub" class="clip">Wall Street's smartest shops just proved it on real Excel.</div>
+        <div id="f00-skyline" class="clip">
+          <div class="f00-tower" id="f00-t1"></div>
+          <div class="f00-tower" id="f00-t2"></div>
+          <div class="f00-tower" id="f00-t3"></div>
+          <div class="f00-tower" id="f00-t4"></div>
+          <div class="f00-tower" id="f00-t5"></div>
+        </div>
+      </div>
+      <script>
+        window.__timelines = window.__timelines || {};
+        const tl = gsap.timeline({ paused: true });
+        gsap.set("#f00-kicker,#f00-rule,#f00-badge,#f00-headline,#f00-sub,#f00-skyline", { opacity: 0 });
+        gsap.set(".f00-tower", { scaleY: 0 });
+        gsap.set(".f00-hline .w", { y: 70, opacity: 0 });
+        tl.fromTo("#f00-kicker", { y: -12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.22, ease: "power2.out" }, 0.1);
+        tl.fromTo("#f00-rule", { scaleX: 0 }, { scaleX: 1, opacity: 1, duration: 0.32, ease: "power2.out" }, 0.2);
+        tl.fromTo("#f00-badge", { x: 20, opacity: 0 }, { x: 0, opacity: 1, duration: 0.25, ease: "power2.out" }, 0.28);
+        tl.to(".f00-tower", { scaleY: 1, duration: 0.45, ease: "power3.out", stagger: 0.08 }, 0.35);
+        tl.fromTo("#f00-skyline", { opacity: 0 }, { opacity: 1, duration: 0.2 }, 0.35);
+        tl.to(".f00-hline .w", { y: 0, opacity: 1, duration: 0.34, ease: "power4.out", stagger: 0.07 }, 0.85);
+        tl.fromTo("#f00-headline", { opacity: 0 }, { opacity: 1, duration: 0.1 }, 0.85);
+        tl.fromTo("#f00-sub", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.32, ease: "power3.out" }, 1.35);
+        tl.to("#f00-t3", { boxShadow: "0 0 60px rgba(45,138,78,0.35)", duration: 1.2, ease: "sine.inOut", yoyo: true, repeat: 1 }, 2.0);
+        window.__timelines["frame-00-skyline"] = tl;
+      </script>
+    </template>
+  </body>
+</html>

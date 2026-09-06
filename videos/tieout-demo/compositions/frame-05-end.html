@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+  <head><meta charset="UTF-8" /></head>
+  <body>
+    <template>
+      <style>
+        @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=IBM+Plex+Sans:wght@400;600;700&display=swap");
+        #root {
+          position: absolute;
+          inset: 0;
+          overflow: hidden;
+          font-family: "IBM Plex Sans", system-ui, sans-serif;
+          color: #1a1a1a;
+          background: #f5f0e8;
+          display: grid;
+          place-items: center;
+        }
+        .dither {
+          position: absolute;
+          inset: -6%;
+          background-color: #f5f0e8;
+          background-image:
+            repeating-conic-gradient(#e8e0d4 0% 25%, transparent 0% 50%) 0 0 / 5px 5px,
+            repeating-conic-gradient(transparent 0% 25%, #e8e0d4 0% 50%) 2.5px 2.5px / 5px 5px;
+          transform-origin: 50% 50%;
+        }
+        .lockup {
+          position: relative;
+          z-index: 2;
+          text-align: center;
+        }
+        .logo {
+          font-size: 120px;
+          font-weight: 800;
+          letter-spacing: -0.06em;
+          line-height: 1;
+          margin-bottom: 18px;
+        }
+        .logo span { color: #2d8a4e; }
+        .tagline {
+          font-family: "IBM Plex Mono", monospace;
+          font-size: 18px;
+          letter-spacing: 0.16em;
+          text-transform: uppercase;
+          color: #6b6560;
+          margin-bottom: 28px;
+        }
+        .stats {
+          display: flex;
+          gap: 36px;
+          justify-content: center;
+          font-family: "IBM Plex Mono", monospace;
+          font-size: 15px;
+          color: #6b6560;
+        }
+        .stats strong { color: #1a1a1a; font-size: 22px; display: block; margin-bottom: 4px; }
+        .caption {
+          position: absolute;
+          left: 6%;
+          right: 6%;
+          bottom: 7%;
+          font-size: 28px;
+          line-height: 1.35;
+          color: #6b6560;
+          text-align: center;
+          border-top: 1px solid rgba(26, 26, 26, 0.08);
+          padding-top: 18px;
+        }
+      </style>
+      <div id="root" data-composition-id="frame-05-end" data-width="1920" data-height="1080">
+        <div class="dither" id="dither"></div>
+        <div class="lockup">
+          <div class="logo" id="logo">tie<span>out</span></div>
+          <div class="tagline" id="tag">encode hackathon · open model · holdout ready</div>
+          <div class="stats" id="stats">
+            <div><strong>68.00%</strong>ship score</div>
+            <div><strong>400</strong>verified tasks</div>
+            <div><strong>1</strong>docker run</div>
+          </div>
+        </div>
+        <div class="caption" id="caption">tieout.</div>
+      </div>
+      <script>
+        window.__timelines = window.__timelines || {};
+        const tl = gsap.timeline({ paused: true });
+        gsap.set("#logo, #tag, #stats, #caption", { opacity: 0 });
+        tl.fromTo("#root", { opacity: 0 }, { opacity: 1, duration: 0.35, ease: "power2.out" }, 0);
+        tl.fromTo("#logo", { scale: 0.75, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(1.7)" }, 0.2);
+        tl.fromTo("#tag", { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power2.out" }, 0.65);
+        tl.fromTo("#stats", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out", stagger: 0.08 }, 0.95);
+        tl.fromTo("#caption", { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power2.out" }, 1.4);
+        tl.to("#dither", { scale: 1.03, duration: 2.5, ease: "sine.inOut" }, 2.0);
+        window.__timelines["frame-05-end"] = tl;
+      </script>
+    </template>
+  </body>
+</html>

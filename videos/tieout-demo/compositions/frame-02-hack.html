@@ -1,0 +1,122 @@
+<!doctype html>
+<html>
+  <head><meta charset="UTF-8" /></head>
+  <body>
+    <template>
+      <style>
+        @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=IBM+Plex+Sans:wght@400;600;700;800&display=swap");
+        #root {
+          position: absolute; inset: 0; overflow: hidden;
+          font-family: "IBM Plex Sans", system-ui, sans-serif;
+          color: #1a1a1a; background: #f5f0e8;
+        }
+        .dither {
+          position: absolute; inset: -4%;
+          background-color: #f5f0e8;
+          background-image:
+            repeating-conic-gradient(#e8e0d4 0% 25%, transparent 0% 50%) 0 0 / 5px 5px,
+            repeating-conic-gradient(transparent 0% 25%, #e8e0d4 0% 50%) 2.5px 2.5px / 5px 5px;
+        }
+        #f02-kicker {
+          top: 74px; left: 96px;
+          font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 26px;
+          letter-spacing: 0.14em; text-transform: uppercase; color: #6b6560;
+        }
+        #f02-rule {
+          top: 128px; left: 96px; width: 520px; height: 2px;
+          background: #e07a3a; transform-origin: left center;
+        }
+        .f02-mandate {
+          position: absolute; left: 6%; top: 18%;
+          font-size: 72px; font-weight: 800; line-height: 1.02;
+          letter-spacing: -0.04em; max-width: 920px;
+        }
+        .f02-mandate .w { display: inline-block; margin-right: 0.14em; }
+        .f02-mandate .accent { color: #c45a1a; }
+        #f02-slip {
+          left: 6%; top: 52%; width: 640px; height: 120px;
+          background: #fffaf3; border: 2px solid #1a1a1a; border-radius: 8px;
+          display: flex; flex-direction: column; justify-content: center;
+          padding: 0 28px; transform: rotate(-1.5deg);
+          box-shadow: 8px 10px 0 rgba(224,122,58,0.25);
+        }
+        #f02-slip .top {
+          font-family: "IBM Plex Mono", monospace; font-size: 11px;
+          letter-spacing: 0.14em; text-transform: uppercase; color: #6b6560;
+          margin-bottom: 8px;
+        }
+        #f02-slip .main {
+          font-size: 28px; font-weight: 700; line-height: 1.2;
+        }
+        .f02-lockup {
+          position: absolute; right: 6%; top: 22%;
+          display: flex; flex-direction: column; gap: 16px; align-items: flex-end;
+        }
+        .f02-brand {
+          font-family: "IBM Plex Mono", monospace;
+          font-size: 22px; font-weight: 700; letter-spacing: 0.06em;
+          padding: 16px 24px; border: 2px solid #1a1a1a;
+          background: #fffaf3; box-shadow: 6px 8px 0 rgba(26,26,26,0.1);
+        }
+        .f02-brand span { color: #2d8a4e; }
+        .f02-meta {
+          position: absolute; left: 6%; bottom: 14%;
+          font-family: "IBM Plex Mono", monospace; font-size: 14px;
+          letter-spacing: 0.1em; text-transform: uppercase; color: #6b6560;
+        }
+        .f02-chips {
+          position: absolute; right: 6%; bottom: 14%;
+          display: flex; gap: 12px;
+        }
+        .f02-chip {
+          font-family: "IBM Plex Mono", monospace; font-size: 12px;
+          letter-spacing: 0.08em; text-transform: uppercase;
+          padding: 8px 14px; border-radius: 999px;
+          border: 1px solid rgba(26,26,26,0.12);
+          background: rgba(255,252,247,0.9);
+        }
+      </style>
+      <div id="root" data-composition-id="frame-02-hack" data-width="1920" data-height="1080">
+        <div class="dither" id="dither"></div>
+        <div id="f02-kicker">✓ THE HACK / 02</div>
+        <div id="f02-rule"></div>
+        <div class="f02-mandate" id="f02-m1">
+          <span class="w">REBUILD</span><span class="w accent">PRIVATE</span><span class="w accent">MARKETS</span>
+        </div>
+        <div id="f02-slip">
+          <div class="top">Encode Hub · Pitfield St · London</div>
+          <div class="main">Ylookup × Encode · 100 builders · 1 weekend</div>
+        </div>
+        <div class="f02-lockup">
+          <div class="f02-brand" id="b1">Ylookup</div>
+          <div class="f02-brand" id="b2">Encode <span>Club</span></div>
+        </div>
+        <div class="f02-meta" id="meta">Sat 5 – Sun 6 Sept · Submission 12:00</div>
+        <div class="f02-chips" id="chips">
+          <div class="f02-chip">Research track</div>
+          <div class="f02-chip">Product track</div>
+          <div class="f02-chip">Live interviews</div>
+        </div>
+      </div>
+      <script>
+        window.__timelines = window.__timelines || {};
+        const tl = gsap.timeline({ paused: true });
+        gsap.set("#f02-kicker,#f02-rule,#f02-m1,#f02-slip,.f02-lockup,#meta,#chips", { opacity: 0 });
+        gsap.set(".f02-mandate .w", { y: 80, opacity: 0 });
+        gsap.set(".f02-brand", { x: 60, opacity: 0 });
+        tl.fromTo("#root", { scale: 1.06, filter: "blur(14px)" }, { scale: 1, filter: "blur(0px)", duration: 0.4, ease: "power3.out" }, 0);
+        tl.fromTo("#f02-kicker", { y: -12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.22 }, 0.12);
+        tl.fromTo("#f02-rule", { scaleX: 0 }, { scaleX: 1, opacity: 1, duration: 0.3 }, 0.22);
+        tl.to(".f02-mandate .w", { y: 0, opacity: 1, duration: 0.36, ease: "power4.out", stagger: 0.08 }, 0.35);
+        tl.fromTo("#f02-m1", { opacity: 0 }, { opacity: 1, duration: 0.1 }, 0.35);
+        tl.fromTo("#f02-slip", { y: -700, opacity: 0, rotation: -4 }, { y: 0, opacity: 1, rotation: -1.5, duration: 0.38, ease: "power4.out" }, 0.95);
+        tl.to(".f02-brand", { x: 0, opacity: 1, duration: 0.32, ease: "power3.out", stagger: 0.12 }, 1.35);
+        tl.fromTo(".f02-lockup", { opacity: 0 }, { opacity: 1, duration: 0.1 }, 1.35);
+        tl.fromTo("#meta", { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.28 }, 1.75);
+        tl.fromTo("#chips", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, stagger: 0.06 }, 2.05);
+        tl.to("#dither", { x: 10, duration: 7, ease: "none" }, 0);
+        window.__timelines["frame-02-hack"] = tl;
+      </script>
+    </template>
+  </body>
+</html>

@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+  <head><meta charset="UTF-8" /></head>
+  <body>
+    <template>
+      <style>
+        @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=IBM+Plex+Sans:wght@400;600;700&display=swap");
+        #root {
+          position: absolute; inset: 0; overflow: hidden;
+          font-family: "IBM Plex Sans", system-ui, sans-serif;
+          color: #1a1a1a; background: #f5f0e8;
+        }
+        .dither {
+          position: absolute; inset: -4%;
+          background-color: #f5f0e8;
+          background-image:
+            repeating-conic-gradient(#e8e0d4 0% 25%, transparent 0% 50%) 0 0 / 5px 5px,
+            repeating-conic-gradient(transparent 0% 25%, #e8e0d4 0% 50%) 2.5px 2.5px / 5px 5px;
+        }
+        h2 {
+          position: absolute; top: 10%; left: 6%;
+          font-size: 40px; font-weight: 700;
+        }
+        .lines {
+          position: absolute; top: 20%; left: 6%; right: 6%;
+        }
+        .line {
+          font-size: 64px; font-weight: 800; line-height: 1.08;
+          letter-spacing: -0.03em; margin-bottom: 8px; overflow: hidden;
+        }
+        .line .word { display: inline-block; margin-right: 0.22em; }
+        .accent { color: #2d8a4e; }
+        .pipeline {
+          position: absolute; top: 58%; left: 6%; right: 6%;
+          display: flex; align-items: stretch; gap: 16px;
+        }
+        .node {
+          flex: 1; background: rgba(255,252,247,0.94);
+          border: 2px solid rgba(26,26,26,0.1); border-radius: 14px;
+          padding: 20px 16px; box-shadow: 6px 8px 0 rgba(26,26,26,0.05);
+        }
+        .node-num {
+          font-family: "IBM Plex Mono", monospace; font-size: 11px;
+          letter-spacing: 0.12em; color: #6b6560; margin-bottom: 10px;
+        }
+        .node h3 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+        .node p { font-size: 15px; line-height: 1.35; color: #6b6560; }
+        .arrow {
+          align-self: center; font-family: "IBM Plex Mono", monospace;
+          font-size: 28px; color: #c45a1a; opacity: 0;
+        }
+        .playbook {
+          position: absolute; top: 48%; left: 6%;
+          font-family: "IBM Plex Mono", monospace; font-size: 14px;
+          letter-spacing: 0.1em; text-transform: uppercase;
+          padding: 10px 16px; border: 2px solid #2d8a4e;
+          color: #267643; background: rgba(45,138,78,0.08);
+          transform: rotate(-1deg);
+        }
+      </style>
+      <div id="root" data-composition-id="frame-04-unlock" data-width="1920" data-height="1080">
+        <div class="dither" id="dither"></div>
+        <h2 id="title">The playbook is public.</h2>
+        <div class="lines">
+          <div class="line" id="l1"><span class="word">Your</span><span class="word">data.</span></div>
+          <div class="line" id="l2"><span class="word">Your</span><span class="word accent">model.</span></div>
+          <div class="line" id="l3"><span class="word">Niche</span><span class="word">beats</span><span class="word">general.</span></div>
+        </div>
+        <div class="playbook" id="playbook">Open recipe · Fine-tune on failures · Ship</div>
+        <div class="pipeline">
+          <div class="node" id="n1">
+            <div class="node-num">01</div>
+            <h3>Your spreadsheets</h3>
+            <p>Domain tasks, failures, anonymised data</p>
+          </div>
+          <div class="arrow" id="a1">→</div>
+          <div class="node" id="n2">
+            <div class="node-num">02</div>
+            <h3>Fine-tune</h3>
+            <p>Open model on your trajectories</p>
+          </div>
+          <div class="arrow" id="a2">→</div>
+          <div class="node" id="n3">
+            <div class="node-num">03</div>
+            <h3>Specialize</h3>
+            <p>Fund workflows, not generic chat</p>
+          </div>
+        </div>
+      </div>
+      <script>
+        window.__timelines = window.__timelines || {};
+        const tl = gsap.timeline({ paused: true });
+        gsap.set(".word", { y: 80, opacity: 0 });
+        gsap.set("#title,#playbook,.node,.arrow", { opacity: 0 });
+        gsap.set(".node", { y: 40 });
+        tl.fromTo("#root", { x: 100, filter: "blur(10px)" }, { x: 0, filter: "blur(0px)", duration: 0.3, ease: "power3.out" }, 0);
+        tl.fromTo("#title", { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.28, ease: "power2.out" }, 0.1);
+        tl.to(".word", { y: 0, opacity: 1, duration: 0.36, ease: "power4.out", stagger: 0.07 }, 0.25);
+        tl.fromTo("#playbook", { y: -400, opacity: 0 }, { y: 0, opacity: 1, duration: 0.32, ease: "power4.out" }, 1.0);
+        ["#n1","#a1","#n2","#a2","#n3"].forEach((sel, i) => {
+          tl.fromTo(sel, { y: sel.startsWith("#a") ? 0 : 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.28, ease: "power3.out" }, 1.35 + i * 0.2);
+        });
+        tl.to("#dither", { x: 8, duration: 8, ease: "none" }, 0);
+        window.__timelines["frame-04-unlock"] = tl;
+      </script>
+    </template>
+  </body>
+</html>

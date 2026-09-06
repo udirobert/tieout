@@ -137,6 +137,10 @@ Diagnostic VM paths (also archived in repo):
 - `results.json`: `/tmp/clone-run-400/results.json`  →  `research/data/eval/clone_run/results.json`
 - parse audit: `/tmp/clone-run-400/parse_audit_summary.json` (33 JSONDecodeError, 25 truncated at 16k, 23 both; 365 harness-ok)  →  `research/data/eval/clone_run/parse_audit_summary.json`
 
+Independent container reproduction (the shipped image, run unattended on the full 400):
+- results: `research/data/eval/container400/results.json` — **67.75%** (271/400), within the ±2–3pp noise band of the 68.00% clone-run headline; cell 75.64% / sheet 50.40% / cell_acc 37.00%; audit 34 json_err / 23 trunc / 366 ok
+- `run.log` archived alongside. The container produced the full contract (`predictions.jsonl`, `outputs/`, `traces/`, `run.log`) and exited cleanly on its own.
+
 ## Code
 
 Pipeline in `harness/`, runs in Docker reading `/data` writing `/out`. Env vars:

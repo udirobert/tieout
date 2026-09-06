@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+  <head><meta charset="UTF-8" /></head>
+  <body>
+    <template>
+      <style>
+        @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=IBM+Plex+Sans:wght@400;600;700&display=swap");
+        #root {
+          position: absolute; inset: 0; overflow: hidden;
+          font-family: "IBM Plex Sans", system-ui, sans-serif;
+          color: #1a1a1a; background: #f5f0e8;
+        }
+        .dither {
+          position: absolute; inset: -4%;
+          background-color: #f5f0e8;
+          background-image:
+            repeating-conic-gradient(#e8e0d4 0% 25%, transparent 0% 50%) 0 0 / 5px 5px,
+            repeating-conic-gradient(transparent 0% 25%, #e8e0d4 0% 50%) 2.5px 2.5px / 5px 5px;
+        }
+        .badge {
+          position: absolute; top: 10%; left: 6%;
+          font-family: "IBM Plex Mono", monospace; font-size: 14px;
+          letter-spacing: 0.14em; text-transform: uppercase; color: #6b6560;
+          padding: 8px 14px; border: 1px solid rgba(26,26,26,0.12);
+          border-radius: 999px; background: rgba(255,252,247,0.85);
+        }
+        .hero-stat {
+          position: absolute; top: 22%; left: 6%;
+          font-family: "IBM Plex Mono", monospace;
+          font-size: 120px; font-weight: 700; letter-spacing: -0.05em; line-height: 1;
+        }
+        .ring {
+          position: absolute; top: 18%; left: 4.5%;
+          width: 280px; height: 280px;
+          border: 3px solid rgba(45,138,78,0.25); border-radius: 50%;
+        }
+        .headline {
+          position: absolute; top: 42%; left: 6%;
+          font-size: 44px; font-weight: 700; max-width: 780px; line-height: 1.15;
+        }
+        .sub {
+          position: absolute; top: 54%; left: 6%;
+          font-size: 26px; color: #6b6560; max-width: 700px;
+        }
+        .proof-card {
+          position: absolute; right: 6%; top: 18%;
+          width: 38%; padding: 28px; border-radius: 6px;
+          background: #fffaf3; border: 2px solid #1a1a1a;
+          box-shadow: 8px 10px 0 rgba(26,26,26,0.12);
+          transform: rotate(1deg);
+        }
+        .proof-card h3 {
+          font-family: "IBM Plex Mono", monospace; font-size: 13px;
+          letter-spacing: 0.12em; text-transform: uppercase;
+          color: #6b6560; margin-bottom: 16px;
+          border-bottom: 1px dashed rgba(26,26,26,0.15); padding-bottom: 12px;
+        }
+        .proof-row {
+          display: flex; justify-content: space-between;
+          padding: 10px 0; border-bottom: 1px solid rgba(26,26,26,0.06);
+          font-size: 20px;
+        }
+        .proof-row:last-child { border-bottom: none; }
+        .proof-row span:last-child { font-family: "IBM Plex Mono", monospace; font-weight: 700; }
+        .pass-wrap {
+          position: absolute; right: 8%; bottom: 10%;
+          width: 320px; height: 220px;
+          border: 2px solid rgba(26,26,26,0.35); padding: 6px;
+          background: #fffaf3; transform: rotate(-2deg);
+          box-shadow: 6px 8px 0 rgba(26,26,26,0.1);
+        }
+        .pass-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+      </style>
+      <div id="root" data-composition-id="frame-01-proof" data-width="1920" data-height="1080">
+        <div class="dither" id="dither"></div>
+        <div class="badge" id="badge">Thinking Machines · arXiv:2607.20999</div>
+        <div class="ring" id="ring"></div>
+        <div class="hero-stat" id="stat">0.00%</div>
+        <div class="headline" id="headline">Not chat. Execution.</div>
+        <div class="sub" id="sub">SpreadsheetBench Verified — 400 real Excel tasks.</div>
+        <div class="proof-card" id="card">
+          <h3>Benchmark receipt</h3>
+          <div class="proof-row"><span>Lab</span><span>Thinking Machines</span></div>
+          <div class="proof-row"><span>Benchmark</span><span>Verified 400</span></div>
+          <div class="proof-row"><span>Pass rate</span><span>74.67%</span></div>
+        </div>
+        <div class="pass-wrap" id="pass"><img src="raw-assets/prop-spreadsheet-pass.jpg" alt="" /></div>
+      </div>
+      <script>
+        window.__timelines = window.__timelines || {};
+        const tl = gsap.timeline({ paused: true });
+        const counter = { v: 0 };
+        gsap.set("#badge,#ring,#stat,#headline,#sub,#card,#pass", { opacity: 0 });
+        tl.fromTo("#root", { x: 80, filter: "blur(12px)" }, { x: 0, filter: "blur(0px)", duration: 0.32, ease: "power3.out" }, 0);
+        tl.fromTo("#badge", { y: -20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.25, ease: "power2.out" }, 0.2);
+        tl.fromTo("#ring", { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(1.4)" }, 0.35);
+        tl.to(counter, {
+          v: 74.67, duration: 1.0, ease: "power2.out",
+          onUpdate: () => { document.getElementById("stat").textContent = counter.v.toFixed(2) + "%"; }
+        }, 0.45);
+        tl.fromTo("#stat", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power3.out" }, 0.45);
+        tl.fromTo("#headline", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, 1.1);
+        tl.fromTo("#sub", { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power2.out" }, 1.35);
+        tl.fromTo("#card", { y: -500, opacity: 0, rotation: 4 }, { y: 0, opacity: 1, rotation: 1, duration: 0.38, ease: "power4.out" }, 1.5);
+        tl.fromTo("#pass", { x: 40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, 1.85);
+        tl.to("#dither", { backgroundPosition: "12px 8px", duration: 6, ease: "none" }, 0);
+        window.__timelines["frame-01-proof"] = tl;
+      </script>
+    </template>
+  </body>
+</html>

@@ -1,0 +1,31 @@
+{
+  "provider": "elevenlabs",
+  "model_id": "eleven_multilingual_v2",
+  "voice": {
+    "name": "George",
+    "voice_id": "JBFqnCBsd6RMkjVDRZzb",
+    "settings": {
+      "stability": 0.45,
+      "similarity_boost": 0.75,
+      "style": 0.18,
+      "speaker_boost": true
+    }
+  },
+  "lines": [
+    { "id": "00", "text": "Private markets still run on spreadsheets. Wall Street's smartest shops just proved AI can keep up." },
+    { "id": "01", "text": "Thinking Machines Lab. Seventy-five percent on real Excel tasks. Not chat — execution." },
+    { "id": "02", "text": "This weekend — Encode Hub, London. Ylookup and Encode. One mandate: rebuild private markets." },
+    { "id": "03", "text": "We took the research track. Same benchmark. Open Qwen. Sixty-eight percent — nine above the floor." },
+    { "id": "04", "text": "The playbook is public. Your data. Your model. Niche beats general." },
+    { "id": "05", "text": "One Docker run. Four hundred tasks. Holdout ready." },
+    { "id": "06", "text": "tieout." }
+  ],
+  "bgm": {
+    "provider": "elevenlabs",
+    "model_id": "music_v1",
+    "force_instrumental": true,
+    "length_ms": 52000,
+    "path": "bgm-elevenlabs.mp3",
+    "prompt": "Restrained high-energy editorial instrumental; warm paper-and-ink dither mood; muted pulse and soft plucked strings; subtle rise through middle section; no vocals; room for spoken narration; confident hackathon demo energy without aggressive drums."
+  }
+}

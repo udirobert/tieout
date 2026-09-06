@@ -1,0 +1,244 @@
+<!doctype html>
+<html>
+  <head><meta charset="UTF-8" /></head>
+  <body>
+    <template>
+      <style>
+        @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=IBM+Plex+Sans:wght@400;600;700;800&display=swap");
+        #root {
+          position: absolute;
+          inset: 0;
+          overflow: hidden;
+          font-family: "IBM Plex Sans", system-ui, sans-serif;
+          color: #1a1a1a;
+        }
+        .clip { position: absolute; }
+        #f00-plate {
+          inset: 0;
+          background-color: #f5f0e8;
+          background-image:
+            repeating-conic-gradient(#e8e0d4 0% 25%, transparent 0% 50%) 0 0 / 5px 5px,
+            repeating-conic-gradient(transparent 0% 25%, #e8e0d4 0% 50%) 2.5px 2.5px / 5px 5px;
+        }
+        #f00-kicker {
+          top: 74px;
+          left: 96px;
+          font-family: "IBM Plex Mono", monospace;
+          font-weight: 500;
+          font-size: 26px;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: #6b6560;
+        }
+        #f00-rule {
+          top: 128px;
+          left: 96px;
+          width: 480px;
+          height: 2px;
+          background: #2d8a4e;
+          transform-origin: left center;
+        }
+        #f00-slot {
+          left: 0;
+          right: 0;
+          bottom: 0;
+          height: 420px;
+          background: linear-gradient(180deg, transparent 0%, rgba(232, 224, 212, 0.35) 18%, #e8e0d4 100%);
+          border-top: 3px solid rgba(26, 26, 26, 0.12);
+        }
+        #f00-slot-lip {
+          top: -28px;
+          left: 50%;
+          width: 720px;
+          height: 56px;
+          margin-left: -360px;
+          background: #fffaf3;
+          border: 2px solid rgba(26, 26, 26, 0.2);
+          border-radius: 8px 8px 0 0;
+          box-shadow: 0 -8px 24px rgba(26, 26, 26, 0.08);
+        }
+        #f00-receipt {
+          left: 50%;
+          top: 520px;
+          width: 480px;
+          margin-left: -320px;
+          padding: 28px 32px 36px;
+          background: #fffaf3;
+          border: 2px solid #1a1a1a;
+          border-radius: 4px;
+          box-shadow: 8px 12px 0 rgba(26, 26, 26, 0.14);
+          transform: rotate(-1deg);
+        }
+        .f00-rhead {
+          font-family: "IBM Plex Mono", monospace;
+          font-size: 11px;
+          letter-spacing: 0.16em;
+          text-transform: uppercase;
+          color: #6b6560;
+          margin-bottom: 16px;
+          border-bottom: 1px dashed rgba(26, 26, 26, 0.15);
+          padding-bottom: 12px;
+        }
+        .f00-rrow {
+          display: flex;
+          justify-content: space-between;
+          font-size: 18px;
+          padding: 8px 0;
+        }
+        .f00-rrow span:last-child {
+          font-family: "IBM Plex Mono", monospace;
+          font-weight: 700;
+        }
+        #f00-stamp {
+          left: 50%;
+          top: 520px;
+          width: 220px;
+          height: 220px;
+          margin-left: 120px;
+          border: 6px solid #c45a1a;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transform: rotate(-12deg);
+          mix-blend-mode: multiply;
+        }
+        #f00-stamp span {
+          font-family: "IBM Plex Mono", monospace;
+          font-weight: 700;
+          font-size: 34px;
+          letter-spacing: 0.08em;
+          color: #c45a1a;
+        }
+        #f00-headline {
+          left: 96px;
+          top: 168px;
+          max-width: 900px;
+        }
+        .f00-hline {
+          font-size: 80px;
+          font-weight: 800;
+          line-height: 0.98;
+          letter-spacing: -0.04em;
+          overflow: hidden;
+        }
+        .f00-hline .w { display: inline-block; margin-right: 0.18em; }
+        .f00-hline .accent { color: #2d8a4e; }
+        #f00-tease {
+          left: 96px;
+          top: 420px;
+          width: 460px;
+          height: 88px;
+          background: #fffaf3;
+          border: 2px solid #1a1a1a;
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transform: rotate(2deg);
+          box-shadow: 6px 8px 0 rgba(38, 118, 67, 0.35);
+          font-family: "IBM Plex Mono", monospace;
+          font-weight: 700;
+          font-size: 28px;
+          letter-spacing: -0.02em;
+          color: #267643;
+        }
+        #f00-pass {
+          right: 48px;
+          top: 180px;
+          width: 680px;
+          height: 480px;
+        }
+        .f00-pcard {
+          position: absolute;
+          inset: 0;
+          transform: rotate(1.5deg);
+          border: 2px solid rgba(26, 26, 26, 0.45);
+          padding: 8px;
+          background: #fffaf3;
+          box-shadow: 8px 10px 0 rgba(26, 26, 26, 0.12);
+        }
+        .f00-pcard img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+        }
+        .f00-tape {
+          position: absolute;
+          width: 90px;
+          height: 28px;
+          background: rgba(245, 240, 232, 0.85);
+          border-left: 2px dashed rgba(26, 26, 26, 0.2);
+          border-right: 2px dashed rgba(26, 26, 26, 0.2);
+        }
+        .f00-tape-l { top: -10px; left: 40px; transform: rotate(-6deg); }
+        .f00-tape-r { top: -8px; right: 48px; transform: rotate(4deg); }
+        #f00-caption {
+          left: 6%;
+          right: 6%;
+          bottom: 7%;
+          font-size: 28px;
+          line-height: 1.35;
+          color: #6b6560;
+          border-top: 1px solid rgba(26, 26, 26, 0.08);
+          padding-top: 18px;
+        }
+      </style>
+      <div id="root" data-composition-id="frame-00-hook" data-width="1920" data-height="1080">
+        <div id="f00-plate" class="clip"></div>
+        <div id="f00-kicker" class="clip">✓ PROVEN / 01</div>
+        <div id="f00-rule" class="clip"></div>
+        <div id="f00-headline" class="clip">
+          <div class="f00-hline" id="f00-l1">
+            <span class="w">SPREADSHEET</span><span class="w">AI</span>
+          </div>
+          <div class="f00-hline" id="f00-l2">
+            <span class="w accent">IS</span><span class="w accent">REAL.</span>
+          </div>
+        </div>
+        <div id="f00-pass" class="clip" data-layout-allow-overflow>
+          <div class="f00-pcard">
+            <img src="raw-assets/prop-spreadsheet-pass.jpg" alt="" />
+            <div class="f00-tape f00-tape-l"></div>
+            <div class="f00-tape f00-tape-r"></div>
+          </div>
+        </div>
+        <div id="f00-tease" class="clip">74.67% · Verified 400</div>
+        <div id="f00-stamp" class="clip" data-layout-allow-overlap data-layout-allow-occlusion><span>PROVEN</span></div>
+        <div id="f00-slot" class="clip">
+          <div id="f00-slot-lip" class="clip"></div>
+        </div>
+        <div id="f00-receipt" class="clip">
+          <div class="f00-rhead">SpreadsheetBench Verified · arXiv:2607.20999</div>
+          <div class="f00-rrow"><span>Lab</span><span>Thinking Machines</span></div>
+          <div class="f00-rrow"><span>Tasks</span><span>400</span></div>
+          <div class="f00-rrow"><span>Pass rate</span><span>74.67%</span></div>
+        </div>
+        <div id="f00-caption" class="clip">Wall Street just proved spreadsheet AI works — 75% on real Excel tasks.</div>
+      </div>
+      <script>
+        window.__timelines = window.__timelines || {};
+        const tl = gsap.timeline({ paused: true });
+        gsap.set("#f00-kicker, #f00-rule, #f00-headline, #f00-pass, #f00-slot, #f00-receipt, #f00-stamp, #f00-tease, #f00-caption", { opacity: 0 });
+        gsap.set("#f00-receipt", { y: 420, opacity: 0 });
+        gsap.set("#f00-stamp", { scale: 2.2, opacity: 0 });
+        gsap.set(".f00-hline .w", { y: 90, opacity: 0 });
+
+        tl.to("#f00-plate", { backgroundPosition: "10px 6px", duration: 6, ease: "none" }, 0);
+        tl.fromTo("#f00-kicker", { y: -12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.22, ease: "power2.out" }, 0.08);
+        tl.fromTo("#f00-rule", { scaleX: 0, opacity: 0 }, { scaleX: 1, opacity: 1, duration: 0.32, ease: "power2.out" }, 0.18);
+        tl.fromTo("#f00-slot", { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, 0.22);
+        tl.fromTo("#f00-pass", { x: 40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.38, ease: "power3.out" }, 0.35);
+        tl.to(".f00-hline .w", { y: 0, opacity: 1, duration: 0.32, ease: "power4.out", stagger: 0.06 }, 0.45);
+        tl.fromTo("#f00-receipt", { y: 420, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: "power3.out" }, 0.85);
+        tl.fromTo("#f00-stamp", { scale: 2.4, opacity: 0, rotation: -24 }, { scale: 1, opacity: 0.92, rotation: -12, duration: 0.28, ease: "power4.in", overwrite: "auto" }, 1.15);
+        tl.to("#f00-stamp", { scale: 1.06, duration: 0.06, yoyo: true, repeat: 1, ease: "steps(2)", overwrite: "auto" }, 1.43);
+        tl.fromTo("#f00-tease", { y: -700, opacity: 0, rotation: 6 }, { y: 0, opacity: 1, rotation: 2, duration: 0.35, ease: "power4.out" }, 1.55);
+        tl.fromTo("#f00-caption", { y: 14, opacity: 0 }, { y: 0, opacity: 1, duration: 0.28, ease: "power2.out" }, 2.4);
+        tl.to("#root", { filter: "blur(8px)", duration: 0.22, ease: "power2.in" }, 5.7);
+        window.__timelines["frame-00-hook"] = tl;
+      </script>
+    </template>
+  </body>
+</html>
