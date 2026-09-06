@@ -73,10 +73,15 @@ def _tinker(base_model: str, model_path: str | None, temperature: float = 0.0):
         # drowns the JSON; values-first wants direct answers (parser still lenient).
         try:
             enc = tokenizer.apply_chat_template(
-                messages, add_generation_prompt=True, tokenize=True, enable_thinking=False
+                messages,
+                add_generation_prompt=True,
+                tokenize=True,
+                enable_thinking=False,
             )
         except TypeError:  # non-Qwen template without the kwarg
-            enc = tokenizer.apply_chat_template(messages, add_generation_prompt=True, tokenize=True)
+            enc = tokenizer.apply_chat_template(
+                messages, add_generation_prompt=True, tokenize=True
+            )
         tokens = enc["input_ids"] if hasattr(enc, "keys") else enc
         if hasattr(tokens, "tolist"):
             tokens = tokens.tolist()

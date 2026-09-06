@@ -46,13 +46,33 @@ def get_skill_fragment(instruction: str) -> str:
     inst_lower = instruction.lower()
     skills = []
 
-    if any(k in inst_lower for k in ("vlookup", "xlookup", "index", "match", "offset", "lookup")):
+    if any(
+        k in inst_lower
+        for k in ("vlookup", "xlookup", "index", "match", "offset", "lookup")
+    ):
         skills.append(LOOKUP_SKILL)
-    if any(k in inst_lower for k in ("countif", "sumif", "averageif", "aggregate", "heatmap", "matrix")):
+    if any(
+        k in inst_lower
+        for k in ("countif", "sumif", "averageif", "aggregate", "heatmap", "matrix")
+    ):
         skills.append(AGGREGATION_SKILL)
-    if any(k in inst_lower for k in ("delete", "filter", "vba", "macro", "consolidat", "dedup", "merge")):
+    if any(
+        k in inst_lower
+        for k in ("delete", "filter", "vba", "macro", "consolidat", "dedup", "merge")
+    ):
         skills.append(SHEET_REORG_SKILL)
-    if any(k in inst_lower for k in ("yellow", "highlight", "shad", "color", "colour", "cell fill", "fill color")):
+    if any(
+        k in inst_lower
+        for k in (
+            "yellow",
+            "highlight",
+            "shad",
+            "color",
+            "colour",
+            "cell fill",
+            "fill color",
+        )
+    ):
         skills.append(FILL_GATED_SKILL)
     if any(k in inst_lower for k in ("date", "time", "day", "month", "year", "hour")):
         skills.append(DATE_TIME_SKILL)

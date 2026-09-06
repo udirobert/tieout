@@ -121,10 +121,7 @@ def run_snippet(code: str, init_xlsx: str, out_xlsx: str) -> dict:
         local_init = td_path / "init.xlsx"
         local_out = td_path / "out.xlsx"
         shutil.copy(init_xlsx, local_init)
-        preamble = (
-            f"INIT_XLSX = {str(local_init)!r}\n"
-            f"OUT_XLSX = {str(local_out)!r}\n"
-        )
+        preamble = f"INIT_XLSX = {str(local_init)!r}\nOUT_XLSX = {str(local_out)!r}\n"
         script = td_path / "snippet.py"
         script.write_text(preamble + "\n" + code, encoding="utf-8")
         try:
@@ -163,7 +160,9 @@ def run_snippet(code: str, init_xlsx: str, out_xlsx: str) -> dict:
             if not wrote:
                 error = "script did not write OUT_XLSX"
             elif proc.returncode != 0:
-                error = f"exit {proc.returncode}: {stderr or stdout or 'no output'}"[:300]
+                error = f"exit {proc.returncode}: {stderr or stdout or 'no output'}"[
+                    :300
+                ]
             else:
                 error = "script failed"
         return {

@@ -158,7 +158,9 @@ def _new_trace(complete, step: int, prompt: str) -> dict:
     }
 
 
-def _accept(task: dict, out: Path, graded: list[str], written: dict) -> tuple[bool, str]:
+def _accept(
+    task: dict, out: Path, graded: list[str], written: dict
+) -> tuple[bool, str]:
     ok, reason = sanity_check(graded, written)
     if not ok:
         return ok, reason
@@ -169,7 +171,12 @@ def _accept(task: dict, out: Path, graded: list[str], written: dict) -> tuple[bo
 
 
 async def run_values_loop(ctx: dict, attempts: int) -> tuple[str, dict, str]:
-    task, out, complete, out_dir = ctx["task"], ctx["out"], ctx["complete"], ctx["out_dir"]
+    task, out, complete, out_dir = (
+        ctx["task"],
+        ctx["out"],
+        ctx["complete"],
+        ctx["out_dir"],
+    )
     prompt = build_values_prompt(task, ctx["wb_serialized"])
     last_reply = ""
     status = "error: no values attempt"
@@ -211,7 +218,12 @@ async def run_values_loop(ctx: dict, attempts: int) -> tuple[str, dict, str]:
 
 
 async def run_codegen_loop(ctx: dict, attempts: int) -> tuple[str, dict, str]:
-    task, out, complete, out_dir = ctx["task"], ctx["out"], ctx["complete"], ctx["out_dir"]
+    task, out, complete, out_dir = (
+        ctx["task"],
+        ctx["out"],
+        ctx["complete"],
+        ctx["out_dir"],
+    )
     prompt = build_codegen_prompt(task, ctx["wb_serialized"], ctx["graded_refs"])
     last_code = ""
     last_stdout = last_stderr = ""
@@ -259,7 +271,11 @@ async def run_codegen_loop(ctx: dict, attempts: int) -> tuple[str, dict, str]:
                 if is_formula_error_reason(reason):
                     trace["latency_ms"] = int((time.time() - started) * 1000)
                     append_trace(out_dir, task["id"], trace)
-                    return f"{status} (codegen, {last_reason})"[:200], last_info, last_reason
+                    return (
+                        f"{status} (codegen, {last_reason})"[:200],
+                        last_info,
+                        last_reason,
+                    )
         except Exception as e:  # noqa: BLE001 — best guess, never blank
             status = f"error: {type(e).__name__}: {e}"[:200]
             trace["error"] = status
@@ -331,7 +347,9 @@ async def predict_task(
         else:
             # auto: hybrid + one-shot cross-path fallback (hurt cell-level on the 400)
             if kind == "sheet-level":
-                status, last_info, last_reason = await run_codegen_loop(ctx, MAX_ATTEMPTS)
+                status, last_info, last_reason = await run_codegen_loop(
+                    ctx, MAX_ATTEMPTS
+                )
                 if status != "ok":
                     ctx["wb_serialized"] = serialize_task_workbook(
                         task, include_init_values=True
@@ -345,7 +363,9 @@ async def predict_task(
                         else f"{status}; values-fallback: {fb_status}"[:200]
                     )
             else:
-                status, last_info, last_reason = await run_values_loop(ctx, MAX_ATTEMPTS)
+                status, last_info, last_reason = await run_values_loop(
+                    ctx, MAX_ATTEMPTS
+                )
                 if status != "ok":
                     fb_status, fb_info, fb_reason = await run_codegen_loop(ctx, 1)
                     last_info = fb_info
@@ -357,7 +377,12 @@ async def predict_task(
                     )
         _ensure_output(task, out)
         write_exceptions(out_dir, task, status, last_reason, last_info, out)
-        return {"status": status, "reason": last_reason, "info": last_info, "out": str(out)}
+        return {
+            "status": status,
+            "reason": last_reason,
+            "info": last_info,
+            "out": str(out),
+        }
 
 
 def _load_env() -> None:
@@ -470,7 +495,11 @@ def _flush_out_dir(out_dir: Path) -> None:
         os.fsync(out_fd)
     finally:
         os.close(out_fd)
-    if not pred.exists() or not (out_dir / "run.log").exists() or not (out_dir / "outputs").is_dir():
+    if (
+        not pred.exists()
+        or not (out_dir / "run.log").exists()
+        or not (out_dir / "outputs").is_dir()
+    ):
         raise SystemExit("ship outputs missing after flush")
 
 

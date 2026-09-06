@@ -67,7 +67,9 @@ def _row_keys(ws, coord: str) -> list[str]:
     return keys[:5]
 
 
-def _find_evidence(wb, keys: list[str], answer_sheet: str, answer_row: int) -> list[dict]:
+def _find_evidence(
+    wb, keys: list[str], answer_sheet: str, answer_row: int
+) -> list[dict]:
     """Search all sheets for rows containing any key; return up to 5 evidence rows."""
     evidence: list[dict] = []
     seen: set[tuple[str, int, str]] = set()
@@ -103,7 +105,9 @@ def _reason_for(value: object, ref: str, written: dict[str, object]) -> str:
     return "pending review"
 
 
-def build_exceptions(task: dict, out_path: Path, status: str, reason: str, written: dict) -> list[dict]:
+def build_exceptions(
+    task: dict, out_path: Path, status: str, reason: str, written: dict
+) -> list[dict]:
     """Return exception entries for answer cells that need human review."""
     out_path = Path(out_path)
     out_wb = openpyxl.load_workbook(out_path, data_only=True)
@@ -118,7 +122,9 @@ def build_exceptions(task: dict, out_path: Path, status: str, reason: str, writt
         if ref in written and not _is_exception_value(value):
             continue
 
-        exc_reason = _reason_for(value, ref, written) if _is_exception_value(value) else reason
+        exc_reason = (
+            _reason_for(value, ref, written) if _is_exception_value(value) else reason
+        )
         if ref not in written and "missing answer" not in (exc_reason or ""):
             exc_reason = "missing answer cell"
 
@@ -126,7 +132,13 @@ def build_exceptions(task: dict, out_path: Path, status: str, reason: str, writt
         row, _ = coordinate_to_tuple(coord)
         evidence = _find_evidence(init_wb, keys, sheet or ws.title, row)
         if not evidence:
-            evidence = [{"sheet": sheet or ws.title, "row": row, "key": keys[0] if keys else coord}]
+            evidence = [
+                {
+                    "sheet": sheet or ws.title,
+                    "row": row,
+                    "key": keys[0] if keys else coord,
+                }
+            ]
 
         exceptions.append(
             {
@@ -169,7 +181,9 @@ def write_exceptions(
     }
 
     task_file = exceptions_dir / f"{task['id']}.json"
-    task_file.write_text(json.dumps(payload, indent=2, default=str) + "\n", encoding="utf-8")
+    task_file.write_text(
+        json.dumps(payload, indent=2, default=str) + "\n", encoding="utf-8"
+    )
 
     # Aggregate file across all tasks in the run.
     agg_file = out_dir / "exceptions.json"
@@ -202,7 +216,9 @@ def _set_cell(wb, ref: str, value: object) -> None:
     ws[coord] = value
 
 
-def _apply_decisions(payloads: list[dict], decisions: dict[str, dict[str, str]]) -> None:
+def _apply_decisions(
+    payloads: list[dict], decisions: dict[str, dict[str, str]]
+) -> None:
     """Apply review decisions: approved exceptions keep proposed value, rejected revert to init."""
     for payload in payloads:
         task_id = payload["task_id"]
@@ -216,14 +232,20 @@ def _apply_decisions(payloads: list[dict], decisions: dict[str, dict[str, str]])
         init_wb = openpyxl.load_workbook(init, data_only=True)
         for exc in payload["exceptions"]:
             cell = exc["cell"]
-            is_approved = exc["status"] == "approved" and approved.get(cell) == "approved"
+            is_approved = (
+                exc["status"] == "approved" and approved.get(cell) == "approved"
+            )
             if is_approved:
                 _set_cell(wb, cell, exc["proposed_value"])
             else:
                 # Rejected/pending: revert to the init value.
                 if "!" in cell:
                     sheet, coord = cell.rsplit("!", 1)
-                    ws = init_wb[sheet] if sheet in init_wb.sheetnames else init_wb.active
+                    ws = (
+                        init_wb[sheet]
+                        if sheet in init_wb.sheetnames
+                        else init_wb.active
+                    )
                 else:
                     ws = init_wb.active
                     coord = cell
@@ -236,7 +258,9 @@ def _prompt(msg: str) -> str:
     return input(msg).strip().lower()
 
 
-def review_exceptions(path: Path | str, approve_all: bool = False, reject_all: bool = False) -> None:
+def review_exceptions(
+    path: Path | str, approve_all: bool = False, reject_all: bool = False
+) -> None:
     """Interactive CLI: review and approve/reject each exception, then rewrite output."""
     path = Path(path)
     payloads = _load_exceptions(path)
@@ -248,9 +272,13 @@ def review_exceptions(path: Path | str, approve_all: bool = False, reject_all: b
             print(f"\nTask: {task_id}  ({len(payload['exceptions'])} exception(s))")
             task_decisions: dict[str, str] = {}
             for exc in payload["exceptions"]:
-                print(f"  {exc['cell']} | {exc['reason']} | proposed: {exc['proposed_value']!r}")
+                print(
+                    f"  {exc['cell']} | {exc['reason']} | proposed: {exc['proposed_value']!r}"
+                )
                 for ev in exc["evidence_rows"]:
-                    print(f"    evidence: {ev['sheet']} row {ev['row']} (key={ev['key']})")
+                    print(
+                        f"    evidence: {ev['sheet']} row {ev['row']} (key={ev['key']})"
+                    )
 
                 if approve_all:
                     ans = "y"
@@ -280,7 +308,9 @@ def review_exceptions(path: Path | str, approve_all: bool = False, reject_all: b
     # Persist reviewed statuses back to the exceptions file.
     agg = payloads if len(payloads) > 1 else payloads[0]
     path.write_text(json.dumps(agg, indent=2, default=str) + "\n", encoding="utf-8")
-    print("\nReview complete. Output workbook(s) updated with approved exceptions only.")
+    print(
+        "\nReview complete. Output workbook(s) updated with approved exceptions only."
+    )
 
 
 def main() -> None:
@@ -289,10 +319,16 @@ def main() -> None:
         raw = raw[1:]
     parser = argparse.ArgumentParser(description="Review tieout exception queue")
     parser.add_argument("path", help="path to exceptions.json or a task exception file")
-    parser.add_argument("--approve-all", action="store_true", help="approve every exception")
-    parser.add_argument("--reject-all", action="store_true", help="reject every exception")
+    parser.add_argument(
+        "--approve-all", action="store_true", help="approve every exception"
+    )
+    parser.add_argument(
+        "--reject-all", action="store_true", help="reject every exception"
+    )
     args = parser.parse_args(raw)
-    review_exceptions(args.path, approve_all=args.approve_all, reject_all=args.reject_all)
+    review_exceptions(
+        args.path, approve_all=args.approve_all, reject_all=args.reject_all
+    )
 
 
 if __name__ == "__main__":

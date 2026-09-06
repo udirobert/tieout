@@ -76,9 +76,7 @@ def _make_completer(base_model: str, model_path: str | None, max_tokens: int):
     tokenizer = get_tokenizer(base_model)
     renderer = renderers.get_renderer(RENDERER_NAME, tokenizer)
     stops = renderer.get_stop_sequences()
-    params = types.SamplingParams(
-        max_tokens=max_tokens, temperature=0.0, stop=stops
-    )
+    params = types.SamplingParams(max_tokens=max_tokens, temperature=0.0, stop=stops)
 
     async def complete(prompt: str) -> tuple[str, int, int]:
         messages = [
@@ -93,9 +91,7 @@ def _make_completer(base_model: str, model_path: str | None, max_tokens: int):
         content = renderer.parse_response(tokens)[0]["content"]
         if not isinstance(content, str):
             content = "".join(
-                part.get("text", "")
-                for part in content
-                if part.get("type") == "text"
+                part.get("text", "") for part in content if part.get("type") == "text"
             )
         return content, model_input.length, len(tokens)
 
@@ -168,7 +164,9 @@ async def main() -> None:
     p = argparse.ArgumentParser()
     p.add_argument("--dataset-dir", required=True)
     p.add_argument("--out-dir", required=True)
-    p.add_argument("--ids", help="comma-separated task ids (default: all, dataset order)")
+    p.add_argument(
+        "--ids", help="comma-separated task ids (default: all, dataset order)"
+    )
     p.add_argument("--model", default=DEFAULT_MODEL)
     p.add_argument("--model-path", default=None)
     p.add_argument("--concurrency", type=int, default=3)
@@ -257,9 +255,7 @@ async def main() -> None:
         "json_decode_error": sum(1 for a in audits if a.get("json_decode_error")),
         "truncated": sum(1 for a in audits if a.get("truncated")),
         "both": sum(
-            1
-            for a in audits
-            if a.get("json_decode_error") and a.get("truncated")
+            1 for a in audits if a.get("json_decode_error") and a.get("truncated")
         ),
         "ok": sum(1 for a in audits if a.get("status") == "ok"),
     }
@@ -297,7 +293,11 @@ def _flush_out_dir(out_dir: Path) -> None:
         os.fsync(out_fd)
     finally:
         os.close(out_fd)
-    if not pred.exists() or not (out_dir / "run.log").exists() or not (out_dir / "outputs").is_dir():
+    if (
+        not pred.exists()
+        or not (out_dir / "run.log").exists()
+        or not (out_dir / "outputs").is_dir()
+    ):
         raise SystemExit("ship outputs missing after flush")
 
 
