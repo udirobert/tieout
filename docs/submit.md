@@ -62,8 +62,9 @@ Fill before Devpost. Count must match the video.
 | tieout-4 | worker | Demo fixtures + scripts | idle |
 | tieout-6 | worker | Docs + Devpost | idle |
 | tieout-5 | worker | Demo video | idle |
+| tieout-10 | worker | Verify exceptions wiring + demo run | done |
 
-**Total sessions:** 5
+**Total sessions:** 6
 
 ### Devpost — How we used AO
 
