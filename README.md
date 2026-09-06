@@ -6,7 +6,7 @@ Autonomous spreadsheet reconciliation for finance close.
 Given a workbook + natural-language mandate, tieout executes the transform, verifies every
 answer cell, routes exceptions to human review, and archives a full audit trace.
 
-**Submission:** `SYNDICATE.md` · **Demo script:** `docs/SYNDICATE-DEMO.md` · **Checklist:** `docs/SYNDICATE-REQUIREMENTS.md`  
+**Submission:** `SYNDICATE.md` · **Demo script:** `docs/SYNDICATE-DEMO.md` · **Checklist:** `docs/SYNDICATE-REQUIREMENTS.md` · **Doc index:** `docs/DOC-INDEX.md`  
 **Devpost:** https://syndicate-by-maximor.devpost.com/
 
 ---
@@ -18,8 +18,8 @@ still happen in Excel. One wrong cell fails the deliverable. tieout automates th
 layer — lookups, aggregations, filters, consolidations — with verification and approve-gated
 exceptions for the accountant.
 
-See `docs/SYNDICATE-WORKFLOW.md` for workflow grounding (sub-ledger tie-out, AP recon,
-consolidation).
+See `docs/SYNDICATE-WORKFLOW.md` for workflow grounding (bank counterparty match — hero demo,
+sub-ledger tie-out, AP recon, consolidation).
 
 ---
 
@@ -27,14 +27,17 @@ consolidation).
 
 ```bash
 # Build fixtures from ~/Downloads/Ylookup Hackathon Datasets (~44 KB, space-safe)
-python demo/build_fixtures.py
+python3 demo/build_fixtures.py
 
-# Dry run (no Tinker credits)
-./demo/run_demo.sh close-tieout-movements-rec
+# Hero demo — offline (no Tinker; produces exceptions.json)
+./demo/simulate_demo.sh close-tieout-bank-cp
 
 # Live agent — check Tinker credits first (docs/SYNDICATE-REQUIREMENTS.md)
 export TINKER_API_KEY= # set from .env
-./demo/run_demo.sh close-tieout-le-map
+./demo/run_demo.sh close-tieout-bank-cp
+
+# Human review after run
+cd research && uv run python ../harness/exceptions.py review /tmp/syndicate-demo/exceptions.json
 ```
 
 Env: `TINKER_API_KEY` (required), `GEMINI_API_KEY` (optional), `SOFFICE` (optional LibreOffice recalc).
@@ -63,8 +66,9 @@ tieout/
   demo/                  Finance close demo fixtures (Syndicate)
   harness/               Agent pipeline: classify → execute → verify → retry
   docs/
-    SYNDICATE-WORKFLOW.md   CFO workflow grounding
-    SYNDICATE-DEMO.md       3-min demo script + AO session log
+    SYNDICATE-WORKFLOW.md   CFO workflow grounding (bank-cp hero)
+    SYNDICATE-DEMO.md       3-min demo script + AO session table
+    SYNDICATE-REQUIREMENTS.md  Devpost checklist, judging weights
     TAXONOMY.md             Failure buckets → skill categories
     HACKATHON-NOTES.md      Encode retro (concurrency, repair loop, factorial evals)
   research/              UPSTREAM SpreadsheetBench starter (read-only)

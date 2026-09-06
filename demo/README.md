@@ -3,6 +3,8 @@
 Finance-framed scenarios extracted from **Ylookup anonymised datasets** (~44 KB in repo).
 Source files stay in `~/Downloads/Ylookup Hackathon Datasets` — not copied wholesale.
 
+**Hero scenario for Syndicate video:** `close-tieout-bank-cp` (bank counterparty match → exception queue).
+
 ## Build
 
 ```bash
@@ -12,11 +14,11 @@ python3 demo/build_fixtures.py
 
 ## Scenarios (built)
 
-| ID | CFO workflow | Source | Answer range |
-|----|--------------|--------|--------------|
-| `close-tieout-le-map` | Entity mapping (fund-admin GL migration) | Dataset 02 `LE Mapping` | `LE Mapping!E3:E22` |
-| `close-tieout-movements-rec` | Pre-upload reconciliation (OK / EXCEPTION) | Dataset 02 `Movements Rec` | `Movements Rec!F2:F13` |
-| `close-tieout-bank-cp` | Bank counterparty match → exception queue | Dataset 01 `Staging Sheet` | `Staging Sheet!K2:K…` |
+| ID | CFO workflow | Source | Demo role |
+|----|--------------|--------|-----------|
+| **`close-tieout-bank-cp`** | **Bank counterparty match → exception queue** | Dataset 01 `Staging Sheet` | **Hero — record this** |
+| `close-tieout-le-map` | Entity mapping (fund-admin GL migration) | Dataset 02 `LE Mapping` | Skill demo beat |
+| `close-tieout-movements-rec` | Pre-upload reconciliation (OK / EXCEPTION) | Dataset 02 `Movements Rec` | Secondary |
 
 ## Run
 
@@ -49,15 +51,16 @@ demo/close-tieout/
 
 ## Human review loop
 
-Rows that fail verification or have blank matches (by design in source data) route to
-`exceptions.json` when the exception module is wired. See `docs/SYNDICATE-WORKFLOW.md`.
+Rows that fail verification or have blank matches (by design in source data) are written to
+`exceptions.json` after each run. Review via CLI — see `docs/SYNDICATE-WORKFLOW.md` and
+`docs/SYNDICATE-DEMO.md`.
 
 ## Status
 
-| Scenario | Built | Recorded in demo |
-|----------|-------|------------------|
-| close-tieout-le-map | yes | pending |
-| close-tieout-movements-rec | yes | pending |
-| close-tieout-bank-cp | yes | pending |
+| Scenario | Built | Demo role |
+|----------|-------|-----------|
+| close-tieout-bank-cp | yes | **hero** |
+| close-tieout-le-map | yes | skill beat |
+| close-tieout-movements-rec | yes | secondary |
 
 Rebuild after editing source datasets: `python3 demo/build_fixtures.py`

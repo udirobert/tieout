@@ -1,7 +1,8 @@
 # Submission: tieout (Encode × Ylookup — archived)
 
 > **Active submission:** Syndicate by Maximor, Track 2 (Office of the CFO) — see
-> [`SYNDICATE.md`](SYNDICATE.md), [`docs/SYNDICATE-WORKFLOW.md`](docs/SYNDICATE-WORKFLOW.md),
+> [`SYNDICATE.md`](SYNDICATE.md), [`docs/DOC-INDEX.md`](docs/DOC-INDEX.md),
+> [`docs/SYNDICATE-WORKFLOW.md`](docs/SYNDICATE-WORKFLOW.md),
 > [`docs/SYNDICATE-DEMO.md`](docs/SYNDICATE-DEMO.md).
 
 This file preserves the Encode hackathon write-up, scores, and ablation table. The 68%

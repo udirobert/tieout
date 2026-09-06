@@ -56,21 +56,21 @@ Track: **Autonomous Office of the CFO** · Project: **tieout**
 
 ---
 
-## Space budget (this Mac — ~18 GB free, 91% full)
+## Space budget (this Mac — ~31 GB free)
 
 | Action | Disk impact | Status |
 |--------|-------------|--------|
-| Demo fixtures (`demo/build_fixtures.py`) | **~300–500 KB** | Safe — run locally |
+| Demo fixtures (`demo/build_fixtures.py`) | **~44 KB** | Done |
 | Syndicate docs | **< 100 KB** | Done |
+| AO desktop install | **~500 MB** | Pending |
 | Demo video render | **50–200 MB** | OK; delete intermediates after |
-| `uv sync` / venv | **300–500 MB** | **Ask before running** |
-| SpreadsheetBench full dataset in repo | already present | Don't duplicate |
+| `uv sync` / venv | **300–500 MB** | Done (`cd research && uv sync`) |
 | Copy full Ylookup datasets (17 MB) | 17 MB | **Not needed** — fixtures extracted |
 | `docker build` | **10+ GB** | **Do not run on this Mac** — use VM or skip for Syndicate |
 | LibreOffice install | **~1 GB** | Skip locally; optional on VM |
 | LoRA / local weights | **GB+** | Not needed for Syndicate demo |
 
-**Rule:** If any step needs **> 500 MB**, stop and discuss VM/cloud options first.
+**Rule:** If any step needs **> 500 MB** beyond AO + video, stop and discuss VM/cloud options first.
 
 ---
 
@@ -83,7 +83,7 @@ Required for live agent demo runs (`TINKER_API_KEY`).
 **Before running pipeline on demo fixtures:**
 1. Log in to Tinker dashboard / billing for your project
 2. Confirm credits remain for ~3–5 demo tasks (not full 400)
-3. Use `--ids close-tieout-movements-rec` for single-task smoke (~30–60s)
+3. Smoke test: `./demo/simulate_demo.sh close-tieout-bank-cp` (free) or `./demo/run_demo.sh close-tieout-bank-cp` (~30–60s live)
 
 If credits exhausted: demo video can show **fixture walkthrough + trace format** without live inference, but live run is stronger for judges.
 
@@ -105,15 +105,15 @@ Previous gcloud VM is unavailable. Options if heavy compute needed:
 Built from anonymised client data in Downloads — **not copied wholesale**:
 
 ```bash
-python demo/build_fixtures.py          # ~400 KB into demo/close-tieout/
-./demo/run_demo.sh close-tieout-le-map  # dry-run without TINKER_API_KEY
+python3 demo/build_fixtures.py          # ~44 KB into demo/close-tieout/
+./demo/simulate_demo.sh close-tieout-bank-cp   # offline smoke (no TINKER_API_KEY)
 ```
 
-| Task ID | CFO workflow | Source |
-|---------|--------------|--------|
-| `close-tieout-le-map` | Entity mapping (GL migration) | Dataset 02 LE Mapping |
-| `close-tieout-movements-rec` | Pre-upload reconciliation | Dataset 02 Movements Rec |
-| `close-tieout-bank-cp` | Bank counterparty match | Dataset 01 Staging Sheet |
+| Task ID | CFO workflow | Source | Demo role |
+|---------|--------------|--------|-----------|
+| **`close-tieout-bank-cp`** | **Bank counterparty match** | Dataset 01 Staging Sheet | **Hero — record this** |
+| `close-tieout-le-map` | Entity mapping (GL migration) | Dataset 02 LE Mapping | Skill demo beat |
+| `close-tieout-movements-rec` | Pre-upload reconciliation | Dataset 02 Movements Rec | Secondary (11 EXCEPTION sentinels) |
 
 Known unmatched rows in source data are **preserved by design** — they feed the exception-queue story.
 
@@ -121,9 +121,9 @@ Known unmatched rows in source data are **preserved by design** — they feed th
 
 ## Pre-submit final check (23:00 deadline)
 
-1. `python demo/build_fixtures.py` — fixtures present
-2. `./demo/run_demo.sh` — layout OK
-3. Optional: one live Tinker run with `TINKER_API_KEY`
+1. `python3 demo/build_fixtures.py` — fixtures present
+2. `./demo/simulate_demo.sh close-tieout-bank-cp` — exceptions.json + trace OK
+3. Optional: `./demo/run_demo.sh close-tieout-bank-cp` with `TINKER_API_KEY`
 4. Demo video uploaded (≤5 min, shows AO dashboard)
 5. Devpost submitted with track, repo, video, AO explanation
 6. Discord announcement / pass posted

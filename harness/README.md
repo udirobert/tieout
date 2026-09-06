@@ -8,9 +8,21 @@ Docs: `SYNDICATE.md`, `docs/SYNDICATE-WORKFLOW.md`, `docs/SYNDICATE-DEMO.md`.
 
 Tinker Qwen3.8-27B is the default. 16k output tokens, temperature 0.
 
+**Local (Syndicate demo):**
+
+```bash
+python3 demo/build_fixtures.py
+./demo/simulate_demo.sh close-tieout-bank-cp
+cd research && uv run python ../harness/pipeline.py \
+  --dataset-dir ../demo/close-tieout --out-dir /tmp/tieout-demo \
+  --path hybrid --ids close-tieout-bank-cp
 ```
-python harness/pipeline.py --dataset-dir /data --out-dir /out
-python harness/pipeline.py --dataset-dir ... --out-dir ... --ids 13-1,51-12 --fresh
+
+**Eval / Docker:**
+
+```
+cd research && uv run python ../harness/pipeline.py --dataset-dir /data --out-dir /out
+cd research && uv run python ../harness/pipeline.py --dataset-dir ... --out-dir ... --ids 13-1,51-12 --fresh
 ```
 
 `--resume` (default) skips ids already in `predictions.jsonl`. `--fresh` wipes the out-dir artifacts first.

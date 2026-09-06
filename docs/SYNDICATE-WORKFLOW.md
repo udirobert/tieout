@@ -20,7 +20,37 @@ aggregations, filters, consolidations — with verification and human review on 
 
 ---
 
-## Primary workflow: sub-ledger tie-out
+## Demo workflow (hero — record this)
+
+**Fixture:** `close-tieout-bank-cp` · **Source:** Ylookup dataset 01 (`01-bank-statements-to-journal-entries`)
+
+This is the **primary demo** for Syndicate. It comes from real anonymised client work: bank
+statement rows staged for journal entry, counterparty pulled from truncated bank narratives,
+matched against a vendor master list.
+
+**Actors:** Treasury / fund accountant processing bank feeds  
+**Trigger:** Weekly cash reconciliation or month-end bank close  
+**Pain:** Bank writes names truncated, in capitals, wrapped mid-word. Master list has clean names.
+52 of 100 rows in the source staging sheet had no counterparty match — **preserved by design**
+in the anonymised dataset.
+
+**Steps with tieout (demo):**
+1. Workbook contains `Staging Sheet` + `Vendor Master List` + mandate in natural language
+2. Agent matches column J (pulled counterparty) → column K (clean vendor name)
+3. Verifier checks answer cells; **blank K = no match**
+4. Unmatched rows → **`exceptions.json`** with evidence rows from source data
+5. Accountant reviews: approve (keep blank / flag) or reject via CLI
+6. Trace archived in `traces/close-tieout-bank-cp.jsonl`
+
+**Demo command:** `./demo/simulate_demo.sh close-tieout-bank-cp` (offline) or `./demo/run_demo.sh close-tieout-bank-cp` (live Tinker).
+
+Full script: `docs/SYNDICATE-DEMO.md`.
+
+---
+
+## Supported CFO workflows (product scope)
+
+### Sub-ledger tie-out
 
 **Actors:** Staff accountant or fund accountant  
 **Trigger:** Month-end close, Day T+3 to T+10  
@@ -49,6 +79,8 @@ aggregations, filters, consolidations — with verification and human review on 
 cell-level bucket (VLOOKUP, INDEX-MATCH, OFFSET, conditional return). Real forum instructions
 match fund-admin pain: *"consolidate data about schools using INDEX and MATCH… merge 15 columns
 of data."*
+
+**Demo fixture:** `close-tieout-le-map` (dataset 02 — entity mapping with `Corvus LE Reference` sheet).
 
 ---
 
@@ -122,7 +154,13 @@ exceptions.json
   - task_id, cell, reason, evidence_rows[], proposed_value, status: pending|approved|rejected
 ```
 
-Reviewer runs: `python -m harness.exceptions review exceptions.json` (see `demo/README.md`).
+Reviewer runs:
+
+```bash
+cd research && uv run python ../harness/exceptions.py review /tmp/syndicate-demo/exceptions.json
+```
+
+See `demo/README.md` and `docs/SYNDICATE-DEMO.md`.
 
 ---
 
@@ -150,6 +188,7 @@ Syndicate ship story is **skills + repair loop**, not weight updates.
 
 | Taxonomy bucket | CFO workflow | Eval coverage |
 |-----------------|--------------|---------------|
+| Lookup repair | **Bank counterparty match** *(hero demo)* | Ylookup dataset 01 + 89+ MATCH/VLOOKUP eval tasks |
 | Lookup repair | Sub-ledger tie-out | 89+ MATCH/VLOOKUP tasks |
 | Multi-criteria aggregation | Cashflow matrices, SUMIFS close schedules | COUNTIF/SUMIF hits |
 | Sheet filter / VBA equivalent | Invoice cleanup, row deletes | 55+ macro tasks |

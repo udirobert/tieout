@@ -2,7 +2,7 @@
 
 **Active event:** Syndicate by Maximor · Track 2: Autonomous Office of the CFO  
 **Deadline:** Sept 6, 18:00 GMT-4 (23:00 UTC+1)  
-**Read first:** `SYNDICATE.md` → `docs/SYNDICATE-DEMO.md` → `docs/SYNDICATE-WORKFLOW.md`
+**Read first:** `SYNDICATE.md` → `docs/DOC-INDEX.md` → `docs/SYNDICATE-DEMO.md` → `docs/SYNDICATE-WORKFLOW.md`
 
 Encode hackathon is complete (68% ship). This file tracks Syndicate submission work.
 
@@ -16,13 +16,13 @@ Encode hackathon is complete (68% ship). This file tracks Syndicate submission w
 | CFO workflow grounding | **done** | `docs/SYNDICATE-WORKFLOW.md` |
 | Demo script + AO log | **done** | `docs/SYNDICATE-DEMO.md` |
 | Syndicate requirements checklist | **done** | `docs/SYNDICATE-REQUIREMENTS.md` (space, AO, credits, Devpost) |
-| Demo fixtures (`demo/close-tieout/`) | **done** | 3 tasks, 44 KB — `python demo/build_fixtures.py` |
+| Demo fixtures (`demo/close-tieout/`) | **done** | 3 tasks, 44 KB — `python3 demo/build_fixtures.py` |
 | Exception queue (`exceptions.json` + review) | **done** | `harness/exceptions.py`; `./demo/simulate_demo.sh` |
 | Skill improvement demo | **done** | `./demo/run_skill_demo.sh` |
 | `uv sync` (local runs) | **done** | `cd research && uv sync` |
 | AO integration plan | **done** | `docs/SYNDICATE-AO-INTEGRATION.md` |
-| AO desktop install | **pending** | ~500 MB — confirm disk first |
-| AO sessions (≥4 workers + 1 orchestrator) | **pending** | Log in `docs/AO-SESSION-LOG.md` |
+| AO desktop install | **pending** | ~500 MB — ~31 GB free on Mac |
+| AO sessions (≥4 workers + 1 orchestrator) | **in progress (work completed; AO desktop IDs pending)** | Log in `docs/AO-SESSION-LOG.md` |
 | 3-min demo video | **pending** | Do not lead with SpreadsheetBench scores |
 | Devpost submission | **pending** | https://syndicate-by-maximor.devpost.com/ |
 
@@ -77,9 +77,8 @@ Full Encode session log: expand above or see git history for `docs/SESSION-STATU
 
 ## Next actions (priority order)
 
-1. Populate `demo/close-tieout/` with 1–2 finance-framed workbooks (from your datasets)
-2. Wire exception queue output on verify failures
-3. Record one skill-improvement before/after for demo
-4. Run AO sessions for fixtures + exception queue; update AO table
-5. Record 3-min demo video per `docs/SYNDICATE-DEMO.md`
-6. Submit Devpost before deadline
+1. **Install AO desktop** (~500 MB) — see `docs/SYNDICATE-AO-INTEGRATION.md`
+2. **Run ≥5 AO sessions** — log IDs in `docs/AO-SESSION-LOG.md` (backfill or new work)
+3. **Record demo video** — bank-cp hero per `docs/SYNDICATE-DEMO.md` (AO dashboard + session count mandatory)
+4. **Submit Devpost** before 23:00 GMT+1 — checklist in `docs/SYNDICATE-REQUIREMENTS.md`
+5. Optional: one live Tinker run on `close-tieout-bank-cp` if credits allow

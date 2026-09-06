@@ -51,7 +51,7 @@ AO is **not installed** here (`~/.ao` absent, no desktop app found).
 1. Download **macOS Apple silicon** DMG:  
    https://github.com/Untrivial-ai/agent-orchestrator/releases/latest/download/agent-orchestrator-darwin-arm64.dmg
 2. Install and open **Agent Orchestrator** (starts local daemon on `127.0.0.1:3001`, data in `~/.ao/`)
-3. **Disk warning:** app + daemon + worktrees ≈ **300–800 MB** base, **+~200 MB per active worker worktree**. With **~18 GB free**, cap at **2–3 concurrent workers**; merge/archive sessions promptly.
+3. **Disk warning:** app + daemon + worktrees ≈ **300–800 MB** base, **+~200 MB per active worker worktree**. With **~31 GB free**, cap at **2–3 concurrent workers**; merge/archive sessions promptly.
 
 ### Prerequisites
 
@@ -93,8 +93,10 @@ Read before any task:
 - docs/SYNDICATE-AO-INTEGRATION.md (this file)
 
 Constraints:
-- Space-constrained Mac (~18 GB free). No docker build, no uv sync, no large downloads.
-- Demo fixtures already in demo/close-tieout/ (~44 KB). Rebuild with: python demo/build_fixtures.py
+- Space-constrained Mac (~31 GB free). No docker build, no large downloads.
+- Demo fixtures in demo/close-tieout/ (~44 KB). Rebuild: python3 demo/build_fixtures.py
+- Hero demo: close-tieout-bank-cp — see docs/SYNDICATE-DEMO.md
+- Local runs: cd research && uv run python ../harness/...
 - Do not modify research/ (upstream read-only).
 - Harness entry for demo: harness/pipeline.py --path hybrid (not clone_run.py).
 - Tinker inference only for live demo runs; check credits before batch runs.
@@ -172,15 +174,15 @@ Devpost requires demo video to show:
 - [ ] **Orchestrator** delegating (optional but strong for 25% criterion)
 - [ ] tieout **product demo** (separate segment — `./demo/run_demo.sh` or live Tinker run)
 
-Suggested video structure (5 min max):
+Suggested video structure (5 min max) — **canonical script:** `docs/SYNDICATE-DEMO.md`
 
 | Time | Content |
 |------|---------|
-| 0:00–0:30 | Problem (call-1 NAV quote) + tieout one-liner |
-| 0:30–1:30 | Product: run `close-tieout-movements-rec` fixture |
-| 1:30–2:00 | Exception queue + human review |
-| 2:00–2:30 | **AO dashboard — scroll sessions, show count** |
-| 2:30–3:00 | One AO worker that built exceptions/fixtures (screen recording) |
+| 0:00–0:25 | Hook (call-1 NAV pain) + tieout one-liner |
+| 0:25–1:25 | Product: `./demo/simulate_demo.sh close-tieout-bank-cp` |
+| 1:25–2:20 | Exception queue + human review CLI |
+| 2:20–2:40 | Skill demo (`./demo/run_skill_demo.sh`) — optional |
+| 2:40–3:00 | **AO dashboard — scroll sessions, show count** |
 | 3:00–3:30 | Close + Devpost CTA |
 
 Screenshot checklist before recording:

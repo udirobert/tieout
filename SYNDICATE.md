@@ -27,6 +27,7 @@ error-prone, and scale by headcount — not by process.
 
 | Workflow | What breaks today | tieout's role |
 |----------|-------------------|---------------|
+| **Bank counterparty match** *(hero demo)* | Truncated bank narratives vs clean vendor master; unmatched rows discovered late | Agent matches what it can; **preserves blanks**; routes unmatched to exception queue |
 | **Sub-ledger tie-out** | Manual INDEX/MATCH across entity registers and GL exports; unmatched rows discovered late | Agent resolves lookups, flags `#N/A` and unmatched keys for review |
 | **Invoice / AP reconciliation** | Filter, dedupe, and sum across 10k+ row exports; VBA macros that break on format changes | Agent implements equivalent transforms in sandboxed Python; verifier catches fatal formula errors |
 | **Multi-sheet consolidation** | Net additions/retirements across sheets into a consolidated tracker; one wrong cell fails the deliverable | Agent writes verified values; human approves exceptions before commit |
@@ -125,12 +126,13 @@ Prior Encode hackathon write-up and ablation table: `SUBMISSION.md` (archived).
 
 Video must show **AO dashboard with total session count** (25% AO usage + 15% demo criteria).
 
-1. **Hook** — $30T private markets; close still happens in Excel
-2. **Scenario** — Sub-ledger tie-out or invoice reconciliation workbook + mandate
+1. **Hook** — $30T private markets; close still happens in Excel (call-1 NAV pain)
+2. **Scenario** — Bank counterparty match workbook + mandate (`close-tieout-bank-cp`)
 3. **Agent run** — classify → execute → verify; show trace (Neatlogs-friendly JSONL)
-4. **Exception queue** — 2–3 flagged rows with source evidence; reviewer approves
-5. **Improvement loop** — one failed lookup category → skill injected → re-run passes
-6. **Close** — tieout · every cell tied to its source · built with AO
+4. **Exception queue** — unmatched counterparties with source evidence; reviewer approves/rejects
+5. **Improvement loop** — skill demo on lookup task (`./demo/run_skill_demo.sh`)
+6. **AO** — dashboard with total session count
+7. **Close** — tieout · every cell tied to its source · built with AO
 
 Demo fixtures: `demo/` (see `demo/README.md`).
 
@@ -139,14 +141,24 @@ Demo fixtures: `demo/` (see `demo/README.md`).
 ## Run it
 
 ```bash
-# Demo scenario (finance close fixture)
-python harness/pipeline.py --dataset-dir demo/close-tieout --out-dir /tmp/tieout-demo \
-  --path hybrid --ids <scenario-id>
+# Build fixtures (once)
+python3 demo/build_fixtures.py
+
+# Hero demo — offline (no Tinker)
+./demo/simulate_demo.sh close-tieout-bank-cp
+
+# Hero demo — live (requires TINKER_API_KEY)
+./demo/run_demo.sh close-tieout-bank-cp
+
+# Direct pipeline (from research venv)
+cd research && uv run python ../harness/pipeline.py \
+  --dataset-dir ../demo/close-tieout --out-dir /tmp/tieout-demo \
+  --path hybrid --ids close-tieout-bank-cp
 
 # Full eval suite (regression — requires SpreadsheetBench dataset mount)
-python harness/pipeline.py --dataset-dir /data --out-dir /out --path hybrid
+cd research && uv run python ../harness/pipeline.py --dataset-dir /data --out-dir /out --path hybrid
 
-# Docker (unattended batch)
+# Docker (unattended batch — not for space-limited Mac)
 docker build -t tieout .
 docker run --rm --env-file keys.env \
   -v /path/to/data:/data:ro \
@@ -184,6 +196,7 @@ same model). SpreadsheetBench scores are validation evidence, not the demo story
 
 | Resource | Location |
 |----------|----------|
+| **Doc index (start here)** | `docs/DOC-INDEX.md` |
 | **Devpost checklist + space/credits** | `docs/SYNDICATE-REQUIREMENTS.md` |
 | CFO workflow grounding | `docs/SYNDICATE-WORKFLOW.md` |
 | Demo script + AO log | `docs/SYNDICATE-DEMO.md` |
