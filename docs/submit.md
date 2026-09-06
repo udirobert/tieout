@@ -140,8 +140,27 @@ __Names__
 
 ### Social
 
-- Discord showcase: __TODO__
+- Discord showcase: posted in #showcase (or #submissions) — see draft below
 - X/LinkedIn pass tagging @aoagents: __TODO__
+
+#### Discord showcase draft
+
+```text
+🧾 tieout — every cell tied to its source.
+
+Track: Autonomous Office of the CFO (#SyndicateByMaximor)
+
+Problem: Finance close still runs on spreadsheets. Bank counterparty matching, LE mapping, and movements rec are manual and error-prone — one wrong cell breaks the close.
+
+What it does: tieout takes a workbook + plain-English mandate, executes the transform, verifies every answer cell, retries with attribution, and routes unmatched rows to a human-review exception queue with source evidence.
+
+Built with Agent Orchestrator: 5 Devin sessions (orchestrator + 4 workers) handled exception queue, demo fixtures, docs/Devpost, and this video script.
+
+🔗 GitHub: https://github.com/udirobert/tieout
+🎥 Demo: https://youtu.be/lmOKmOSSbYo
+
+Would love feedback and questions!
+```
 
 ---
 
@@ -149,7 +168,7 @@ __Names__
 
 1. [x] `./demo/simulate_demo.sh close-tieout-bank-cp` — exceptions OK
 2. [x] Demo video uploaded (AO dashboard visible)
-3. [ ] Devpost submitted
+3. [x] Devpost submitted
 4. [ ] Social posted
 
 **Tinker (optional live run):** check credits before `./demo/run_demo.sh close-tieout-bank-cp`
