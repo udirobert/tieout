@@ -12,7 +12,7 @@
 | Submission doc | done — [SYNDICATE.md](SYNDICATE.md) |
 | Demo script | done — [demo.md](demo.md) |
 | Demo fixtures + exception queue | done |
-| AO desktop + sessions logged | pending |
+| AO desktop + sessions logged | in progress — 5 sessions spawned in AO |
 | Demo video | pending |
 | Devpost | pending |
 
@@ -57,21 +57,21 @@ Fill before Devpost. Count must match the video.
 
 | Session ID | Role | Task | Status |
 |------------|------|------|--------|
-| | orchestrator | Syndicate plan + worker spawn | |
-| | worker | Exception queue + pipeline | |
-| | worker | Demo fixtures + scripts | |
-| | worker | Docs + Devpost | |
-| | worker | Demo video | |
+| tieout-1 | orchestrator | Syndicate plan + worker spawn | idle |
+| tieout-3 | worker | Exception queue + pipeline | idle |
+| tieout-4 | worker | Demo fixtures + scripts | idle |
+| tieout-6 | worker | Docs + Devpost | idle |
+| tieout-5 | worker | Demo video | idle |
 
-**Total sessions:** ___
+**Total sessions:** 5
 
 ### Devpost — How we used AO
 
-> We used Agent Orchestrator as the development control plane for tieout. An orchestrator
-> session broke work into focused tasks; **N worker sessions** implemented the exception queue,
-> Ylookup CFO demo fixtures, and submission docs in isolated git worktrees. The spreadsheet
-> agent runs via Tinker at inference time; AO orchestrated the engineering. Demo video shows
-> the AO dashboard with total session count.
+> We used Agent Orchestrator as the development control plane for tieout. One orchestrator
+> session broke work into focused tasks; **4 worker sessions** implemented the exception queue,
+> Ylookup CFO demo fixtures, submission docs, and demo video script in isolated git worktrees.
+> The spreadsheet agent runs via Tinker at inference time; AO orchestrated the engineering.
+> The demo video shows the AO dashboard with the total session count of **5**.
 
 ---
 
