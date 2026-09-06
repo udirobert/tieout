@@ -65,6 +65,8 @@ cd research && uv run python ../harness/exceptions.py review /tmp/syndicate-demo
 # 5. AO dashboard screenshot / screen recording (session count visible)
 ```
 
+Step-by-step recording guide: `docs/VIDEO-RECORDING.md`
+
 ---
 
 ## What to show vs skip

@@ -53,7 +53,9 @@ See `docs/SYNDICATE-AO-INTEGRATION.md` and `docs/AO-SESSION-LOG.md` for the full
 
 __TODO: upload 3–5 minute video and paste URL here.__
 
-Video script: `docs/SYNDICATE-DEMO.md`
+- Recording guide: `docs/VIDEO-RECORDING.md`
+- Script / shot list: `docs/SYNDICATE-DEMO.md`
+- Hero scenario: `close-tieout-bank-cp` (bank counterparty match → exception queue)
 
 ## GitHub repository
 
