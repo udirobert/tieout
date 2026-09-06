@@ -150,7 +150,7 @@ __Names__
 
 Track: Autonomous Office of the CFO (#SyndicateByMaximor)
 
-Problem: Finance close still runs on spreadsheets. Bank counterparty matching, LE mapping, and movements rec are manual and error-prone — one wrong cell breaks the close.
+Problem: Finance teams still close the books in spreadsheets. Bank counterparty matching, legal-entity mapping, and movements reconciliation are manual and error-prone — one wrong cell breaks the close.
 
 What it does: tieout takes a workbook + plain-English mandate, executes the transform, verifies every answer cell, retries with attribution, and routes unmatched rows to a human-review exception queue with source evidence.
 
