@@ -3,10 +3,13 @@ name = "encode-hackathon-research"
 version = "0.1.0"
 requires-python = ">=3.11"
 dependencies = [
+    "marimo>=0.24.2",
+    "openai>=3.7.0",
     "openpyxl>=3.1",
     "opentelemetry-exporter-otlp>=1.44.0",
     "opentelemetry-sdk>=1.44.0",
     "pydantic-ai-slim[openrouter]>=2.38.0",
+    "weave>=0.53.9",
 ]
 
 [project.optional-dependencies]

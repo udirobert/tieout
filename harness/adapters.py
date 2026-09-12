@@ -1,22 +1,30 @@
 """tieout adapters — pluggable complete(prompt) -> (text, in_tokens, out_tokens).
 
 tinker is PRIMARY (Qwen3.8-27B sampling + fine-tune). gemini is a spare teacher
-(Gemini 3.7 Flash baseline 68.3%). No OpenRouter (unfunded). Temperature 0.
+(Gemini 3.7 Flash baseline 68.3%). wandb routes to W&B Serverless Inference
+(OpenAI-compatible; Weave auto-traces the SDK calls). No OpenRouter (unfunded).
+Temperature 0.
 """
 
 import asyncio
 import os
 
+from weave_hooks import traceable_call
+
 
 def make_completer(spec: str, temperature: float = 0.0):
-    """spec: 'gemini:<model>' (e.g. gemini:gemini-3.7-flash) or 'tinker:<base>|<model_path>'."""
+    """spec: 'gemini:<model>', 'tinker:<base>|<model_path>', or 'wandb:<model>'."""
     if spec.startswith("gemini:"):
-        return _gemini(spec.split(":", 1)[1], temperature)
-    if spec.startswith("tinker:"):
+        fn = _gemini(spec.split(":", 1)[1], temperature)
+    elif spec.startswith("tinker:"):
         rest = spec.split(":", 1)[1]
         base, _, path = rest.partition("|")
-        return _tinker(base, path or None, temperature)
-    raise ValueError(f"unknown adapter spec: {spec}")
+        fn = _tinker(base, path or None, temperature)
+    elif spec.startswith("wandb:"):
+        fn = _wandb(spec.split(":", 1)[1], temperature)
+    else:
+        raise ValueError(f"unknown adapter spec: {spec}")
+    return traceable_call(fn, name="model.complete")
 
 
 def _gemini(model: str, temperature: float = 0.0):
@@ -107,5 +115,50 @@ def _tinker(base_model: str, model_path: str | None, temperature: float = 0.0):
         return tokenizer.decode(seq.tokens), in_tok, len(seq.tokens)
 
     complete.model_name = model_path or base_model
+    complete.temperature = temperature
+    return complete
+
+
+def _wandb(model: str, temperature: float = 0.0):
+    """W&B Serverless Inference — OpenAI-compatible chat completions.
+
+    Endpoint: https://api.inference.wandb.ai/v1, key from WANDB_API_KEY.
+    WANDB_INFERENCE_PROJECT (entity/project, optional) tags usage in W&B.
+    Weave's OpenAI integration auto-traces these calls once weave.init ran.
+    """
+    import openai
+
+    kwargs = {
+        "base_url": "https://api.inference.wandb.ai/v1",
+        "api_key": os.environ["WANDB_API_KEY"],
+    }
+    project = os.environ.get("WANDB_INFERENCE_PROJECT")
+    if project:
+        kwargs["project"] = project
+    client = openai.AsyncOpenAI(**kwargs)
+    model = model or "meta-llama/Llama-3.3-70B-Instruct"
+
+    async def complete(prompt: str, system: str = ""):
+        messages = ([{"role": "system", "content": system}] if system else []) + [
+            {"role": "user", "content": prompt}
+        ]
+        r = await client.chat.completions.create(
+            model=model,
+            messages=messages,
+            temperature=temperature,
+            max_tokens=16384,
+            # Qwen thinking burns the whole budget in `reasoning` and leaves
+            # `content` empty on truncation — same fix as the tinker adapter.
+            extra_body={"chat_template_kwargs": {"enable_thinking": False}},
+        )
+        usage = r.usage
+        msg = r.choices[0].message
+        return (
+            msg.content or getattr(msg, "reasoning", None) or "",
+            getattr(usage, "prompt_tokens", None),
+            getattr(usage, "completion_tokens", None),
+        )
+
+    complete.model_name = f"wandb:{model}"
     complete.temperature = temperature
     return complete

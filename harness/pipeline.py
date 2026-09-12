@@ -50,6 +50,7 @@ from verifier import (  # noqa: E402
     postcheck_soffice,
     sanity_check,
 )
+from weave_hooks import init_weave, traceable  # noqa: E402
 
 _ISO_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}([ T]\d{2}:\d{2}(:\d{2})?)?$")
 DEFAULT_MODEL = "tinker:Qwen/Qwen3.8-27B"
@@ -170,6 +171,7 @@ def _accept(
     return True, reason
 
 
+@traceable("run_values_loop")
 async def run_values_loop(ctx: dict, attempts: int) -> tuple[str, dict, str]:
     task, out, complete, out_dir = (
         ctx["task"],
@@ -217,6 +219,7 @@ async def run_values_loop(ctx: dict, attempts: int) -> tuple[str, dict, str]:
     return f"{status} (values, {last_reason})"[:200], last_info, last_reason
 
 
+@traceable("run_codegen_loop")
 async def run_codegen_loop(ctx: dict, attempts: int) -> tuple[str, dict, str]:
     task, out, complete, out_dir = (
         ctx["task"],
@@ -411,6 +414,7 @@ def _already_predicted(pred_path: Path) -> set[str]:
 async def main() -> None:
     args = parse_args()
     _load_env()
+    init_weave()
 
     out_dir = Path(args.out_dir)
     if args.fresh:

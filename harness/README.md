@@ -7,6 +7,10 @@
 Docs: `docs/SYNDICATE.md`, `docs/demo.md`.
 
 Tinker Qwen3.8-27B is the default. 16k output tokens, temperature 0.
+`wandb:<model>` routes to W&B Serverless Inference (thinking disabled via
+chat_template_kwargs); Weave traces every call when WANDB_API_KEY is set.
+`skills_overlay.json` (written by research/loop.py) adds/replaces skill
+fragments at runtime — the self-improvement loop's mutation surface.
 
 **Local (Syndicate demo):**
 
@@ -42,6 +46,7 @@ Pinned answer range: values-first keeps init values; codegen omits them (echo ca
 - `verifier.py` — graded cells present + scalars + no `#ERR!`; soffice recalc when `SOFFICE` / LibreOffice exists, silent skip otherwise.
 - `tracer.py` — `traces/<id>.jsonl`, one line per model call. Codegen steps add `tool`/`tool_output`.
 - `exceptions.py` — post-run exception queue (`exceptions.json`) + human review CLI
+- `weave_hooks.py` — Weave init gating + traceable op wrappers (no-op without WANDB_API_KEY)
 
 After each task, `write_exceptions()` flags blank cells, `#N/A`, Excel errors, and review
 sentinels (`EXCEPTION`, `REVIEW`). Review:
