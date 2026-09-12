@@ -56,18 +56,59 @@ scripts/sweep.sh        model × path factorial sweep
 ```bash
 export WANDB_API_KEY=...   # enables Inference + Weave
 
-# factorial config sweep (~2 min/cell at 15 tasks)
+# factorial config sweep (~5 min/cell at 15 tasks)
 ./scripts/sweep.sh research/data/spreadsheetbench_verified_400 15
 
 # the loop: dev set for mutation+selection, CFO set as lockbox
 cd research && uv run python loop.py \
   --dataset-dir data/spreadsheetbench_verified_400 --sample 20 --iters 3 \
-  --model wandb:meta-llama/Llama-3.3-70B-Instruct \
+  --model wandb:Qwen/Qwen3.8-27B \
   --holdout-dir ../demo/close-tieout --out-dir /tmp/tieout-loop
 
 # dashboard
 uv run marimo run ../demo/loop_dashboard.py
 ```
+
+## Results (dev-15 sweep, SpreadsheetBench verified)
+
+| model | hybrid | values-only |
+|---|---|---|
+| **Qwen/Qwen3.8-27B** | **0.9232** | 0.5164 |
+| deepseek-ai/DeepSeek-V4-Flash-0731 | 0.9162 | 0.5100 |
+| meta-llama/Llama-3.3-70B-Instruct | 0.6344 | 0.5414 |
+
+The repair/verify path (`hybrid`) is the single biggest lever: +9 to +41 pts
+over one-shot values. A 27B with a good harness beats a 70B without one —
+the loop exists to widen that gap.
+
+## Loop run (dev-20, Qwen3.8-27B, iters=3)
+
+| iter | cell_accuracy | decision |
+|---|---|---|
+| 0 (baseline) | 0.9964 | — |
+| 1 | 0.9954 | reverted |
+| 2 | 0.9288 | reverted |
+| 3 | 0.9234 | reverted |
+
+Baseline sits at the ceiling, so every mutation was correctly rejected —
+iterations 2–3 demonstrate negative transfer being caught by the paired
+keep/revert guard. **Lockbox (CFO demo, 3 tasks): 0.7447 cell accuracy,
+2/3 pass** with zero exposure to the mutator.
+
+## Loop run (dev-20, Llama-3.3-70B, iters=3) — the improvement arc
+
+| iter | cell_accuracy | decision |
+|---|---|---|
+| 0 (baseline) | 0.6599 | — |
+| 1 | 0.7494 | kept (+9.0) |
+| 2 | 0.8919 | kept (+14.3, large-gain audit flag) |
+| 3 | 0.8407 | reverted |
+
+**+23.2 pts** from two accepted skills; a third mutation regressed and was
+reverted. Learned overlay (`skills_overlay.json`): a keyword-gated lookup/
+dedup skill replacing the base fragment — generic guidance, no task IDs or
+cell coords. **Lockbox transfer: 0.9149 cell accuracy, 2/3 pass** on the
+CFO demo set the mutator never saw.
 
 ## Methodology guards (from published prompt-optimization work)
 

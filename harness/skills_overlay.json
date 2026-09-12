@@ -1,3 +1,14 @@
 {
-  "skills": []
+  "skills": [
+    {
+      "name": "ENHANCED_LOOKUP_SKILL",
+      "keywords": [
+        "match",
+        "duplicate",
+        "combine"
+      ],
+      "text": "When combining or matching data, ensure to handle duplicates correctly by using functions like VLOOKUP or INDEX-MATCH. Consider using exact matches and handling errors appropriately.",
+      "replaces": "LOOKUP_SKILL"
+    }
+  ]
 }

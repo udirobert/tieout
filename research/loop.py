@@ -23,14 +23,14 @@ sys.path.insert(0, str(ROOT / "research"))
 sys.path.insert(0, str(ROOT / "harness"))
 sys.path.insert(0, str(ROOT))
 
-from adapters import make_completer
-from pipeline import _load_env, predict_task
-from skills import load_overlay
-from weave_hooks import enabled as weave_on
-from weave_hooks import init_weave, traceable
+from adapters import make_completer  # noqa: E402
+from pipeline import _load_env, predict_task  # noqa: E402
+from skills import load_overlay  # noqa: E402
+from weave_hooks import enabled as weave_on  # noqa: E402
+from weave_hooks import init_weave, traceable  # noqa: E402
 
-from evaluate import score
-from sb import load_dataset, soffice_path
+from evaluate import score  # noqa: E402
+from sb import load_dataset, soffice_path  # noqa: E402
 
 OVERLAY_PATH = ROOT / "harness" / "skills_overlay.json"
 
@@ -147,7 +147,9 @@ def cluster_failures(items: list[dict], tasks_by_id: dict) -> list[dict]:
             "status": it.get("status"),
         }
         if it.get("mismatches"):
-            ex["mismatches"] = it["mismatches"][:3]
+            ex["mismatches"] = [
+                {k: str(v) for k, v in m.items()} for m in it["mismatches"][:3]
+            ]
         clusters.setdefault(key, []).append(ex)
     return [
         {"instruction_type": k[0], "signature": k[1], "count": len(v), "examples": v[:3]}
