@@ -10,13 +10,16 @@ step that applies only approved writes to the final workbook.
 from __future__ import annotations
 
 import argparse
+import datetime
 import json
+import os
 import re
 import shutil
 import sys
 from pathlib import Path
 
 import openpyxl
+from openpyxl.utils import get_column_letter
 from openpyxl.utils.cell import coordinate_to_tuple
 
 HARNESS = Path(__file__).resolve().parent
@@ -24,6 +27,7 @@ ROOT = HARNESS.parent
 sys.path.insert(0, str(ROOT / "research"))
 sys.path.insert(0, str(HARNESS))
 
+import graph  # noqa: E402  (lazy neo4j — import-safe in the ship container)
 from parsing import cell_ref, normalize_cell_value  # noqa: E402
 from sb import answer_cells  # noqa: E402
 
@@ -57,8 +61,10 @@ def _row_keys(ws, coord: str) -> list[str]:
                 keys.append(s)
     if not keys:
         # Fallback: first non-empty value in the row.
-        for c in range(1, ws.max_column + 1):
-            v = ws.cell(row=row, column=c).value
+        for (r, c) in sorted(ws._cells):
+            if r != row:
+                continue
+            v = ws._cells[(r, c)].value
             if v is not None:
                 s = str(v).strip()
                 if s:
@@ -75,21 +81,20 @@ def _find_evidence(
     seen: set[tuple[str, int, str]] = set()
     key_set = set(keys)
     for ws in wb.worksheets:
-        for r in range(1, ws.max_row + 1):
+        for (r, c) in sorted(ws._cells):
             if ws.title == answer_sheet and r == answer_row:
                 continue
-            for c in range(1, ws.max_column + 1):
-                v = ws.cell(row=r, column=c).value
-                if v is None:
-                    continue
-                s = str(v).strip()
-                if s in key_set:
-                    ident = (ws.title, r, s)
-                    if ident not in seen:
-                        seen.add(ident)
-                        evidence.append({"sheet": ws.title, "row": r, "key": s})
-                    if len(evidence) >= 5:
-                        return evidence
+            v = ws._cells[(r, c)].value
+            if v is None:
+                continue
+            s = str(v).strip()
+            if s in key_set:
+                ident = (ws.title, r, s)
+                if ident not in seen:
+                    seen.add(ident)
+                    evidence.append({"sheet": ws.title, "row": r, "key": s})
+                if len(evidence) >= 5:
+                    return evidence
     return evidence
 
 
@@ -155,6 +160,85 @@ def build_exceptions(
     return exceptions
 
 
+def _graph_payload(
+    task: dict, status: str, reason: str, info: dict | None, exceptions: list[dict]
+) -> dict:
+    """Assemble the Neo4j lineage payload for one task's answer cells.
+
+    Lineage is read from the INIT workbook (nearest-left text cells first, so the
+    direct input column — J for an answer in K — is always captured). Answer values
+    come from info['written'], never a re-read of out_path (data_only=True returns
+    None for formula cells openpyxl never recalculated).
+    """
+    written = (info or {}).get("written", {})
+    exc_by_ref = {e["cell"]: e for e in exceptions}
+    wb = openpyxl.load_workbook(task["init_xlsx"], data_only=True)
+    cells: list[dict] = []
+    try:
+        for sheet, coord in answer_cells(task, wb):
+            ws = wb[sheet] if sheet and sheet in wb.sheetnames else wb.active
+            row, col = coordinate_to_tuple(coord)
+            ref = cell_ref(sheet or ws.title, coord)
+            derived: list[dict] = []
+            for c in range(col - 1, 0, -1):  # nearest-left first = direct inputs
+                v = ws.cell(row=row, column=c).value
+                if isinstance(v, str) and v.strip() and any(ch.isalpha() for ch in v):
+                    src_coord = f"{get_column_letter(c)}{row}"
+                    derived.append(
+                        {
+                            "ref": cell_ref(ws.title, src_coord),
+                            "sheet": ws.title,
+                            "coord": src_coord,
+                            "value": v.strip(),
+                        }
+                    )
+                if len(derived) >= 4:
+                    break
+            value = written.get(ref)
+            vk = graph.vendor_key(value) if isinstance(value, str) else None
+            exc = exc_by_ref.get(ref)
+            cells.append(
+                {
+                    "ref": ref,
+                    "sheet": ws.title,
+                    "coord": coord,
+                    "row": row,
+                    "col": col,
+                    "header": ws.cell(row=1, column=col).value or "",
+                    "kind": "answer",
+                    "value": value,
+                    "derived": derived,
+                    "evidence": (exc or {}).get("evidence_rows", [])[:5],
+                    "vendor_key": vk,
+                    "match_method": "exact-value" if vk else None,
+                    "score": 1.0 if vk else None,
+                    "exception": (
+                        {
+                            "reason": exc["reason"],
+                            "proposed_value": exc["proposed_value"],
+                            "status": exc["status"],
+                        }
+                        if exc
+                        else None
+                    ),
+                }
+            )
+    finally:
+        wb.close()
+    answer_sheet = task.get("answer_sheet") or (cells[0]["sheet"] if cells else "Sheet")
+    return {
+        "run_id": graph.run_id(),
+        "task_id": task["id"],
+        "model": os.environ.get("TIEOUT_MODEL", ""),
+        "mandate": (task.get("instruction") or "")[:1000],
+        "status": status,
+        "reason": reason,
+        "created_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        "answer_sheet": answer_sheet,
+        "cells": cells,
+    }
+
+
 def write_exceptions(
     out_dir: Path,
     task: dict,
@@ -197,6 +281,12 @@ def write_exceptions(
     agg = [x for x in agg if x.get("task_id") != task["id"]]
     agg.append(payload)
     agg_file.write_text(json.dumps(agg, indent=2, default=str) + "\n", encoding="utf-8")
+
+    try:
+        if graph.enabled():
+            graph.write_lineage(_graph_payload(task, status, reason, info, exceptions))
+    except Exception:  # noqa: BLE001 — the exception queue must never break
+        pass
 
     return payload
 

@@ -7,7 +7,7 @@ change on improvement, revert on regression. Hill-climbing on cell_accuracy,
 every iteration logged to Weave and out_dir/loop_log.jsonl.
 
   uv run python loop.py --dataset-dir data/spreadsheetbench_verified_400 \
-      --sample 20 --iters 4 --model wandb:meta-llama/Llama-3.3-70B-Instruct
+      --sample 20 --iters 4 --model wandb:Qwen/Qwen3.8-27B
 """
 
 import argparse
@@ -331,7 +331,7 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--ids-file", help="file with one task id per line")
     p.add_argument("--sample", type=int, default=20, help="first N tasks (default 20)")
     p.add_argument("--iters", type=int, default=3, help="improvement iterations after baseline")
-    p.add_argument("--model", default="wandb:meta-llama/Llama-3.3-70B-Instruct")
+    p.add_argument("--model", default="wandb:Qwen/Qwen3.8-27B")
     p.add_argument("--mutator-model", help="adapter spec for the mutator (default: --model)")
     p.add_argument("--path", default="hybrid")
     p.add_argument("--temperature", type=float, default=0.0)
