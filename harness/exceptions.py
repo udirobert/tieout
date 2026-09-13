@@ -309,9 +309,18 @@ def write_exceptions(
     return payload
 
 
-def _load_exceptions(path: Path) -> list[dict]:
+def load_exceptions(path: Path | str) -> tuple[list[dict], bool]:
+    """Payloads, plus whether the file held a JSON array or a single object.
+
+    The aggregate `exceptions.json` is an array; a per-task `exceptions/<id>.json`
+    is one object. The shape is reported so a review writes back what it read
+    rather than inferring it from the payload count — inferring collapses a
+    one-task aggregate into a bare object.
+    """
     data = json.loads(Path(path).read_text(encoding="utf-8"))
-    return data if isinstance(data, list) else [data]
+    if isinstance(data, list):
+        return data, True
+    return [data], False
 
 
 def _set_cell(wb, ref: str, value: object) -> None:
@@ -324,10 +333,26 @@ def _set_cell(wb, ref: str, value: object) -> None:
     ws[coord] = value
 
 
-def _apply_decisions(
-    payloads: list[dict], decisions: dict[str, dict[str, str]]
+def apply_decisions(
+    payloads: list[dict],
+    decisions: dict[str, dict[str, str]],
+    path: Path | str | None = None,
+    *,
+    as_array: bool = True,
 ) -> None:
-    """Apply review decisions: approved exceptions keep proposed value, rejected revert to init."""
+    """The one write path for review decisions — the CLI and any UI both call this.
+
+    Approved exceptions keep their proposed value; rejected and pending revert to
+    the init value. When `path` is given the decisions are persisted *before* the
+    workbooks are touched, so a human approval is never lost to a later failure
+    and a value is never written without a recorded decision. The file is
+    rewritten in the shape `load_exceptions` reported.
+    """
+    if path is not None:
+        body = payloads if as_array else payloads[0]
+        Path(path).write_text(
+            json.dumps(body, indent=2, default=str) + "\n", encoding="utf-8"
+        )
     for payload in payloads:
         task_id = payload["task_id"]
         init = Path(payload["init_xlsx"])
@@ -371,7 +396,7 @@ def review_exceptions(
 ) -> None:
     """Interactive CLI: review and approve/reject each exception, then rewrite output."""
     path = Path(path)
-    payloads = _load_exceptions(path)
+    payloads, as_array = load_exceptions(path)
     decisions: dict[str, dict[str, str]] = {}
 
     try:
@@ -411,11 +436,7 @@ def review_exceptions(
     except (EOFError, KeyboardInterrupt):
         pass
 
-    _apply_decisions(payloads, decisions)
-
-    # Persist reviewed statuses back to the exceptions file.
-    agg = payloads if len(payloads) > 1 else payloads[0]
-    path.write_text(json.dumps(agg, indent=2, default=str) + "\n", encoding="utf-8")
+    apply_decisions(payloads, decisions, path, as_array=as_array)
     print(
         "\nReview complete. Output workbook(s) updated with approved exceptions only."
     )

@@ -476,4 +476,5 @@ hill-climbing measurement are never perturbed.
 - Native **vector index** / embeddings for fuzzy vendor matching (adds an embedding API + a network
   dependency on stage; ~$0 at this data size but higher demo risk).
 - **Human-review write-back**: approve/reject as `(:Exception)-[:RESOLVED_BY]->…`. The graph records
-  the pre-review `status` (`pending`) only. Easy follow-on (second hook in `_apply_decisions`).
+  the pre-review `status` (`pending`) only. Easy follow-on: one hook in `apply_decisions`, which is
+  the single write path the review CLI and the dashboard both call.

@@ -80,13 +80,14 @@ def _(iters, mo, scores):
 
 
 @app.cell
-def _(Path, exceptions_path, json, mo, refresh, sys):
+def _(Path, exceptions_path, mo, refresh):
     _ = refresh.value
-    payloads = []
-    p = Path(exceptions_path.value)
-    if p.exists():
-        data = json.loads(p.read_text())
-        payloads = data if isinstance(data, list) else [data]
+    import exceptions as exc_mod
+
+    path = Path(exceptions_path.value)
+    payloads, as_array = ([], True)
+    if path.exists():
+        payloads, as_array = exc_mod.load_exceptions(path)
     rows = [
         {
             "task": pl["task_id"],
@@ -100,7 +101,7 @@ def _(Path, exceptions_path, json, mo, refresh, sys):
     ]
     table = mo.ui.table(rows, selection="multi", label="exceptions — select to review")
     mo.vstack([mo.md("## Exception queue"), table])
-    return table, payloads, rows
+    return as_array, exc_mod, payloads, rows, table
 
 
 @app.cell
@@ -112,7 +113,7 @@ def _(mo):
 
 
 @app.cell
-def _(approve, exceptions_path, mo, payloads, reject, rows, table):
+def _(approve, as_array, exc_mod, exceptions_path, mo, payloads, reject, table):
     decision = None
     if approve.value:
         decision = "approved"
@@ -124,23 +125,17 @@ def _(approve, exceptions_path, mo, payloads, reject, rows, table):
             for e in pl["exceptions"]:
                 if (pl["task_id"], e["cell"]) in chosen:
                     e["status"] = decision
-        import json as _json
-        from pathlib import Path as _P
-
-        _p = _P(exceptions_path.value)
-        _p.write_text(_json.dumps(payloads, indent=2, default=str) + "\n")
+        decisions = {
+            pl["task_id"]: {e["cell"]: e["status"] for e in pl["exceptions"]}
+            for pl in payloads
+        }
         try:
-            import exceptions as exc_mod
-
-            decisions = {}
-            for pl in payloads:
-                decisions[pl["task_id"]] = {
-                    e["cell"]: e["status"] for e in pl["exceptions"]
-                }
-            exc_mod._apply_decisions(payloads, decisions)
+            exc_mod.apply_decisions(
+                payloads, decisions, exceptions_path.value, as_array=as_array
+            )
             msg = f"applied {decision} to {len(chosen)} exception(s) and updated workbooks"
         except Exception as e:  # noqa: BLE001
-            msg = f"statuses saved; workbook apply failed: {e}"
+            msg = f"review failed: {e}"
     else:
         msg = "select rows, then approve or reject"
     mo.md(f"**{msg}**")
