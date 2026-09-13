@@ -60,6 +60,12 @@ def _skill_fragment(task: dict) -> str:
     return f"\n\n## Skill\n{text}\n" if text else ""
 
 
+def _graph_fragment(graph_context: str) -> str:
+    """Neo4j GraphRAG candidate-vendor block; empty context => no-op (byte-identical)."""
+    text = (graph_context or "").strip()
+    return f"\n\n## Graph context (candidate vendor matches)\n{text}\n" if text else ""
+
+
 def codegen_system(task: dict) -> str:
     """CODEGEN_SYSTEM plus category skill(s) for this instruction. Generic only."""
     frag = _skill_fragment(task)
@@ -83,11 +89,14 @@ def _range_block(task: dict) -> str:
     )
 
 
-def build_values_prompt(task: dict, workbook_text: str) -> str:
+def build_values_prompt(
+    task: dict, workbook_text: str, graph_context: str = ""
+) -> str:
     return (
         f"## Instruction\n{task['instruction']}\n\n"
         f"## Workbook\n{workbook_text}\n\n"
         + _range_block(task)
+        + _graph_fragment(graph_context)
         + _skill_fragment(task)
         + FORMAT_HINT
     )
@@ -117,7 +126,7 @@ def build_repair_prompt(
 
 
 def build_codegen_prompt(
-    task: dict, workbook_text: str, graded_cells: list[str]
+    task: dict, workbook_text: str, graded_cells: list[str], graph_context: str = ""
 ) -> str:
     shown = ", ".join(graded_cells[:80])
     more = " ..." if len(graded_cells) > 80 else ""
@@ -126,6 +135,7 @@ def build_codegen_prompt(
         f"## Workbook (preview — read INIT_XLSX for full data)\n{workbook_text}\n\n"
         + _range_block(task)
         + f"Graded cells: {shown}{more}\n"
+        + _graph_fragment(graph_context)
         + _skill_fragment(task)
         + CODEGEN_FORMAT
     )

@@ -808,6 +808,9 @@ dependencies = [
 ]
 
 [package.optional-dependencies]
+graph = [
+    { name = "neo4j" },
+]
 tinker = [
     { name = "tinker" },
     { name = "tinker-cookbook" },
@@ -816,6 +819,7 @@ tinker = [
 [package.metadata]
 requires-dist = [
     { name = "marimo", specifier = ">=0.24.2" },
+    { name = "neo4j", marker = "extra == 'graph'", specifier = ">=5.8,<6" },
     { name = "openai", specifier = ">=3.7.0" },
     { name = "openpyxl", specifier = ">=3.1" },
     { name = "opentelemetry-exporter-otlp", specifier = ">=1.44.0" },
@@ -1988,6 +1992,19 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/35/68/5351e34623d253423240ea7de3f8fc74fa8ab14b1ab3c0ec4ac8997413c9/narwhals-2.26.0.tar.gz", hash = "sha256:6b9cadca82f375c7e4cf584fdc86ca25da54827307a9c58f94547ee6104b82dd", size = 686970 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/40/b5/1b84b2c784db76d69442334bc8b8748c840f13ca53be086f4f250ad4a0bc/narwhals-2.26.0-py3-none-any.whl", hash = "sha256:29326d74f107c347fd1009bd58e38d9f7c7c5b51e6de97bc93dbc325d9038b54", size = 474034 },
+]
+
+[[package]]
+name = "neo4j"
+version = "5.28.5"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pytz" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/a9/fc/56d23ba3eed18ad3cfece6fadc52a2386d16627e8d96554f43b14984e857/neo4j-5.28.5.tar.gz", hash = "sha256:22c17254dc99cded006ff8d1904fe4c8a09d2b67f4e02709bfeca95786b1b58d", size = 232775 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/aa/fc/4e379b0bdecf3a22ec4581a594349f88546ee0a6e0d3cbd8941013e1411a/neo4j-5.28.5-py3-none-any.whl", hash = "sha256:b5a919bb7be2dd0ccb72acd52724964b73f1bb5f5c753a031af84dbbe170fbf3", size = 313920 },
+    { url = "https://files.pythonhosted.org/packages/0c/9b/ecd432ccda4c4a1015e46a19645922cad7304cf37012982b22b2777a29c2/neo4j-5.28.5.0-py3-none-any.whl", hash = "sha256:c8ab75a72d54f2aceea35a22d1cd39203f754777c6ec8ccb3d9e6d4d8b8bdd4e", size = 313958 },
 ]
 
 [[package]]
@@ -3225,6 +3242,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/5b/42/55c32bb9b12693c092ad250a0e82edb5b31ddeda6eb772de5f308b3804ad/python_multipart-0.0.32.tar.gz", hash = "sha256:be54b7f3fa167bb83e4fcd936b887b708f4e57fe75911c02aebf53efaf8d938e", size = 46881 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/e1/04/e8135ebd1ad02c56ec633277529b2602ff99ff634be76cdba5744cf554fd/python_multipart-0.0.32-py3-none-any.whl", hash = "sha256:ff6d3f776f16878c894e52e107296ffc890e913c611b1a4ec6c44e2821fe2e23", size = 30042 },
+]
+
+[[package]]
+name = "pytz"
+version = "2026.3.post1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/fb/48/fb042503b6ca6cd271261dc559fd6432f7d8c713153e9ec5c591af4dfc1c/pytz-2026.3.post1.tar.gz", hash = "sha256:2211d3fcf9a797d3405cac96ac7f61d80e6a644f72a3309607282fe8a2010c5d", size = 319745 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/0f/7b/39c34ca613b0b198cb866466651b26b045e2009864c5183c979a3b83f383/pytz-2026.3.post1-py2.py3-none-any.whl", hash = "sha256:dd95840dd199baea12d9cc096a1d452caa6596a1c1e4b5f3dbd1541855d5e815", size = 508283 },
 ]
 
 [[package]]

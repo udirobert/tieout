@@ -16,7 +16,7 @@ fi
 mkdir -p "${OUT}/outputs" "${OUT}/exceptions"
 
 cd "${ROOT}/research"
-uv run python <<PY
+uv run --extra graph python <<PY
 import json, shutil, sys
 from pathlib import Path
 
@@ -27,7 +27,10 @@ sys.path.insert(0, str(ROOT / "harness"))
 from sb import load_dataset, answer_cells
 from exceptions import write_exceptions
 from parsing import cell_ref
+from graph import init_graph
 import openpyxl
+
+graph_on = init_graph()
 
 data = ROOT / "demo/close-tieout"
 out_dir = Path("${OUT}")
@@ -54,6 +57,7 @@ print(f"=== simulate_demo: {tid} ({mode}) ===")
 print(f"Output:     {out}")
 print(f"Exceptions: {len(payload['exceptions'])}")
 print(f"Queue:      {out_dir / 'exceptions.json'}")
+print(f"Graph:      {'lineage written (Neo4j)' if graph_on else 'disabled (set NEO4J_URI)'}")
 print()
 for exc in payload["exceptions"][:5]:
     print(f"  {exc['cell']} | {exc['reason']} | proposed={exc['proposed_value']!r}")

@@ -27,8 +27,10 @@ sys.path.insert(0, str(ROOT))
 
 import openpyxl  # noqa: E402
 from openpyxl.cell.cell import MergedCell  # noqa: E402
+from openpyxl.utils.cell import coordinate_to_tuple  # noqa: E402
 from sb import answer_cells, load_dataset  # noqa: E402
 
+import graph  # noqa: E402
 from adapters import make_completer  # noqa: E402
 from executor import run_snippet  # noqa: E402
 from parsing import cell_ref, normalize_cell_value, parse_answer, parse_code  # noqa: E402
@@ -179,7 +181,9 @@ async def run_values_loop(ctx: dict, attempts: int) -> tuple[str, dict, str]:
         ctx["complete"],
         ctx["out_dir"],
     )
-    prompt = build_values_prompt(task, ctx["wb_serialized"])
+    prompt = build_values_prompt(
+        task, ctx["wb_serialized"], ctx.get("graph_context", "")
+    )
     last_reply = ""
     status = "error: no values attempt"
     last_reason = ""
@@ -227,7 +231,9 @@ async def run_codegen_loop(ctx: dict, attempts: int) -> tuple[str, dict, str]:
         ctx["complete"],
         ctx["out_dir"],
     )
-    prompt = build_codegen_prompt(task, ctx["wb_serialized"], ctx["graded_refs"])
+    prompt = build_codegen_prompt(
+        task, ctx["wb_serialized"], ctx["graded_refs"], ctx.get("graph_context", "")
+    )
     last_code = ""
     last_stdout = last_stderr = ""
     status = "error: no codegen attempt"
@@ -297,6 +303,33 @@ async def run_codegen_loop(ctx: dict, attempts: int) -> tuple[str, dict, str]:
     return f"{status} (codegen, {last_reason})"[:200], last_info, last_reason
 
 
+_GRAPHRAG_KEYWORDS = ("vendor", "counterparty", "beneficiary", "sender")
+
+
+def _graphrag_on(task: dict) -> bool:
+    """READ is opt-in (TIEOUT_GRAPHRAG) and keyword-gated, so it never perturbs
+    non-vendor tasks or confounds research/loop.py hill-climbing scoring."""
+    flag = os.environ.get("TIEOUT_GRAPHRAG", "0").strip().lower()
+    if flag not in ("1", "true", "on"):
+        return False
+    inst = (task.get("instruction") or "").lower()
+    return any(k in inst for k in _GRAPHRAG_KEYWORDS)
+
+
+def _pulled_names(wb, task: dict) -> list[str]:
+    """Nearest-left text cell per answer row = the direct match input (col J)."""
+    names: list[str] = []
+    for sheet, coord in answer_cells(task, wb):
+        ws = wb[sheet] if sheet and sheet in wb.sheetnames else wb.active
+        row, col = coordinate_to_tuple(coord)
+        for c in range(col - 1, 0, -1):
+            v = ws.cell(row=row, column=c).value
+            if isinstance(v, str) and v.strip() and any(ch.isalpha() for ch in v):
+                names.append(v.strip())
+                break
+    return names
+
+
 async def predict_task(
     complete, task: dict, out_dir: Path, sem: asyncio.Semaphore, path: str = "hybrid"
 ) -> dict:
@@ -312,6 +345,13 @@ async def predict_task(
         codegen_first = path == "codegen" or (
             kind == "sheet-level" and path in ("hybrid", "auto")
         )
+        graph_context = ""
+        if _graphrag_on(task) and graph.enabled():
+            names = _pulled_names(wb0, task)
+            if names:
+                graph_context = await asyncio.to_thread(
+                    graph.query_vendor_context, names
+                )
         ctx = {
             "complete": complete,
             "task": task,
@@ -322,6 +362,7 @@ async def predict_task(
                 task, include_init_values=not codegen_first
             ),
             "graded_refs": graded_refs,
+            "graph_context": graph_context,
         }
         last_info: dict = {"graded": graded_refs, "written": {}}
         last_reason = ""
@@ -379,7 +420,9 @@ async def predict_task(
                         else f"{status}; codegen-fallback: {fb_status}"[:200]
                     )
         _ensure_output(task, out)
-        write_exceptions(out_dir, task, status, last_reason, last_info, out)
+        await asyncio.to_thread(
+            write_exceptions, out_dir, task, status, last_reason, last_info, out
+        )
         return {
             "status": status,
             "reason": last_reason,
@@ -415,6 +458,7 @@ async def main() -> None:
     args = parse_args()
     _load_env()
     init_weave()
+    graph.init_graph()
 
     out_dir = Path(args.out_dir)
     if args.fresh:
@@ -470,9 +514,12 @@ async def main() -> None:
             f.write(json.dumps(line) + "\n")
 
     run_t0 = time.time()
-    await asyncio.gather(*(one(t) for t in tasks))
-    log(f"total {round(time.time() - run_t0, 1)}s for {len(tasks)} tasks")
-    _flush_out_dir(out_dir)
+    try:
+        await asyncio.gather(*(one(t) for t in tasks))
+        log(f"total {round(time.time() - run_t0, 1)}s for {len(tasks)} tasks")
+        _flush_out_dir(out_dir)
+    finally:
+        graph.close_graph()
 
 
 def _fsync_file(path: Path) -> None:

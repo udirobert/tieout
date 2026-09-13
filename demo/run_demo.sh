@@ -27,7 +27,7 @@ if [[ "${SIMULATE}" == "1" ]] || [[ -z "${TINKER_API_KEY:-}" ]]; then
 fi
 
 cd "${ROOT}/research"
-uv run python ../harness/pipeline.py \
+uv run --extra graph python ../harness/pipeline.py \
   --dataset-dir "${DATA}" \
   --out-dir "${OUT}" \
   --ids "${ID}" \

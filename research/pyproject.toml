@@ -17,3 +17,6 @@ tinker = [
     "tinker>=0.27.1",
     "tinker-cookbook>=0.5.7",
 ]
+graph = [
+    "neo4j>=5.8,<6",
+]
