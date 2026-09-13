@@ -36,6 +36,21 @@ export TINKER_API_KEY= # set from .env
 
 # Human review after run
 cd research && uv run python ../harness/exceptions.py review /tmp/syndicate-demo/exceptions.json
+
+# Frontends (marimo) — governed memory review, and the improvement curve + exception review
+uv run --directory research marimo run ../demo/close_workspace.py
+uv run --directory research marimo run ../demo/loop_dashboard.py
+
+# Governed correction memory across two close cycles (local SQLite; refuses to overwrite artifacts)
+uv run --directory research python ../demo/memory_scenario.py --out-dir /tmp/memory-demo
+
+# Knowledge graph (optional, needs NEO4J_* in .env — see docs/NEO4J.md)
+uv run --directory research --extra graph python ../demo/seed_graph.py   # 510 counterparty identities
+uv run --directory research --extra graph python ../harness/graph.py query "NIP LIT"
+uv run --directory research --extra graph python ../demo/rebuild_graph.py /tmp/syndicate-demo
+
+# Measure the read path on all 55 real rows — no model, no credits, writes nothing
+research/.venv/bin/python demo/measure_gate.py
 ```
 
 ## Layout

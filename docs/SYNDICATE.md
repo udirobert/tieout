@@ -44,11 +44,20 @@ Workbook + mandate → Classify → Execute → Verify (≤3 retries) → Except
 | `harness/exceptions.py` | Post-run queue + approve/reject CLI with evidence rows |
 | `harness/skills.py` | Domain skill fragments (lookup, aggregation, consolidation) |
 | `harness/verifier.py` | Blocks fatal errors; flags unresolved lookups |
+| `harness/graph.py` | *Optional* Neo4j cell lineage + counterparty retrieval — see below |
 | **Tinker** Qwen3.8-27B | Inference at demo time (`TINKER_API_KEY`) |
 | **AO** | Built the Syndicate pivot (orchestrator + workers) — see below |
 
 **Human judgment:** read-only source data, approve-gated writes, evidence-backed exceptions.
 The accountant approves or rejects before unmatched rows are final.
+
+**Knowledge graph (optional).** With `NEO4J_URI` set, every answer cell becomes a stable `(:Cell)`
+node tied to the source cells it derived from, the counterparty it matched, and the exception it
+raised — the tagline as a queryable artifact rather than a claim. It also lets the agent read a
+seeded counterparty master (510 identities, against the 71-row copy in the workbook) to ground
+column K. Without credentials it no-ops: identical prompts, `exceptions.json`, and scores. The
+measured read-path delta is real but narrow, and the fixture leaks its own answer key through an
+adjacent column — both documented with the numbers in [NEO4J.md](NEO4J.md). Not a benchmark score.
 
 ---
 
@@ -77,7 +86,8 @@ Install, session log, Devpost copy: [`submit.md`](submit.md)
 4. Human review CLI — approve one, reject one
 5. Optional skill beat — `./demo/run_skill_demo.sh`
 6. AO dashboard — scroll sessions, show count
-7. Close — *every cell tied to its source*
+7. Close — *every cell tied to its source*; if Aura is seeded, show it literally with one query:
+   `MATCH (c:Cell {ref:'Staging Sheet!K5'})-[r]-(n) RETURN c,r,n` *(optional beat)*
 
 ---
 
@@ -97,6 +107,6 @@ Env: `TINKER_API_KEY` (required for live), `GEMINI_API_KEY` (optional spare)
 
 ## Built with
 
-AO · Python · openpyxl · Tinker (Qwen3.8-27B) · Neatlogs (traces)
+AO · Python · openpyxl · Tinker (Qwen3.8-27B) · Neatlogs (traces) · Neo4j Aura (optional lineage graph)
 
 **Team:** tieout · **Track:** Autonomous Office of the CFO

@@ -33,7 +33,7 @@ Deliberate unmatched rows in the source data are **by design** — they feed the
 | 1:50–2:20 | Human review | `uv run python ../harness/exceptions.py review …` |
 | 2:20–2:40 | Skill loop | `./demo/run_skill_demo.sh` *(optional)* |
 | 2:40–3:00 | AO | Dashboard — session count visible |
-| 3:00–3:15 | Close | Tagline |
+| 3:00–3:15 | Close | Tagline; optional lineage visual — `MATCH (c:Cell {ref:'Staging Sheet!K5'})-[r]-(n) RETURN c,r,n` in the Aura console |
 
 ---
 
