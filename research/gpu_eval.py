@@ -15,9 +15,13 @@ baselines. LibreOffice recalculation runs when soffice is present
 (--install-libreoffice tries apt); otherwise scoring falls back to --no-recalc
 and the summary says so.
 
-Blackwell note: sm_120 needs recent torch/vLLM builds. The container's
-preinstalled torch is kept; if `pip install vllm` downgrades it and the server
-dies at startup, install a vLLM/nightly wheel built for the container's CUDA.
+Blackwell note (verified on molab's RTX Pro 6000, 2026-09): vllm 0.29 + torch
+2.13 (cu13) serve sm_120 fine. Two molab-specific traps: the container has no
+CUDA toolkit, so flashinfer's JIT sampler crashes warmup with "Could not find
+nvcc" — start_server sets VLLM_USE_FLASHINFER_SAMPLER=0 to take the torch
+sampler path instead (if it still crashes, `pip uninstall flashinfer-python`
+in the venv is the known-good config). vLLM 0.29 also renamed
+--disable-log-requests, so this script passes no logging flags.
 """
 
 from __future__ import annotations
@@ -26,6 +30,7 @@ import argparse
 import asyncio
 import importlib.util
 import json
+import os
 import subprocess
 import sys
 import time
@@ -50,6 +55,11 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--sample", type=int, help="first N tasks in dataset order")
     p.add_argument("--all", action="store_true", help="score every task in the dataset")
     p.add_argument("--concurrency", type=int, default=8)
+    p.add_argument("--max-tokens", type=int, default=8192,
+                   help="per-task generation cap; matches baseline/tinker_predict.py (default 8192)")
+    p.add_argument("--no-thinking", action="store_true",
+                   help="Qwen3-style models: pass enable_thinking=false via chat_template_kwargs "
+                        "for direct JSON answers (faster, more parseable; different model behavior)")
     p.add_argument("--port", type=int, default=8000)
     p.add_argument("--server-url",
                    help="use an already-running OpenAI-compatible server (http://host:port/v1) "
@@ -118,12 +128,13 @@ def start_server(args: argparse.Namespace) -> subprocess.Popen:
         "--model", args.model,
         "--port", str(args.port),
         "--gpu-memory-utilization", str(args.gpu_memory_utilization),
-        "--disable-log-requests",
     ]
     if args.max_model_len:
         cmd += ["--max-model-len", str(args.max_model_len)]
     log("starting vLLM: " + " ".join(cmd))
-    proc = subprocess.Popen(cmd)
+    # molab's runtime image has no nvcc; keep vLLM off flashinfer's JIT sampler path
+    env = dict(os.environ, VLLM_USE_FLASHINFER_SAMPLER="0")
+    proc = subprocess.Popen(cmd, env=env)
     url = f"http://127.0.0.1:{args.port}/health"
     deadline = time.time() + args.server_timeout
     while time.time() < deadline:
@@ -152,16 +163,23 @@ async def predict(args: argparse.Namespace, tasks: list[dict]) -> None:
 
     base_url = args.server_url or f"http://127.0.0.1:{args.port}/v1"
     client = AsyncOpenAI(base_url=base_url, api_key="EMPTY")
-    from common import SYSTEM_PROMPT  # same prompt contract as the hosted baselines
+    # same prompt contract as the Tinker baseline: system prompt + FORMAT_HINT, temp 0, 8192 cap
+    from common import FORMAT_HINT, SYSTEM_PROMPT
+
+    extra = {}
+    if args.no_thinking:
+        extra["extra_body"] = {"chat_template_kwargs": {"enable_thinking": False}}
 
     async def complete(prompt: str):
         resp = await client.chat.completions.create(
             model=args.model,
             temperature=0,
+            max_tokens=args.max_tokens,
             messages=[
                 {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": prompt},
+                {"role": "user", "content": prompt + FORMAT_HINT},
             ],
+            **extra,
         )
         usage = resp.usage
         return (
