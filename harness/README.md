@@ -41,7 +41,8 @@ Pinned answer range: values-first keeps init values; codegen omits them (echo ca
 `memory_store.py` records corrections, immutable rules, validation, activation,
 and revocation in local SQLite. `memory_workbook.py` imports an explicit
 `Transactions` schema and exports suggestions to a new workbook without editing
-source cells. `demo/close_workspace.py` is the review UI.
+source cells. `demo/console.py` (Memory tab) is the review UI;
+`demo/close_workspace.py` is the legacy single-purpose one.
 
 The original exception CLI and pipeline do not automatically write to this store.
 No model guess, prompt-overlay change, or Neo4j match is an approved correction.

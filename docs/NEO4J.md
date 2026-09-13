@@ -362,6 +362,11 @@ and artifacts written before the stamp existed replay onto the current `TIEOUT_R
 warning — pass `--run-id` to pin them. (Unstamped replays fork run history, which is precisely why
 the stamp exists.)
 
+The reconstruction is also readable with **no database at all**: `lineage_from_artifacts()` is
+exposed on its own, and `demo/console.py`'s Graph tab renders it — per-cell values, the left-nearest
+source cells, vendor matches and the blanks — from a run directory alone. Aura is only needed to
+*store* the graph or answer the live candidate retrieval.
+
 ### Backend tiers
 
 | Tier | Backend | Cost | Use |
@@ -460,7 +465,10 @@ harness/pipeline.py     init_graph()/close_graph(); GraphRAG read (keyword+flag 
 harness/prompts.py      _graph_fragment() — "## Graph context" seam (byte-identical when empty)
 demo/seed_graph.py      seeds (:Vendor) from demo/reference_masters.json (510 identities)
 demo/reference_masters.json  committed counterparty master — the seed, so no ~/Downloads needed
-demo/rebuild_graph.py   replays a run's artifacts back into the graph (recovery / tier move)
+demo/rebuild_graph.py   replays a run's artifacts back into the graph (recovery / tier move);
+                        lineage_from_artifacts() exposes the same reconstruction read-only
+demo/console.py         marimo console — Graph tab renders lineage_from_artifacts() with no DB;
+                        the retrieval block is the only thing that connects, and only on submit
 demo/simulate_demo.sh   offline write path (uv run --extra graph; init_graph in the heredoc)
 demo/run_demo.sh        live path (uv run --extra graph; TIEOUT_GRAPHRAG=1 turns on the read)
 ```
@@ -477,4 +485,4 @@ hill-climbing measurement are never perturbed.
   dependency on stage; ~$0 at this data size but higher demo risk).
 - **Human-review write-back**: approve/reject as `(:Exception)-[:RESOLVED_BY]->…`. The graph records
   the pre-review `status` (`pending`) only. Easy follow-on: one hook in `apply_decisions`, which is
-  the single write path the review CLI and the dashboard both call.
+  the single write path the review CLI and the console's Run tab both call.

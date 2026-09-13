@@ -42,6 +42,7 @@ Workbook + mandate → Classify → Execute → Verify (≤3 retries) → Except
 |-----------|------|
 | `harness/pipeline.py` | Classify → values-first or codegen → verify → repair |
 | `harness/exceptions.py` | Post-run queue + approve/reject CLI with evidence rows |
+| `demo/console.py` | Tabbed marimo console (Run / Memory / Graph) — review, governed memory and the offline lineage reconstruction over the same artifacts |
 | `harness/skills.py` | Domain skill fragments (lookup, aggregation, consolidation) |
 | `harness/verifier.py` | Blocks fatal errors; flags unresolved lookups |
 | `harness/graph.py` | *Optional* Neo4j cell lineage + counterparty retrieval — see below |
@@ -83,10 +84,11 @@ Install, session log, Devpost copy: [`submit.md`](submit.md)
 1. Hook — close still happens in Excel; one wrong cell fails tie-out
 2. Bank counterparty workbook + mandate
 3. `./demo/simulate_demo.sh close-tieout-bank-cp` → 2 exceptions
-4. Human review CLI — approve one, reject one
+4. Human review CLI — approve one, reject one *(or the console's Run tab)*
 5. Optional skill beat — `./demo/run_skill_demo.sh`
 6. AO dashboard — scroll sessions, show count
-7. Close — *every cell tied to its source*; if Aura is seeded, show it literally with one query:
+7. Close — *every cell tied to its source*; show it in the console's Graph tab (offline, no Aura),
+   or literally with one query if Aura is seeded:
    `MATCH (c:Cell {ref:'Staging Sheet!K5'})-[r]-(n) RETURN c,r,n` *(optional beat)*
 
 ---
@@ -97,6 +99,9 @@ Install, session log, Devpost copy: [`submit.md`](submit.md)
 python3 demo/build_fixtures.py
 ./demo/simulate_demo.sh close-tieout-bank-cp
 cd research && uv run python ../harness/exceptions.py review /tmp/syndicate-demo/exceptions.json
+
+# same artifacts in a browser — Run / Memory / Graph, no Aura credentials needed
+uv run --directory research marimo run ../demo/console.py
 ```
 
 Live inference (optional): set `TINKER_API_KEY` from `.env`, then `./demo/run_demo.sh close-tieout-bank-cp`
@@ -107,6 +112,6 @@ Env: `TINKER_API_KEY` (required for live), `GEMINI_API_KEY` (optional spare)
 
 ## Built with
 
-AO · Python · openpyxl · Tinker (Qwen3.8-27B) · Neatlogs (traces) · Neo4j Aura (optional lineage graph)
+AO · Python · openpyxl · marimo (console) · Tinker (Qwen3.8-27B) · Neatlogs (traces) · Neo4j Aura (optional lineage graph)
 
 **Team:** tieout · **Track:** Autonomous Office of the CFO

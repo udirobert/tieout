@@ -37,9 +37,16 @@ export TINKER_API_KEY= # set from .env
 # Human review after run
 cd research && uv run python ../harness/exceptions.py review /tmp/syndicate-demo/exceptions.json
 
-# Frontends (marimo) — governed memory review, and the improvement curve + exception review
+# Frontends (marimo) — the console is one app over Run / Memory / Graph;
+# the two older apps remain as legacy single-purpose entry points
+uv run --directory research marimo run ../demo/console.py
 uv run --directory research marimo run ../demo/close_workspace.py
 uv run --directory research marimo run ../demo/loop_dashboard.py
+
+# Console checks that need no browser: script mode runs every cell, and
+# marimo check does the static dataflow check
+research/.venv/bin/python demo/console.py
+research/.venv/bin/marimo check demo/console.py
 
 # Governed correction memory across two close cycles (local SQLite; refuses to overwrite artifacts)
 uv run --directory research python ../demo/memory_scenario.py --out-dir /tmp/memory-demo

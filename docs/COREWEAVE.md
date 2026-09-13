@@ -67,13 +67,15 @@ Run from the repository root after installing the existing research dependencies
 uv sync --directory research
 DEMO_DIR=$(mktemp -d /tmp/tieout-memory-demo.XXXXXX)
 uv run --directory research python ../demo/memory_scenario.py --out-dir "$DEMO_DIR"
-uv run --directory research marimo run ../demo/close_workspace.py
+uv run --directory research marimo run ../demo/console.py
 ```
 
-Set the workspace paths to `$DEMO_DIR/memory.sqlite3` and the chosen
-`$DEMO_DIR/cycle1.xlsx` or `$DEMO_DIR/cycle2.xlsx`. The replay input is
-`$DEMO_DIR/replay_cases.json`. Use a fresh output directory on every scenario run;
-existing fixtures, databases, and export workbooks are not overwritten.
+In the console's picker choose `$DEMO_DIR/memory.sqlite3` under *governed memory
+db* and one of `$DEMO_DIR/cycle*.xlsx` under *transactions workbook* — the picker
+discovers both under `/tmp`, two levels deep, and the Memory tab's validate form
+pre-fills `$DEMO_DIR/replay_cases.json`. Use a fresh output directory on every
+scenario run; existing fixtures, databases, and export workbooks are not
+overwritten.
 
 Artifacts:
 
@@ -110,6 +112,18 @@ end-to-end pass. Earlier UI smoke evidence predates the callback rewrite and
 must not be presented as verification of the revised UI. Use the saved scenario
 and unit-test evidence; do not automatically restart browser testing.
 
+`demo/console.py` was browser-verified once, under explicit permission, with this
+boundary: all three tabs rendered against real artifacts (`/tmp/syndicate-demo`,
+a governed-memory scenario dir), the picker loaded a run + db + workbook, and one
+live Aura retrieval was submitted from the Graph tab. The review and
+governed-memory write actions were **not** clicked in a browser; they were
+exercised headlessly through the console's own form callbacks against scratch
+copies with redirected output paths, which confirmed approve writes the proposed
+value, reject reverts to init, unselected rows are untouched, and the aggregate
+`exceptions.json` keeps its array shape. Rendering the Graph tab never connects:
+`graph.configured()` inspects the environment only, because `graph.enabled()`
+would ensure schema on page load.
+
 ### Workbook contract
 
 Sheet: `Transactions`. Required headers (exact, unique):
@@ -142,7 +156,7 @@ connected to business memory.
 |---|---|
 | W&B Serverless Inference | Runtime and mutator via `wandb:` adapter |
 | Weave | Model/pipeline operation traces and per-iteration evaluations |
-| marimo | Experimental loop dashboard and local close-memory workspace |
+| marimo | `demo/console.py` — one tabbed surface (Run / Memory / Graph); legacy `loop_dashboard.py` and `close_workspace.py` remain |
 | Neo4j | Optional existing lineage and lexical vendor retrieval; see `NEO4J.md` |
 
 ```bash
@@ -151,7 +165,7 @@ connected to business memory.
 uv run --directory research python loop.py \
   --dataset-dir data/spreadsheetbench_verified_400 --sample 20 --iters 3 \
   --model wandb:Qwen/Qwen3.8-27B --out-dir /tmp/tieout-loop-new-run
-uv run --directory research marimo run ../demo/loop_dashboard.py
+uv run --directory research marimo run ../demo/console.py   # Run tab: loop curve + exception queue
 ```
 
 Never run concurrent experimental loops against the shared

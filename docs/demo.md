@@ -30,10 +30,10 @@ Deliberate unmatched rows in the source data are **by design** — they feed the
 | 0:25–0:45 | Scenario | Open bank-cp workbook — cols J/K, vendor master |
 | 0:45–1:25 | Agent run | `./demo/simulate_demo.sh close-tieout-bank-cp` |
 | 1:25–1:50 | Exceptions | `cat /tmp/syndicate-demo/exceptions.json` |
-| 1:50–2:20 | Human review | `uv run python ../harness/exceptions.py review …` |
+| 1:50–2:20 | Human review | `uv run python ../harness/exceptions.py review …` (or the console's Run tab) |
 | 2:20–2:40 | Skill loop | `./demo/run_skill_demo.sh` *(optional)* |
 | 2:40–3:00 | AO | Dashboard — session count visible |
-| 3:00–3:15 | Close | Tagline; optional lineage visual — `MATCH (c:Cell {ref:'Staging Sheet!K5'})-[r]-(n) RETURN c,r,n` in the Aura console |
+| 3:00–3:15 | Close | Tagline; optional lineage visual — the console's Graph tab renders it offline, no Aura needed; deeper: `MATCH (c:Cell {ref:'Staging Sheet!K5'})-[r]-(n) RETURN c,r,n` in the Aura console |
 
 ---
 
@@ -44,6 +44,7 @@ python3 demo/build_fixtures.py
 ./demo/simulate_demo.sh close-tieout-bank-cp /tmp/syndicate-demo golden
 cat /tmp/syndicate-demo/exceptions.json
 cd research && uv run python ../harness/exceptions.py review /tmp/syndicate-demo/exceptions.json
+uv run --directory research marimo run ../demo/console.py   # Run / Memory / Graph over the same artifacts
 ./demo/run_skill_demo.sh
 # optional live — set TINKER_API_KEY from .env first
 ./demo/run_demo.sh close-tieout-bank-cp

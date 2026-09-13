@@ -33,7 +33,7 @@ production multi-tenant service. See [the product, demo, and pilot plan](docs/CO
 uv sync --directory research
 DEMO_DIR=$(mktemp -d /tmp/tieout-memory-demo.XXXXXX)
 uv run --directory research python ../demo/memory_scenario.py --out-dir "$DEMO_DIR"
-uv run --directory research marimo run ../demo/close_workspace.py
+uv run --directory research marimo run ../demo/console.py   # Memory tab; picker finds $DEMO_DIR
 ```
 
 Use the generated database/workbooks in the workspace. The script shows a
@@ -66,8 +66,8 @@ cd research && uv run python ../harness/pipeline.py \
 uv run python loop.py --dataset-dir data/spreadsheetbench_verified_400 \
   --sample 20 --iters 3 --out-dir /tmp/tieout-loop
 
-# dashboard (marimo): accuracy curve + exception review
-uv run marimo run ../demo/loop_dashboard.py
+# console (marimo): Run tab = accuracy curve + exception review; Graph tab = lineage
+uv run marimo run ../demo/console.py
 ```
 
 ## Knowledge graph (Neo4j)
