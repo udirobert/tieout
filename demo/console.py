@@ -1,3 +1,7 @@
+# /// script
+# requires-python = ">=3.12"
+# dependencies = ["marimo>=0.24.2", "openpyxl"]
+# ///
 """tieout console — one marimo app over the three surfaces.
 
 Run:   uv run --directory research marimo run ../demo/console.py
