@@ -160,8 +160,13 @@ def build_exceptions(
     return exceptions
 
 
-def _graph_payload(
-    task: dict, status: str, reason: str, info: dict | None, exceptions: list[dict]
+def graph_payload(
+    task: dict,
+    status: str,
+    reason: str,
+    info: dict | None,
+    exceptions: list[dict],
+    run_id: str | None = None,
 ) -> dict:
     """Assemble the Neo4j lineage payload for one task's answer cells.
 
@@ -169,6 +174,9 @@ def _graph_payload(
     direct input column — J for an answer in K — is always captured). Answer values
     come from info['written'], never a re-read of out_path (data_only=True returns
     None for formula cells openpyxl never recalculated).
+
+    Pass run_id to replay an existing run (demo/rebuild_graph.py); omit it to use
+    the live run.
     """
     written = (info or {}).get("written", {})
     exc_by_ref = {e["cell"]: e for e in exceptions}
@@ -227,7 +235,7 @@ def _graph_payload(
         wb.close()
     answer_sheet = task.get("answer_sheet") or (cells[0]["sheet"] if cells else "Sheet")
     return {
-        "run_id": graph.run_id(),
+        "run_id": run_id or graph.run_id(),
         "task_id": task["id"],
         "model": os.environ.get("TIEOUT_MODEL", ""),
         "mandate": (task.get("instruction") or "")[:1000],
@@ -264,6 +272,22 @@ def write_exceptions(
         "exceptions": exceptions,
     }
 
+    # Lineage write precedes the JSON so the stamp below reports whether it really
+    # landed. Recorded run_id is what lets demo/rebuild_graph.py replay onto the
+    # same CloseRun node. Stamped only when enabled: a disabled graph must leave
+    # exceptions.json byte-identical (docs/NEO4J.md).
+    try:
+        if graph.enabled():
+            lineage = graph_payload(task, status, reason, info, exceptions)
+            if graph.write_lineage(lineage):
+                payload["graph"] = {
+                    "backend": "neo4j",
+                    "run_id": lineage["run_id"],
+                    "lineage": True,
+                }
+    except Exception:  # noqa: BLE001 — the exception queue must never break
+        pass
+
     task_file = exceptions_dir / f"{task['id']}.json"
     task_file.write_text(
         json.dumps(payload, indent=2, default=str) + "\n", encoding="utf-8"
@@ -281,12 +305,6 @@ def write_exceptions(
     agg = [x for x in agg if x.get("task_id") != task["id"]]
     agg.append(payload)
     agg_file.write_text(json.dumps(agg, indent=2, default=str) + "\n", encoding="utf-8")
-
-    try:
-        if graph.enabled():
-            graph.write_lineage(_graph_payload(task, status, reason, info, exceptions))
-    except Exception:  # noqa: BLE001 — the exception queue must never break
-        pass
 
     return payload
 

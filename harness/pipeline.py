@@ -120,8 +120,12 @@ def write_output(task: dict, answer, out_path: Path) -> dict:
     return {"graded": graded_refs, "written": written}
 
 
-def read_graded(task: dict, out_path: Path) -> dict:
-    """Re-read written cells after codegen; coerce ISO dates in place."""
+def read_graded(task: dict, out_path: Path, save: bool = True) -> dict:
+    """Re-read written cells after codegen; coerce ISO dates in place.
+
+    save=False is for replay tooling (demo/rebuild_graph.py), which must not
+    mutate finished artifacts — the returned values are still coerced.
+    """
     wb = openpyxl.load_workbook(out_path)
     written = {}
     graded_refs = []
@@ -135,7 +139,7 @@ def read_graded(task: dict, out_path: Path) -> dict:
             dirty = True
         written[ref] = v
         graded_refs.append(ref)
-    if dirty:
+    if dirty and save:
         wb.save(out_path)
     return {"graded": graded_refs, "written": written}
 

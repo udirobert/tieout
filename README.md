@@ -75,7 +75,9 @@ uv run marimo run ../demo/loop_dashboard.py
 Set `NEO4J_URI`/`NEO4J_USER`/`NEO4J_PASSWORD` in `.env` (Aura) — every answer cell becomes a
 stable `(:Cell)` node tied to its source cells, the vendor it matched, and the exception it raised,
 and the agent reads that vendor memory back to ground column K. Without creds it no-ops: identical
-`exceptions.json`, prompts, and scores. Details in [docs/NEO4J.md](docs/NEO4J.md).
+`exceptions.json`, prompts, and scores. The graph is a derived index, not the system of record, so
+`rebuild_graph.py` reconstructs it from a run's artifacts — a paused or deleted free Aura instance
+costs nothing. Details in [docs/NEO4J.md](docs/NEO4J.md).
 
 ```bash
 # seed the vendor memory, then write lineage offline (no API key)
@@ -85,6 +87,9 @@ TIEOUT_RUN_ID=demo ./demo/simulate_demo.sh close-tieout-bank-cp
 # read candidates back (the GraphRAG retrieval), or run live with the read on
 cd research && uv run --extra graph python ../harness/graph.py query "NIP LIT"
 TIEOUT_GRAPHRAG=1 ./demo/run_demo.sh close-tieout-bank-cp
+
+# recover the graph from artifacts after an Aura pause/delete
+cd research && uv run --extra graph python ../demo/rebuild_graph.py /tmp/syndicate-demo
 ```
 
 ## Example output

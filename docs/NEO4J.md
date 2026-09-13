@@ -27,6 +27,13 @@ pipeline behaves byte-identically to before: same `exceptions.json`, same prompt
 The graph layer can never break the queue, the offline demo, the self-improvement loop, or the
 Docker ship container (`neo4j` is imported lazily, inside `init_graph()`).
 
+When it *is* enabled, `write_exceptions()` stamps `graph: {backend, run_id, lineage}` onto that
+task's `exceptions.json` entry — after `write_lineage()` returns `True`, and only when enabled, so
+the disabled artifact stays byte-identical. That `run_id` is what lets a replay land on the original
+`CloseRun` instead of forking run history. A configured-but-unreachable instance fails fast (~1.4s
+for a DNS miss, ~5s ceiling) and prints one `[tieout] graph disabled: …` line to stderr rather than
+disabling silently — a paused Aura instance is no longer indistinguishable from an unconfigured one.
+
 ## Schema
 
 ```
@@ -85,7 +92,10 @@ Docker ship container (`neo4j` is imported lazily, inside `init_graph()`).
 
 Substring scan beats full-text here: bank narratives are truncated (`"NIP LIT"`), and the constant
 legal-entity token (`NIP`) matches every vendor, so full-text needs trailing wildcards to be useful.
-Overlap-`DESC` ordering floats the discriminative token above the constant one. Any pulled name the
+Overlap-`DESC` ordering floats the discriminative token above the constant one — `query "NIP
+PLATFORM SOLUTIONS APS"` ranks its exact vendor 1.0. `"NIP LIT"` is the honest opposite: no seeded
+vendor contains `LIT`, so every candidate ties at 0.5 on `NIP` alone. Nothing to float, nothing to
+trust — which is the same reason K5 routes to a human instead of being filled. Any pulled name the
 scan misses falls back to `vendor_name_ft` (`db.index.fulltext.queryNodes`, best-effort);
 `seed_graph.py` awaits the index after seeding so it is query-ready and the fallback never returns
 empty mid-demo.
@@ -104,8 +114,61 @@ empty mid-demo.
    TIEOUT_GRAPHRAG=0     # read candidates into the prompt (default off)
    ```
 
-3. **Aura Free auto-pauses after ~3 days.** Resume the instance in the Console before demoing —
-   `init_graph()` fails fast (~5s, `connection_timeout=5.0`) and silently disables if it is paused.
+3. **Aura Free auto-pauses after a few days of inactivity**, and a long-inactive free instance can
+   be **deleted** outright. Check the Console for the current window rather than trusting a number
+   written here. Resume before demoing: `init_graph()` fails fast (`connection_timeout=5.0`) and
+   prints `[tieout] graph disabled: …` to stderr if the instance is paused. If it was deleted,
+   re-seed and rebuild — the graph is derived, so nothing is actually lost (next section).
+
+## Durability: the graph is a derived index
+
+The graph is **never the system of record**. Everything it holds is reconstructible from artifacts
+tieout already writes — `exceptions.json` (status, reason, evidence rows), `outputs/*.xlsx` (the
+written answer values) and the dataset (task metadata) — so losing the database loses no information:
+
+```bash
+cd research && uv run --extra graph python ../demo/rebuild_graph.py /tmp/syndicate-demo
+```
+
+`rebuild_graph.py` replays each task through the same `graph_payload()` the live run used, reading
+the output workbook with `save=False` so finished artifacts are never rewritten (verified: output
+SHA-256 and mtime unchanged across a rebuild). It replays onto the `run_id` stamped in the payload,
+so rebuilding after a full wipe reproduces the original graph exactly — measured identical before
+and after, and unchanged when run twice:
+
+```
+Cell 75 · Vendor 71 · Sheet 1 · CloseRun 1 · Exception 2 · EvidenceRow 5
+DERIVED_FROM 60 · EVIDENCED_BY 10 · IN_SHEET 75 · MATCHES 2 · PRODUCED 15 · RAISED 2 · ROUTED_TO 2
+skeleton vendors 0
+```
+
+Two recovery details: a payload whose recorded absolute `output` path no longer exists falls back to
+`<out_dir>/outputs/<task_id>.xlsx`, so a run directory copied to another machine is still replayable;
+and artifacts written before the stamp existed replay onto the current `TIEOUT_RUN_ID` and print a
+warning — pass `--run-id` to pin them. (Unstamped replays fork run history, which is precisely why
+the stamp exists.)
+
+### Backend tiers
+
+| Tier | Backend | Cost | Use |
+|------|---------|------|-----|
+| 0 | none (default) | $0 | Evals, `research/loop.py`, the Docker ship container — graph off, artifacts byte-identical |
+| 1 | **Neo4j Community, self-hosted** (`bolt://` or `neo4j://`) | $0 | Durable local/dev graph: no account, no auto-pause, no auto-delete |
+| 2 | **Aura** (`neo4j+s://`) | free tier → paid | Managed, multi-user, cross-run vendor memory — the demo and the collaboration story |
+
+Tiers 1 and 2 are the **same code path**: `init_graph()` passes `NEO4J_URI` verbatim to
+`GraphDatabase.driver()`, so moving between them is a config edit, not a migration. One constraint —
+the read path uses `routing_=RoutingControl.READ`, so the scheme must be routing-capable
+(`neo4j+s://` or `neo4j://`; not `bolt+s://`).
+
+There is deliberately **no SQLite backend for the lineage graph.** SQLite is already the governed
+business-memory store (`harness/memory_store.py`: corrections → candidate rules → validated →
+activated → revoked, event-sourced), and `docs/COREWEAVE.md` keeps the two subsystems apart — the
+business-memory path does not contact Neo4j, the Neo4j extension is not the authority for approved
+business rules, and a live graph is never migrated implicitly. A second SQLite concern for lineage
+would blur exactly that boundary. Durability therefore comes from replay rather than mirroring: the
+graph is reproducible from artifacts you already keep, and a free self-hosted Neo4j (tier 1) covers
+the "must not vanish" case with no new code.
 
 ## Commands
 
@@ -121,6 +184,9 @@ TIEOUT_GRAPHRAG=1 ./demo/run_demo.sh close-tieout-bank-cp
 
 # 3. READ from the CLI (the GraphRAG retrieval, no inference)
 cd research && uv run --extra graph python ../harness/graph.py query "NIP LIT"
+
+# 4. REBUILD from artifacts (recovery after an Aura pause/delete, or moving backend tier)
+cd research && uv run --extra graph python ../demo/rebuild_graph.py /tmp/syndicate-demo
 ```
 
 Run graph demos with `uv run --extra graph` (the `neo4j` driver is an optional extra; the
@@ -171,10 +237,11 @@ MATCH (v:Vendor) WHERE v.name IS NULL RETURN count(v);  // expect 0
 
 ```
 harness/graph.py        lazy neo4j driver + schema DDL + WRITE_CYPHER + lexical SCAN + CLI
-harness/exceptions.py   _graph_payload() builds lineage from the INIT workbook; write hook
+harness/exceptions.py   graph_payload() builds lineage from the INIT workbook; write hook + stamp
 harness/pipeline.py     init_graph()/close_graph(); GraphRAG read (keyword+flag gated) → prompt
 harness/prompts.py      _graph_fragment() — "## Graph context" seam (byte-identical when empty)
 demo/seed_graph.py      seeds (:Vendor) from the fixture's 'Vendor Master List'
+demo/rebuild_graph.py   replays a run's artifacts back into the graph (recovery / tier move)
 demo/simulate_demo.sh   offline write path (uv run --extra graph; init_graph in the heredoc)
 demo/run_demo.sh        live path (uv run --extra graph; TIEOUT_GRAPHRAG=1 turns on the read)
 ```

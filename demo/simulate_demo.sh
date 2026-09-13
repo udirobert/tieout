@@ -17,7 +17,7 @@ mkdir -p "${OUT}/outputs" "${OUT}/exceptions"
 
 cd "${ROOT}/research"
 uv run --extra graph python <<PY
-import json, shutil, sys
+import json, os, shutil, sys
 from pathlib import Path
 
 ROOT = Path("${ROOT}")
@@ -57,7 +57,13 @@ print(f"=== simulate_demo: {tid} ({mode}) ===")
 print(f"Output:     {out}")
 print(f"Exceptions: {len(payload['exceptions'])}")
 print(f"Queue:      {out_dir / 'exceptions.json'}")
-print(f"Graph:      {'lineage written (Neo4j)' if graph_on else 'disabled (set NEO4J_URI)'}")
+if graph_on:
+    graph_msg = "lineage written (Neo4j)"
+elif os.environ.get("NEO4J_URI"):
+    graph_msg = "disabled — creds present but unreachable (see [tieout] line above)"
+else:
+    graph_msg = "disabled (set NEO4J_URI in .env)"
+print(f"Graph:      {graph_msg}")
 print()
 for exc in payload["exceptions"][:5]:
     print(f"  {exc['cell']} | {exc['reason']} | proposed={exc['proposed_value']!r}")
