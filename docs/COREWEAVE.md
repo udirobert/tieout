@@ -112,17 +112,24 @@ end-to-end pass. Earlier UI smoke evidence predates the callback rewrite and
 must not be presented as verification of the revised UI. Use the saved scenario
 and unit-test evidence; do not automatically restart browser testing.
 
-`demo/console.py` was browser-verified once, under explicit permission, with this
-boundary: all three tabs rendered against real artifacts (`/tmp/syndicate-demo`,
-a governed-memory scenario dir), the picker loaded a run + db + workbook, and one
-live Aura retrieval was submitted from the Graph tab. The review and
-governed-memory write actions were **not** clicked in a browser; they were
-exercised headlessly through the console's own form callbacks against scratch
-copies with redirected output paths, which confirmed approve writes the proposed
-value, reject reverts to init, unselected rows are untouched, and the aggregate
-`exceptions.json` keeps its array shape. Rendering the Graph tab never connects:
-`graph.configured()` inspects the environment only, because `graph.enabled()`
-would ensure schema on page load.
+`demo/console.py` was browser-verified under explicit permission, most recently
+on 2026-09-13, with this boundary: all three tabs rendered against real
+artifacts (`/tmp/syndicate-demo`, a governed-memory scenario dir), the picker
+loaded a run + db + workbook, one live Aura retrieval was submitted from the
+Graph tab, and the governed-memory writes were clicked end to end — a
+correction proposed a candidate rule, replay validation ran (a deliberately
+wrong vendor replayed to `eligible=False`), and validating a revoked rule was
+refused. That round caught one bug the static checks could not: a single-cell
+Memory tab never re-rendered after its own writes, because marimo does not
+re-run a cell that set its own state. Fixed by splitting the tab into display
+and form cells, then re-verified (the rules table refreshes without a reload).
+The review-decision submit was **not** clicked in a browser; it was exercised
+headlessly through the console's own form callbacks against scratch copies with
+redirected output paths, which confirmed approve writes the proposed value,
+reject reverts to init, unselected rows are untouched, and the aggregate
+`exceptions.json` keeps its array shape. Rendering the Graph tab never
+connects: `graph.configured()` inspects the environment only, because
+`graph.enabled()` would ensure schema on page load.
 
 ### Workbook contract
 
