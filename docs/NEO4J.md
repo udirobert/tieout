@@ -100,6 +100,31 @@ scan misses falls back to `vendor_name_ft` (`db.index.fulltext.queryNodes`, best
 `seed_graph.py` awaits the index after seeding so it is query-ready and the fallback never returns
 empty mid-demo.
 
+### Measured: what the read path does and does not change
+
+A live A/B against Aura (`Qwen3.8-27B`, temp 0.0, `--path hybrid`, same task both arms) — graph ON
+vs `TIEOUT_GRAPHRAG=0`:
+
+| | `## Graph context` in prompt | prompt len | cells filled | exceptions |
+|---|---|---|---|---|
+| graph ON | yes — 779 chars, 7 pulled names, scored candidates | 12504 | **2/15** | 13 |
+| graph OFF | no | 11724 | **2/15** | 13 |
+
+Identical cell values in both arms (`K6`, `K16`), so at temp 0.0 the retrieval changed **nothing
+measurable**. The seam itself is clean: the 780-char delta is exactly the injected block plus one
+newline, and the OFF arm carries no graph section at all.
+
+The reason is structural, not a bug: this fixture's entire `Vendor Master List` (71 rows) already
+sits inline in the baseline prompt, so `NIP P/S` and `NIP PLATFORM SOLUTIONS APS` are readable
+without Neo4j. Retrieving them from the graph duplicates what the model can already see. **GraphRAG
+earns its keep only once the master stops fitting in context** — below that threshold it is correct,
+traced, and redundant. Claim otherwise would be unsupported by these runs.
+
+What the graph does demonstrably carry on this fixture is **provenance**: 75 `(:Cell)` nodes tied by
+60 `DERIVED_FROM` edges to the sources they came from, exceptions linked to their evidence rows, and
+identity that stays stable across runs (three `CloseRun` nodes written, `Cell` still 75, `Vendor`
+still 71). That is the *"every cell tied to its source"* claim, and it is the part to demo.
+
 ## Aura setup
 
 1. Create a free **Aura** instance (Console → Create → Aura Free / Professional trial).
@@ -113,6 +138,15 @@ empty mid-demo.
    TIEOUT_GRAPH=1        # write lineage (default on when creds present)
    TIEOUT_GRAPHRAG=0     # read candidates into the prompt (default off)
    ```
+
+   **Two different credentials, only one works here.** The Console also offers *Account Settings →
+   Client credentials → Aura API* (a client id + client secret). Those mint an OAuth token for the
+   **Aura management API** (`api.neo4j.io/oauth/token`) — they are not database credentials, and the
+   bolt driver cannot use them: `auth=(user, password)` needs the instance's `neo4j` password. As a
+   Basic pair against the Query API they return `Neo.ClientError.Security.Unauthorized`, and Bearer
+   auth there requires your own SSO provider (Business Critical only). `NEO4J_PASSWORD` comes from
+   the instance's **Connect** dialog, or the `Neo4j-<instance>-Created-<date>.txt` the Console
+   downloads at creation; if it is lost, **Reset password** on the instance.
 
 3. **Aura Free auto-pauses after a few days of inactivity**, and a long-inactive free instance can
    be **deleted** outright. Check the Console for the current window rather than trusting a number
