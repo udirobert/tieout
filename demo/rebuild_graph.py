@@ -69,6 +69,49 @@ def _resolve_output(payload: dict, out_dir: Path) -> Path:
     return out_dir / "outputs" / f"{payload.get('task_id')}.xlsx"
 
 
+def lineage_from_artifacts(
+    out_dir: Path, dataset_dir: Path, run_id: str | None = None
+) -> tuple[list[dict], list[tuple[str, str]], bool]:
+    """Replay every task in a run dir through `graph_payload()`, without writing.
+
+    The same reconstruction `main()` replays onto Neo4j, exposed on its own because
+    the lineage is a derived index: a reader can render it with no database
+    connection at all. Output workbooks are read with `save=False`, so finished
+    artifacts are never rewritten, and one unreadable task does not stop the rest.
+
+    Returns `(lineages, skipped, unstamped)`; `skipped` is `[(task_id, reason)]`.
+    """
+    tasks = {t["id"]: t for t in load_dataset(Path(dataset_dir))}
+    lineages: list[dict] = []
+    skipped: list[tuple[str, str]] = []
+    unstamped = False
+    for payload in _payloads(out_dir):
+        task_id = payload.get("task_id")
+        task = tasks.get(task_id)
+        out = _resolve_output(payload, out_dir)
+        if task is None or not out.exists():
+            why = "not in dataset" if task is None else f"missing output {out}"
+            skipped.append((task_id, why))
+            continue
+        resolved, stamped = _run_id(payload, run_id)
+        unstamped = unstamped or not stamped
+        try:
+            info = read_graded(task, out, save=False)
+            lineages.append(
+                graph_payload(
+                    task,
+                    payload.get("status") or "",
+                    payload.get("reason") or "",
+                    info,
+                    payload.get("exceptions") or [],
+                    run_id=resolved,
+                )
+            )
+        except Exception as exc:  # noqa: BLE001 — one bad task must not stop the rest
+            skipped.append((task_id, f"{type(exc).__name__}: {exc}"))
+    return lineages, skipped, unstamped
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("out_dir", help="run dir holding exceptions.json + outputs/")
@@ -91,45 +134,22 @@ def main() -> int:
         )
         return 1
 
-    rows = _payloads(out_dir)
-    if not rows:
+    if not _payloads(out_dir):
         print(f"no exceptions.json or exceptions/*.json under {out_dir}")
         graph.close_graph()
         return 1
-    tasks = {t["id"]: t for t in load_dataset(Path(args.dataset_dir))}
 
-    replayed = skipped = cells = matched = 0
-    unstamped = False
-    for payload in rows:
-        task_id = payload.get("task_id")
-        task = tasks.get(task_id)
-        out = _resolve_output(payload, out_dir)
-        if task is None or not out.exists():
-            why = "not in dataset" if task is None else f"missing output {out}"
-            print(f"  skip {task_id}: {why}")
-            skipped += 1
-            continue
-        run_id, stamped = _run_id(payload, args.run_id)
-        unstamped = unstamped or not stamped
-        try:
-            # save=False: a replay reads finished artifacts, it never rewrites them.
-            info = read_graded(task, out, save=False)
-            lineage = graph_payload(
-                task,
-                payload.get("status") or "",
-                payload.get("reason") or "",
-                info,
-                payload.get("exceptions") or [],
-                run_id=run_id,
-            )
-            ok = graph.write_lineage(lineage)
-        except Exception as exc:  # noqa: BLE001 — one bad task must not stop the rest
-            print(f"  skip {task_id}: {type(exc).__name__}: {exc}")
-            skipped += 1
-            continue
-        if not ok:
-            print(f"  skip {task_id}: write_lineage returned False")
-            skipped += 1
+    lineages, skipped, unstamped = lineage_from_artifacts(
+        out_dir, Path(args.dataset_dir), args.run_id
+    )
+
+    replayed = cells = matched = 0
+    for task_id, why in skipped:
+        print(f"  skip {task_id}: {why}")
+    for lineage in lineages:
+        if not graph.write_lineage(lineage):
+            print(f"  skip {lineage['task_id']}: write_lineage returned False")
+            skipped.append((lineage["task_id"], "write_lineage returned False"))
             continue
         replayed += 1
         cells += len(lineage["cells"])
@@ -138,7 +158,7 @@ def main() -> int:
     graph.close_graph()
     print(f"rebuilt {replayed} task(s), {cells} answer cell(s)")
     if skipped:
-        print(f"skipped {skipped}")
+        print(f"skipped {len(skipped)}")
     if matched:
         print(
             f"{matched} cell(s) carry a vendor_key; a MATCHES edge exists only where "

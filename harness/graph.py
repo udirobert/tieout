@@ -285,6 +285,31 @@ def enabled() -> bool:
     return bool(_ENABLED)
 
 
+def configured() -> str:
+    """Why the graph would or would not connect, without connecting.
+
+    `enabled()` lazily calls `init_graph()`, which runs `_ensure_schema` — so a UI
+    that merely renders a status line would be making a graph schema change on page
+    load. This is the read-only counterpart: env inspection only, no driver, no
+    network, no writes, safe to call on every render.
+    """
+    _load_env_local()
+    flag = os.environ.get("TIEOUT_GRAPH", "1").strip().lower()
+    if flag in ("0", "false", "off"):
+        return "TIEOUT_GRAPH is off — everything here is offline"
+    missing = [
+        name
+        for name in ("NEO4J_URI", "NEO4J_USER", "NEO4J_PASSWORD")
+        if not os.environ.get(name)
+    ]
+    if missing:
+        return f".env has no {', '.join(missing)} — everything here is offline"
+    return (
+        f"configured for {os.environ.get('NEO4J_URI')} — not connected, and no "
+        "schema ensured, until you submit a retrieval"
+    )
+
+
 def run_id() -> str:
     return _RUN_ID or ""
 
