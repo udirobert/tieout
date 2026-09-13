@@ -38,3 +38,7 @@ research/data/eval/lora_v1/traces/
 .idea/
 research/data/sft/trajectories.jsonl
 research/data/sft/tmp_outputs/
+*.sqlite3
+*.sqlite3-journal
+*.sqlite3-wal
+*.sqlite3-shm

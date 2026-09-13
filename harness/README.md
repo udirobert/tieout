@@ -35,6 +35,19 @@ Sheet codegen + LibreOffice `#ERR!` → values-first (C recalc-as-gate).
 Pinned answer range: values-first keeps init values; codegen omits them (echo caused the cell dip).
 `--path auto` adds one cross-path fallback. `--temperature` (default 0; B uses 0.7).
 
+## Governed business memory (separate, local workflow)
+
+`memory_policy.py` defines exact-alias matching and the labeled replay gate.
+`memory_store.py` records corrections, immutable rules, validation, activation,
+and revocation in local SQLite. `memory_workbook.py` imports an explicit
+`Transactions` schema and exports suggestions to a new workbook without editing
+source cells. `demo/close_workspace.py` is the review UI.
+
+The original exception CLI and pipeline do not automatically write to this store.
+No model guess, prompt-overlay change, or Neo4j match is an approved correction.
+Reviewer names are self-attested; matching scope is not authentication or tenant
+access isolation. See `docs/COREWEAVE.md` for the synthetic demo and pilot limits.
+
 ## Files
 
 - `pipeline.py` — entry. Sheet-level: codegen loop then one values-first fallback. Cell-level: values-first then one codegen fallback. Default `--model tinker:Qwen/Qwen3.8-27B`.

@@ -1,5 +1,11 @@
 # Demo — script, commands, recording
 
+This page preserves the **original Syndicate demo** and its event-specific
+requirements. For the new CoreWeave two-close-cycle correction-memory demo,
+review workflow, and honest benchmark caveats, use [COREWEAVE.md](COREWEAVE.md).
+Do not present the original engine or the previously inspected CFO fixtures as
+new hackathon work or an untouched evaluation lockbox.
+
 **Hero fixture:** `close-tieout-bank-cp` (bank counterparty match)  
 **Duration:** ≤4 min (aim 3:30) · **Mandatory:** AO dashboard with **total session count**
 

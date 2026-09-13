@@ -1,121 +1,279 @@
 # tieout — CoreWeave Hacks
 
-**Every cell tied to its source — and now the agent learns from the ones it misses.**
+**Turn a controller's correction into tested, reusable reconciliation memory.**
 
-## What was built this weekend (the judged delta)
+The product goal is fewer recurring exceptions in the next close cycle, with
+human approval and an inspectable decision history. A benchmark curve is
+supporting research, not the customer outcome.
 
-The reconciliation engine (verify → repair → exception queue → human review)
-was built at a previous hackathon and is disclosed prior work. What it lacked
-was learning: every failed cell, repair trace, and exception was a dead-end
-artifact. This weekend we closed the loop:
+## Provenance and implementation boundary
 
-```
-run pipeline on eval split
-  → golden scorer (cell-level exact match, no LLM judge)
-  → cluster failures by signature
-  → mutator agent rewrites the agent's own skill library
-  → re-score → keep on strict improvement, revert on regression
-  → one final score on a lockbox set the mutator never saw
-```
+The spreadsheet reconciliation engine, repair loop, exception queue, and original
+CFO demo are disclosed prior work. The CoreWeave extension adds W&B Serverless
+Inference, Weave operations/evaluations, prompt-skill experiments, and a governed
+correction-memory workflow. The Neo4j lineage/vendor-retrieval extension is a
+separate integration; it is not the authority for approved business rules.
 
-The mutation surface is `harness/skills_overlay.json` — domain skill fragments
-the agent injects into its own code-generation prompt, gated by keyword match
-on the task instruction. Learned skills must be keyword-gated and ≤1500 chars
-(prompt-bloat / negative-transfer guards); a mutation can also `replace` a base
-skill. Keep/revert is hill-climbing on `cell_accuracy` over a fixed eval split
-at temperature 0 — paired comparison, not independent samples.
+Two kinds of learning must remain separate:
 
-**Lockbox:** `demo/close-tieout` (CFO fund-admin tasks, a different
-distribution than the dev set) is scored once after selection — proof the
-learned skills transfer rather than memorize.
+| Learning | Authority | Current implementation |
+|---|---|---|
+| Procedural skill text | Experimental evaluation | `research/loop.py`, injected into codegen prompts |
+| Business mapping | Explicit reviewer correction and approval | Local `harness/memory_store.py` plus deterministic `memory_policy.py` |
 
-## Sponsor tools
+The local business-memory path does not read model guesses as approved facts,
+does not load the learned prompt overlay, and does not contact inference, Weave,
+or Neo4j. The W&B-powered experimental loop remains available independently.
+End-to-end sponsor tracing of the new review workflow is a follow-on, subject to
+an explicit data-sharing policy; do not imply it already exists.
 
-| Tool | Use |
-|------|-----|
-| **W&B Serverless Inference** | Runtime model + mutator (`wandb:` adapter; OpenAI-compatible, `chat_template_kwargs` for thinking control) |
-| **Weave** | `weave.op` tracing of every model call / verify / repair; `weave.Evaluation` per loop iteration; eval history is the improvement curve |
-| **marimo** | `demo/loop_dashboard.py` — accuracy curve + exception-queue review UI |
-| **W&B MCP** | optional — query runs/traces from the coding agent |
-
-## Architecture
+## Governed memory: the first product slice
 
 ```
-harness/pipeline.py     classify → values|codegen → verify → repair ≤3 → exceptions
-harness/skills.py       base fragments + skills_overlay.json (the learned library)
-harness/adapters.py     tinker: | gemini: | wandb: (W&B Inference)
-harness/weave_hooks.py  lazy weave.init + call-time op wrappers (no-op offline)
-research/weave_eval.py  TieoutModel(weave.Model) + cell_score(weave scorer)
-research/loop.py        the self-improvement driver (this weekend's core)
-demo/loop_dashboard.py  marimo panel
-scripts/sweep.sh        model × path factorial sweep
+import explicitly mapped workbook rows
+  -> reviewer records a correction + rationale + source provenance
+  -> immutable exact-alias candidate
+  -> labeled replay: positive, near-name negative, conflicting evidence, scope boundaries
+  -> explicit activation after replay gate
+  -> next-period suggestions with rule IDs and review history
+  -> revoke rule; future suggestions stop
 ```
 
-## Commands
+- Rules require exact tenant, entity, account, and currency scope.
+- Narrative matching normalizes case and whitespace only. No substring/fuzzy
+  match, invented alias, or inferred accounting treatment is silently approved.
+- Source identity includes the workbook SHA-256, sheet, and source cell.
+- Corrections, rule definitions, validation, activation, and revocation are
+  retained as local records/events. A replacement is a new rule ID, not an edit
+  of the previous definition. `version=1` is per immutable rule; there is not yet
+  a parent/child policy-version management UI.
+- Candidate/validated rules do not influence suggestions. Activation reruns the
+  replay under a transaction and refuses stale validation after active rules change.
+- Conflicting vendor evidence or conflicting rules produce `review`, not a match.
+- Export creates a separate workbook with a `tieout review` sheet containing
+  proposed vendors and provenance. It never overwrites the source, fills final
+  accounting cells, or posts to a ledger. Revocation affects future suggestions;
+  already exported files remain historical artifacts.
+
+This is a local, single-operator prototype: reviewer names are self-attested,
+not authenticated; scope checks are not an authorization system. SQLite events
+are append-only through the application, not a tamper-proof audit ledger.
+
+## Run the synthetic two-cycle demonstration
+
+Run from the repository root after installing the existing research dependencies:
 
 ```bash
-export WANDB_API_KEY=...   # enables Inference + Weave
-
-# factorial config sweep (~5 min/cell at 15 tasks)
-./scripts/sweep.sh research/data/spreadsheetbench_verified_400 15
-
-# the loop: dev set for mutation+selection, CFO set as lockbox
-cd research && uv run python loop.py \
-  --dataset-dir data/spreadsheetbench_verified_400 --sample 20 --iters 3 \
-  --model wandb:Qwen/Qwen3.8-27B \
-  --holdout-dir ../demo/close-tieout --out-dir /tmp/tieout-loop
-
-# dashboard
-uv run marimo run ../demo/loop_dashboard.py
+uv sync --directory research
+DEMO_DIR=$(mktemp -d /tmp/tieout-memory-demo.XXXXXX)
+uv run --directory research python ../demo/memory_scenario.py --out-dir "$DEMO_DIR"
+uv run --directory research marimo run ../demo/close_workspace.py
 ```
 
-## Results (dev-15 sweep, SpreadsheetBench verified)
+Set the workspace paths to `$DEMO_DIR/memory.sqlite3` and the chosen
+`$DEMO_DIR/cycle1.xlsx` or `$DEMO_DIR/cycle2.xlsx`. The replay input is
+`$DEMO_DIR/replay_cases.json`. Use a fresh output directory on every scenario run;
+existing fixtures, databases, and export workbooks are not overwritten.
 
-| model | hybrid | values-only |
-|---|---|---|
-| **Qwen/Qwen3.8-27B** | **0.9232** | 0.5164 |
+Artifacts:
+
+- `cycle1.xlsx`: the original correction source.
+- `replay.xlsx` / `replay_cases.json`: explicitly labeled synthetic replay cases.
+- `cycle2.xlsx`: changed period, amount, ordering, and narrative whitespace/case.
+- `cycle2-reviewed.xlsx`: suggestions exported while the rule was active.
+- `memory.sqlite3`: correction, candidate, replay, activation, and revocation history.
+- `evidence.json`: before/candidate/active/revoked outputs and replay report.
+
+The scripted scenario supplies a **synthetic reviewer** to exercise the API and
+ends with the rule **revoked**, demonstrating rollback. It is not an unattended
+production approval agent. In the workspace, record a new correction and propose
+a new rule, validate it against the replay file, then explicitly activate it to
+walk through the interactive lifecycle. Use a new export filename.
+
+The demonstration's expected behavior is one recurring alias suggested after
+activation, with the near-name, contradictory vendor, and other-tenant examples
+remaining in review. This is a functional test, **not a customer accuracy claim,
+a lockbox result, or evidence of learned fuzzy generalization**.
+
+### Verification status
+
+The policy/store/workbook suite passed 29 unit tests, covering replay gates,
+activation/revocation, stale validation, scope boundaries, sparse sheets, source
+snapshot consistency, and literal-string exports. The captured synthetic
+scenario is `/tmp/tieout-memory-run-SEef/evidence.json`.
+
+The revised callback-based marimo UI passed static checks, but its full extended
+browser flow remains unverified. Browser testing was stopped at the user's
+request due to CPU impact; the task's browser processes and marimo server were
+shut down. The latest browser log contains a page-load timeout, not a completed
+end-to-end pass. Earlier UI smoke evidence predates the callback rewrite and
+must not be presented as verification of the revised UI. Use the saved scenario
+and unit-test evidence; do not automatically restart browser testing.
+
+### Workbook contract
+
+Sheet: `Transactions`. Required headers (exact, unique):
+
+`Tenant`, `Entity`, `Account`, `Currency`, `Narrative`, `Vendor Hint`, `Date`, `Amount`.
+
+Scope/narrative are non-empty text. `Vendor Hint` may be blank; conflicting text
+forces review. Formulas are rejected in matching/scope fields. Date and amount
+are preserved context, not matching predicates in this version. This explicit
+adapter does not assume the legacy CFO fixtures have these columns. The original
+exception CLI and benchmark pipeline are unchanged; their output is not silently
+connected to business memory.
+
+## Hackathon demo narrative
+
+1. Disclose the prior engine and the new work.
+2. Show an unresolved recurring counterparty and its workbook source.
+3. Record the controller's correction. Show the candidate is still inactive.
+4. Inspect replay coverage, expected outcomes, and the confusing negative cases.
+5. Approve the rule explicitly, then open the second close cycle.
+6. Show the recurring alias suggested, the lookalike still in review, and the
+   reviewer/rationale/source behind the suggestion.
+7. Revoke the rule and show that future reuse stops.
+8. Show the separate W&B/Weave experimental loop as the research layer, not as
+   proof that business corrections are automatically safe.
+
+## Sponsor tooling and research commands
+
+| Tool | Implemented role |
+|---|---|
+| W&B Serverless Inference | Runtime and mutator via `wandb:` adapter |
+| Weave | Model/pipeline operation traces and per-iteration evaluations |
+| marimo | Experimental loop dashboard and local close-memory workspace |
+| Neo4j | Optional existing lineage and lexical vendor retrieval; see `NEO4J.md` |
+
+```bash
+# Research runs use .env WANDB_API_KEY; paid inference may be consumed.
+./scripts/sweep.sh research/data/spreadsheetbench_verified_400 15
+uv run --directory research python loop.py \
+  --dataset-dir data/spreadsheetbench_verified_400 --sample 20 --iters 3 \
+  --model wandb:Qwen/Qwen3.8-27B --out-dir /tmp/tieout-loop-new-run
+uv run --directory research marimo run ../demo/loop_dashboard.py
+```
+
+Never run concurrent experimental loops against the shared
+`harness/skills_overlay.json`. Historical outputs must be retained in distinct
+run directories. No new benchmark run is necessary for the offline memory demo.
+
+## Historical exploratory results — not a validated sales claim
+
+These are the previously recorded single-run results, retained for transparency.
+The default samples were the first N tasks, not random population samples.
+
+| Model, dev-15 | hybrid | values |
+|---|---:|---:|
+| Qwen/Qwen3.8-27B | 0.9232 | 0.5164 |
 | deepseek-ai/DeepSeek-V4-Flash-0731 | 0.9162 | 0.5100 |
 | meta-llama/Llama-3.3-70B-Instruct | 0.6344 | 0.5414 |
 
-The repair/verify path (`hybrid`) is the single biggest lever: +9 to +41 pts
-over one-shot values. A 27B with a good harness beats a 70B without one —
-the loop exists to widen that gap.
+This compares execution configurations, not an isolated experiment on repair.
+The values path also has retries. Model ranking on 15 tasks does not establish
+an overall winner or justify changing configurations to obtain a better story.
 
-## Loop run (dev-20, Qwen3.8-27B, iters=3)
+| dev-20 iteration | Qwen cell accuracy | decision | Llama cell accuracy | decision |
+|---|---:|---|---:|---|
+| baseline | 0.9964 | baseline | 0.6599 | baseline |
+| 1 | 0.9954 | reverted | 0.7494 | kept |
+| 2 | 0.9288 | reverted | 0.8919 | kept, audit flag |
+| 3 | 0.9234 | reverted | 0.8407 | reverted |
 
-| iter | cell_accuracy | decision |
-|---|---|---|
-| 0 (baseline) | 0.9964 | — |
-| 1 | 0.9954 | reverted |
-| 2 | 0.9288 | reverted |
-| 3 | 0.9234 | reverted |
+Llama's observed best-minus-baseline delta was 23.20 percentage points. Its task
+pass rate moved from 8/20 to 10/20. Qwen's 99.64% cell score accompanied only
+14/20 passing tasks; it is not evidence that the workflow is solved. The overlay
+is replaced between iterations, so two accepted iterations do not mean two
+skills accumulated in the final library.
 
-Baseline sits at the ceiling, so every mutation was correctly rejected —
-iterations 2–3 demonstrate negative transfer being caught by the paired
-keep/revert guard. **Lockbox (CFO demo, 3 tasks): 0.7447 cell accuracy,
-2/3 pass** with zero exposure to the mutator.
+CFO demo scores were 0.7447 for Qwen and 0.9149 for Llama, each 2/3 tasks passing.
+**That dataset had already been used for model comparison and troubleshooting.**
+It is a regression/demo set, not an untouched lockbox. Llama also previously
+scored 0.9149 on it without this learned overlay. The final score alone therefore
+does not establish transfer or incremental benefit.
 
-## Loop run (dev-20, Llama-3.3-70B, iters=3) — the improvement arc
+### Read-only audit of the saved Llama outputs
 
-| iter | cell_accuracy | decision |
-|---|---|---|
-| 0 (baseline) | 0.6599 | — |
-| 1 | 0.7494 | kept (+9.0) |
-| 2 | 0.8919 | kept (+14.3, large-gain audit flag) |
-| 3 | 0.8407 | reverted |
+`research/audit_loop.py` re-scores saved workbooks without inference or
+recalculation, checks the recorded results, and captures output/reference/scorer
+hashes. The initial audit is saved locally at
+`/tmp/tieout-llama-audit-governed-memory.json`; use that capture rather than
+recomputing inputs when presenting these findings.
 
-**+23.2 pts** from two accepted skills; a third mutation regressed and was
-reverted. Learned overlay (`skills_overlay.json`): a keyword-gated lookup/
-dedup skill replacing the base fragment — generic guidance, no task IDs or
-cell coords. **Lockbox transfer: 0.9149 cell accuracy, 2/3 pass** on the
-CFO demo set the mutator never saw.
+| Iteration | Task-balanced accuracy | Improved tasks vs baseline | Regressed tasks vs baseline |
+|---|---:|---:|---:|
+| baseline | 60.64% | 0 | 0 |
+| 1 | 63.30% | 1 | 3 |
+| 2 (selected) | 63.97% | 3 | 3 |
+| 3 | 63.95% | 3 | 2 |
 
-## Methodology guards (from published prompt-optimization work)
+All four saved runs graded all 20 tasks without missing/error outputs under the
+current scorer, reproducing their recorded aggregate scores. All 20 tasks are
+sheet-level tasks. Two workbooks contribute approximately 74.64% of the 15,960
+scored cells. In the selected run, task `23-24` contributes 3,713 additional
+correct cells; the net change across all tasks is 3,703. Thus essentially all
+net cell-level gain is concentrated in one workbook, while the task-balanced
+increase is approximately 3.33 percentage points. This is not evidence that
+most workflows improved, nor does output replay establish causal attribution.
 
-- Mutation and selection share the dev split; the lockbox is scored once, never
-  shown to the mutator.
-- Paired, same-task, temp-0 scoring — deltas are signal, not seed noise.
-- Ties keep the incumbent; >10pt single-mutation gains are flagged for audit.
-- Learned skills: keyword-gated, ≤1500 chars, ≤3 per iteration.
-- Mutator sees failure signatures and instructions — the skills it writes are
-  task-generic.
+The historical loop did not preserve complete immutable skill/config manifests,
+so the audit cannot reconstruct a controlled counterfactual from its logs.
+
+### Known measurement limitations and next experiment
+
+- Mutation and selection currently use the same dev tasks; temp-0 paired tasks
+  reduce some variation but do not remove nondeterminism or selection bias.
+- Cell accuracy is micro-averaged across cells; large workbooks dominate. Report
+  task pass rate and task-balanced accuracy alongside it.
+- `score_task` errors currently have no cell count and are omitted from the cell
+  accuracy denominator. Report errors explicitly; do not treat exact-match
+  grading as immunity to evaluator bugs or gaming.
+- Mutator input includes expected/actual values. Generic-skill instructions are
+  not a technical guarantee against memorization.
+- `replaces` routing currently suppresses a base skill before checking the
+  replacement's keywords; the documented inherited gating is not implemented.
+  Audit/fix this before interpreting skill deltas as controlled effects.
+- The >10-point flag logs suspicion but does not block promotion. It is not an
+  audited release gate. The new business-memory activation gate is separate.
+- Local historical runs lacked LibreOffice recalculation. Values/formula paths
+  can be affected differently, so comparisons are not automatically unbiased.
+
+Next research gate: freeze code/model/config and immutable skill versions;
+partition by workbook/task family into mutation, selection, and genuinely fresh
+final test sets before optimizing; repeat paired incumbent/candidate runs;
+audit per-task improvements/regressions and grading errors; run baseline and
+selected candidate on the final set only after selection. Repeat inspection or
+retuning consumes the test set. These steps remain follow-on research work,
+not capabilities claimed by the current greedy loop.
+
+## Commercial wedge and pilot
+
+**Customer hypothesis:** fund administrators or outsourced finance teams doing
+recurring bank-to-counterparty reconciliation in Excel. Willingness to pay and
+workflow fit still need customer discovery.
+
+**Offer:** keep the workbook process; tieout proposes matches, identifies the
+exceptions requiring judgment, and reuses approved decisions in the next close.
+Start with one workflow in a paid, human-reviewed pilot, not autonomous close.
+
+Pilot sequence:
+
+1. Agree data permissions and one reconciliation workflow with its process owner.
+2. Label approved historical corrections and confusing negatives; retain a later
+   period for evaluation before proposing rules.
+3. Replay historical periods, then shadow the next close without ledger posting.
+4. Compare reviewer minutes, correct recurring resolutions, incorrect suggestions,
+   unresolved/reopened exceptions, and audit-record completeness. Agree targets
+   with the customer before measuring; do not invent ROI from synthetic data.
+5. Decide whether a paid expansion is justified by observed value.
+
+Before real customer data: authentication/roles, storage and tenant access
+isolation, retention/deletion/export policy, encryption/backup choices, audit
+integrity, and explicit inference/tracing data-sharing consent. The existing
+Neo4j cell keys also need tenant/workbook/version scoping before multi-client
+use. Do not migrate a live graph implicitly or call scoped matching an access
+control boundary.
+
+Out of scope for this slice: ERP write-back, production multi-tenancy, fuzzy
+alias auto-approval, fine-tuning, unattended policy changes, and a claimed
+production efficiency gain.
