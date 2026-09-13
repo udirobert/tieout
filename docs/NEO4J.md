@@ -108,9 +108,11 @@ The score is **Jaccard** — `overlap / (query tokens + candidate tokens − ove
 `overlap / query tokens`. Recall-only scoring lets a short pulled name score 1.0 against a much
 longer, more specific entity (`"NORDVIK INFRASTRUCTURE ADVANCED"` vs
 `"…Advanced Bioenergy Fund II SCSp"`), which are not the same counterparty. Ranking is not the gate
-either: `exact` — identity after folding case, diacritics and punctuation (`norm_key`) — is what the
-block tells the model it may write. Folding is what makes exactness usable at all, since the bank
-narrative `"S.A R.L."` and the master's `"S.à r.l."` are one entity.
+either: `exact` — identity after folding case, diacritics, punctuation and one closed legal-form token
+(`norm_key`) — is what the block tells the model it may write. Folding is what makes exactness usable
+at all, since the bank narrative `"S.A R.L."` and the master's `"S.à r.l."` are one entity. The legal-form
+map is a single entry, `ltd` → `limited`, chosen by held-out counterfactual rather than by taste; see
+below.
 
 ### The benchmark fixture's answer key is not in the sheet its instruction names
 
@@ -181,7 +183,9 @@ correctly because the folded `[exact]` hit plus the header's "a jurisdiction suf
 value" tells it to write the suffixed spelling. That single cell is the irreducible evidence that
 retrieval added information the prompt did not have.
 
-Both misses are honest, and both are what a vendor-memory axis would address:
+Both misses are honest, and both are the same class — the right counterparty in a spelling that is not
+the golden's. That class dominates the held-out residuals too (8 of 20 fills below), so it is a
+systematic variant-selection problem rather than anything a memory of past resolutions would fix:
 
 - **K6** — the graph offers `NIP PLATFORM SOLUTIONS APS - Non-LU` as primary and lists the golden
   unsuffixed spelling as an alternate. Nothing in the row discriminates them, so the model takes the
@@ -191,24 +195,83 @@ Both misses are honest, and both are what a vendor-memory axis would address:
   so the conservative gate blanks it. v3's threshold filled it with the wrong variant instead: same
   score, one more confident wrong fill.
 
-`MIN_SCORE` was deleted after being measured, not after being argued about. Held-out check: the 42
-real staging rows the 15-row fixture does not use (37 of them carry a golden match in the source
-workbook), gate applied mechanically — fill with the best candidate's primary name, else blank, no
-model in the loop:
+`MIN_SCORE` was deleted after being measured, not after being argued about. Held-out check: the 40
+real staging rows after the fixture's 15 — the fixture is the first 15 rows with a pulled name, so
+this is every row `build_fixtures.py` leaves out (35 carry a golden match in the source workbook; 3
+repeat a pulled name the fixture also uses). Gate applied mechanically — fill with the best
+candidate's primary name, else blank, no model in the loop:
 
-| write gate | fills | strict-exact correct | folded-equal | wrong fills |
-|---|---|---|---|---|
-| normalised exactness | 18 | 8 | 10 | 7 |
-| exactness or score ≥ 0.90 | 18 | 8 | 10 | 7 |
-| exactness or score ≥ 0.60 | 33 | 8 | 11 | 21 |
+| write gate | fills | string-exact | right identity (folded) | right entity, other spelling | **wrong entity** |
+|---|---|---|---|---|---|
+| normalised exactness | 20 | 9 | 12 | 8 | **0** |
+| exactness or score ≥ 0.90 | 20 | 9 | 12 | 8 | **0** |
+| exactness or score ≥ 0.60 | 32 | 9 | 12 | 8 | **11** |
 
-The 0.90 row is identical to exactness alone, so the threshold did no work except overfit 15
-graded cells. The 0.60 row buys one extra folded-equal fill for fourteen extra wrong ones and *zero*
-extra strictly-correct fills. Exactness is therefore the only gate that survived held-out data — and
-it is not a win there either: 8 of 18 fills reproduce the golden string exactly. Read the two results
-together and the honest claim is narrow. **3/15 → 13/15 is a single-task, 15-cell measurement on a
-fixture whose key leaks into the prompt, taken with a model in the loop; the retrieval-only held-out
-number is 8/18. Reproducible with the commands below; not a benchmark score.**
+Over all 55 real rows the shipped gate fills 31 times — 19 string-exact, 22 the right identity, 9 the
+right entity in a different spelling, **0 a wrong entity** — and leaves 17 rows blank that have a
+golden plus 7 blanks that are correct.
+
+The 0.90 row is identical to exactness alone, so the threshold did no work except overfit 15 graded
+cells. The 0.60 row buys 12 more fills and *not one* extra right-identity fill: 11 are a different
+counterparty and one writes a value where the source workbook's own golden is blank. Exactness is
+therefore the only gate that survived held-out data.
+
+Two corrections to how these numbers were previously read in this file. **"Wrong fills" was
+over-counted.** The 8 held-out residuals are the right counterparty carrying a currency suffix no
+master entry has (`NI Ranfjord II SCSp` → golden `NI Ranfjord II SCSp - EUR`,
+`NI GMF II Coöperatief U.A.` → golden `… U.A. - USD`). The entity is right and the string is not, so
+the honest headline for the shipped gate is *zero wrong entities*, not *7 wrong fills*. **And the
+blanks are not a retrieval failure.** In every one of the 17 the golden answer *is* in the seeded
+master; what is missing is the narrative→entity link — `NIP CINNABAR APS` → `NIP PLATFORM SOLUTIONS
+APS`, `NORDVIK INFRASTRUCTURE PARTNER` → `NIP P/S` — which is knowledge the graph does not hold and a
+similarity score cannot invent. Read the two results together and the honest claim is narrow.
+**3/15 → 13/15 is a single-task, 15-cell measurement on a fixture whose key leaks into the prompt,
+taken with a model in the loop; the retrieval-only held-out number is 12/20 right identity with zero
+wrong entities. Reproducible with the commands below; not a benchmark score.**
+
+### One fold, added after being measured: `ltd` → `limited`
+
+`norm_key` folds case, diacritics and punctuation, plus one closed legal-form map with a single
+entry — because that is all the real data supports. Over the 40 held-out rows it takes exact-gated
+fills 17 → 20 and right-identity fills 9 → 12 with the wrong-entity count unchanged; over all 55 rows,
+28 → 31 and 19 → 22. The three new fills are three names — `NI V AZURITE HOLDCO LTD`,
+`NI V FENWICK HOLDCO LTD.`, `NI V KALVIK TOPCO LTD.` — each matching a master entry spelled
+`Limited`. Wider maps (`co`/`corp`/`inc`/`plc`) added nothing on top of it.
+
+The benchmark cannot have been what this was tuned against: **no string in the fixture's 15 rows
+contains `ltd`**, neither the pulled name nor the golden, so every fixture folded key is byte-identical
+with and without the map and the fixture's graph block is unchanged at 2013 characters — the measured
+13/15 stands without spending a re-run. A jurisdiction-token strip (`LUXEMBOURG` → `LU`) was measured
+in the same pass and **rejected**: it turned K7's near-miss into a confident wrong fill,
+`Trentbeck Audit` where the golden is `Trentbeck Audit - Lu`.
+
+### Why there is no cross-period vendor-memory axis
+
+The obvious next feature — let the graph remember that period 1 resolved `X` to `Y` and reuse it in
+period 2 — was scoped, measured, and dropped:
+
+- **A deterministic gate has nothing to learn from its own past.** Across all 55 rows there are 29
+  distinct pulled names and *zero* names whose golden differs from row to row. Resolution depends only
+  on the name, so if the gate fills a recurring name correctly in period 1 it already fills it
+  correctly in period 2, and if it misses the name it missed it in period 1 too and has nothing to
+  remember. Memory only earns its keep where resolution is human-corrected — which is the governed
+  memory's job, not the graph's.
+- **The ceiling is 7 cells anyway.** The best period split of the real sheet is 22/33 (or 25/30), and
+  only 7 period-2 rows repeat a name period 1 already resolved — in all 7 the prior value equals the
+  golden, i.e. a perfect score on rows the exactness gate already gets right.
+- **It is the wrong subsystem.** `docs/COREWEAVE.md` assigns approved business rules — aliases,
+  renames, "these two spellings are one counterparty" — to the governed SQLite memory, and states the
+  Neo4j extension *"is not the authority for approved business rules"*. `demo/memory_scenario.py`
+  already demonstrates cross-cycle learning there, with approval and provenance attached.
+- **The keys are not scoped.** `Cell.ref` carries no tenant/workbook/version, so a prior-resolution
+  read on the shared Aura instance would leak one fixture's answers into another's prompt. That is the
+  boundary `docs/COREWEAVE.md` names, and closing it is a schema change, not a query.
+
+What the graph can carry for that axis with no schema change is the *distinction*: `MATCHES.method` on
+`(:Cell)-[:MATCHES]->(:Vendor)` is written today and only ever holds `'exact-value'`
+(`harness/exceptions.py`), so a fill that came from an approved governed rule can be recorded as such
+and told apart from a fill that came from similarity. That is the audit question a memory feature
+actually has to answer.
 
 What the graph carries regardless of retrieval is **provenance**: 75 `(:Cell)` nodes tied by 60
 `DERIVED_FROM` edges to the sources they came from, 13 `MATCHES` edges into the master at
@@ -229,6 +292,14 @@ TIEOUT_RUN_ID=ab-off TIEOUT_GRAPHRAG=0 uv run --extra graph python ../harness/pi
 TIEOUT_RUN_ID=ab-on TIEOUT_GRAPHRAG=1 uv run --extra graph python ../harness/pipeline.py \
   --dataset-dir ../demo/close-tieout --ids close-tieout-bank-cp --path hybrid --fresh \
   --out-dir /tmp/ab-on
+```
+
+The held-out gate table, the fold counterfactual and the recurrence numbers come from a separate
+read-only tool — no model, no credits, no writes, but it does need the source workbook
+(`--source`, or `YLOOKUP_DATASETS`):
+
+```bash
+research/.venv/bin/python demo/measure_gate.py            # add --detail for per-row classification
 ```
 
 ## Aura setup
@@ -328,6 +399,9 @@ TIEOUT_GRAPHRAG=1 ./demo/run_demo.sh close-tieout-bank-cp
 
 # 3. READ from the CLI (the GraphRAG retrieval, no inference)
 cd research && uv run --extra graph python ../harness/graph.py query "NIP LIT"
+
+# 3b. MEASURE the read path on all 55 real rows (no inference, read-only; needs the source workbook)
+research/.venv/bin/python demo/measure_gate.py
 
 # 4. REBUILD from artifacts (recovery after an Aura pause/delete, or moving backend tier)
 cd research && uv run --extra graph python ../demo/rebuild_graph.py /tmp/syndicate-demo

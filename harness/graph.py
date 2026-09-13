@@ -138,13 +138,35 @@ LIMIT $k
 _JURIS = re.compile(r"\s*-\s*(non[\s-]*)?lu\s*$", re.IGNORECASE)
 _WS = re.compile(r"\s+")
 
-# Exactness is the only gate that survives held-out data. Over the 42 real staging
-# rows the 15-row benchmark fixture does not use, ">= 0.90 or exact" fills identically
-# to "exact only" (18 fills, 8 exactly right), while threshold 0.6 fills 33 with no
-# additional exact hit and 14 more wrong ones — a threshold tuned on 15 graded cells.
-# Folding case/diacritics/punctuation is what makes exactness usable at all — the
-# bank narrative "S.A R.L." and the master's "S.à r.l." are the same entity.
+# Exactness is the only gate that survives held-out data. Over the 40 real staging rows after the
+# 15-row benchmark fixture's, ">= 0.90 or exact" fills identically to "exact only" (20 fills, 12 of
+# them the right counterparty), while threshold 0.6 fills 32 with no additional right-identity fill
+# and 11 fills that are a different counterparty entirely. Across all 55 real rows the exactness gate
+# picks a wrong entity zero times. A score threshold tuned on 15 graded cells does not generalise.
+# Folding case/diacritics/punctuation is what makes exactness usable at all — the bank narrative
+# "S.A R.L." and the master's "S.à r.l." are the same entity.
 _FOLD = re.compile(r"[^a-z0-9]+")
+
+# Closed set on purpose. 'Ltd' and 'Limited' are the same legal form everywhere, so folding them is
+# orthography, not a guess about the entity. Over the 40 held-out rows this one token takes
+# exact-gated fills 17 -> 20 and right-identity fills 9 -> 12, wrong identities unchanged; over all
+# 55 rows, 28 -> 31 and 19 -> 22. The three new fills are three names ('NI V AZURITE HOLDCO LTD',
+# 'NI V FENWICK HOLDCO LTD.', 'NI V KALVIK TOPCO LTD.') each matching a master entry spelled
+# 'Limited'. Wider maps (co/corp/inc/plc) added nothing on top of it. The benchmark cannot have been
+# what this was tuned against: no string in the fixture's 15 rows contains 'ltd', in the pulled name
+# or in the golden, so every fixture folded key is unchanged and the fixture's graph block stays
+# byte-identical at 2013 chars — the measured 13/15 needs no re-run.
+_LEGAL_FORM = {"ltd": "limited"}
+
+
+def norm_key(value) -> str:
+    """Case/diacritic/punctuation-insensitive identity of a counterparty name."""
+    if not isinstance(value, str):
+        return ""
+    folded = unicodedata.normalize("NFKD", value).encode("ascii", "ignore").decode()
+    tokens = [t for t in _FOLD.split(folded.lower()) if t]
+    return "".join(_LEGAL_FORM.get(t, t) for t in tokens)
+
 
 _HEADER = (
     "Counterparty master retrieved from the knowledge graph, which is the system of "
@@ -157,14 +179,6 @@ _HEADER = (
     "them. If a row has no [exact] candidate and no match in the sheet, leave the "
     "cell blank for the exception queue. Best candidate first."
 )
-
-
-def norm_key(value) -> str:
-    """Case/diacritic/punctuation-insensitive identity of a counterparty name."""
-    if not isinstance(value, str):
-        return ""
-    folded = unicodedata.normalize("NFKD", value).encode("ascii", "ignore").decode()
-    return _FOLD.sub("", folded.lower())
 
 
 def _render_candidate(c: dict) -> str:
