@@ -15,6 +15,22 @@ production multi-tenant service. See [the product, demo, and pilot plan](docs/CO
 
 ---
 
+## close-keeper — Strands agent (Agents for Humans)
+
+A [Strands Agents SDK](https://github.com/strands-agents/sdk-python) agent for the
+financial close: it ties out workbooks in the background and **only surfaces when
+there's a real decision to make**. New build on tieout's verified tools —
+one recorded write path, governance-gated memory. See
+[close_keeper/README.md](close_keeper/README.md).
+
+```bash
+uv sync --directory research --extra agent
+research/.venv/bin/python -m close_keeper \
+  "Tie out the close package (all tasks), then tell me which cells need my decision and why."
+```
+
+---
+
 ## Docs
 
 | Read | Purpose |
@@ -105,10 +121,11 @@ Bank counterparty match: `Matched Sender/Beneficiary` filled where the lookup re
 ## Layout
 
 ```
-docs/       SYNDICATE.md, demo.md, submit.md
-demo/       CFO fixtures + scripts
-harness/    agent pipeline
-research/   dependencies (uv sync)
+close_keeper/  Strands agent for the close (Agents for Humans)
+demo/          CFO fixtures + scripts + marimo console
+docs/          SYNDICATE.md, demo.md, submit.md
+harness/       agent pipeline
+research/      dependencies (uv sync)
 ```
 
 Built with AO · Python · openpyxl · Tinker (Qwen3.8-27B)
