@@ -1,0 +1,4114 @@
+{
+ "source": "Bank statement to journal entries - working file (anonymised).xlsx",
+ "sheets": [
+  "Vendor Master List",
+  "Related Party Master"
+ ],
+ "entries": [
+  {
+   "name": "NISC Pte Ltd Singapore - Non - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "NISC Pte Ltd Singapore - Non - LU"
+   ]
+  },
+  {
+   "name": "WAP Translations",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "WAP Translations"
+   ]
+  },
+  {
+   "name": "Garrfield",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Garrfield",
+    "Garrfield - Non-LU"
+   ]
+  },
+  {
+   "name": "ACD",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "ACD"
+   ]
+  },
+  {
+   "name": "Boardwell - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Boardwell - Non-LU"
+   ]
+  },
+  {
+   "name": "Admini. de l Enregistrement - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Admini. de l Enregistrement - LU"
+   ]
+  },
+  {
+   "name": "Administration des contributions directes",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Administration des contributions directes",
+    "Administration des Contributions Directes - LU"
+   ]
+  },
+  {
+   "name": "BLACKTHORN - VAT",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "BLACKTHORN - VAT"
+   ]
+  },
+  {
+   "name": "BRACKEN Advisory",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "BRACKEN Advisory"
+   ]
+  },
+  {
+   "name": "Skarsvale GmbH - Non - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Skarsvale GmbH - Non - LU"
+   ]
+  },
+  {
+   "name": "MOK SRL - Non-Lu",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "MOK SRL - Non-Lu"
+   ]
+  },
+  {
+   "name": "AL-Draywick & Associates - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "AL-Draywick & Associates - Non-LU"
+   ]
+  },
+  {
+   "name": "Roskcombe Investment Management SE - NON LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Roskcombe Investment Management SE - NON LU"
+   ]
+  },
+  {
+   "name": "Stannvale (Denmark) ApS - Non - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Stannvale (Denmark) ApS - Non - LU"
+   ]
+  },
+  {
+   "name": "Stannvale Fund and Corporate Products S.A. - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Stannvale Fund and Corporate Products S.A. - LU"
+   ]
+  },
+  {
+   "name": "Bramworth",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Bramworth"
+   ]
+  },
+  {
+   "name": "Bramworth & Caldmere SA",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Bramworth & Caldmere SA",
+    "Bramworth & Caldmere SA - LU"
+   ]
+  },
+  {
+   "name": "Zellmont Media Limited",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Zellmont Media Limited"
+   ]
+  },
+  {
+   "name": "Alma J. Thulstrup (UK) Limited - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Alma J. Thulstrup (UK) Limited - Non-LU"
+   ]
+  },
+  {
+   "name": "Innberg - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Innberg - LU",
+    "Innberg - Non LU"
+   ]
+  },
+  {
+   "name": "Carrcombe Energy Research LLC",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Carrcombe Energy Research LLC"
+   ]
+  },
+  {
+   "name": "Authorite des Marchers Financiers - Non - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Authorite des Marchers Financiers - Non - LU"
+   ]
+  },
+  {
+   "name": "Autorité des marchés financiers - Non LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Autorité des marchés financiers - Non LU"
+   ]
+  },
+  {
+   "name": "FAH, XIR and SEW LLC",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "FAH, XIR and SEW LLC",
+    "FAH, XIR AND SEW LLC - Non-Lu"
+   ]
+  },
+  {
+   "name": "Oakwold Kirkwick - Non LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Oakwold Kirkwick - Non LU"
+   ]
+  },
+  {
+   "name": "Kirkstead Nethberg Lindberg S,C - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Kirkstead Nethberg Lindberg S,C - Non-LU"
+   ]
+  },
+  {
+   "name": "Steenstead-Brinwold - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Steenstead-Brinwold - Non-LU"
+   ]
+  },
+  {
+   "name": "Ormhurst Consulting Limited - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Ormhurst Consulting Limited - Non-LU"
+   ]
+  },
+  {
+   "name": "Marketwire Glangarth Group - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Marketwire Glangarth Group - Non-LU"
+   ]
+  },
+  {
+   "name": "KOP Power Strouddale PTY LTD - Non -LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "KOP Power Strouddale PTY LTD - Non -LU"
+   ]
+  },
+  {
+   "name": "KOP POWER PARTNERS AS - NON LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "KOP POWER PARTNERS AS - NON LU"
+   ]
+  },
+  {
+   "name": "Brenneke, Hanne and Partner mbB - Non - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Brenneke, Hanne and Partner mbB - Non - LU"
+   ]
+  },
+  {
+   "name": "Havmere and Losholm Abogados SAS - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Havmere and Losholm Abogados SAS - Non-LU"
+   ]
+  },
+  {
+   "name": "Steenvale y Grenwold Denthorpe - Non - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Steenvale y Grenwold Denthorpe - Non - LU"
+   ]
+  },
+  {
+   "name": "Rikke Fenger",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Rikke Fenger",
+    "Rikke Fenger - LU"
+   ]
+  },
+  {
+   "name": "Rikke Wangel Notaire - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Rikke Wangel Notaire - LU"
+   ]
+  },
+  {
+   "name": "Kirkthorpe & Marshaw Attorneys Ltd - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Kirkthorpe & Marshaw Attorneys Ltd - Non-LU"
+   ]
+  },
+  {
+   "name": "RAQ Marbeck Communications - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "RAQ Marbeck Communications - Non-LU"
+   ]
+  },
+  {
+   "name": "CE - Nordvik Economics - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "CE - Nordvik Economics - Non-LU"
+   ]
+  },
+  {
+   "name": "Chamber of Commerce - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Chamber of Commerce - LU"
+   ]
+  },
+  {
+   "name": "Chambre de Commerce",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Chambre de Commerce"
+   ]
+  },
+  {
+   "name": "Larchvale Umbford - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Larchvale Umbford - Non-LU"
+   ]
+  },
+  {
+   "name": "Wickmont Financial Merrworth Ltd - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Wickmont Financial Merrworth Ltd - Non-LU"
+   ]
+  },
+  {
+   "name": "Wickmont Partners PartG MBB - Non -LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Wickmont Partners PartG MBB - Non -LU"
+   ]
+  },
+  {
+   "name": "Gustav Partner - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Gustav Partner - Non-LU"
+   ]
+  },
+  {
+   "name": "NI ABF I DevCo ApS",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "NI ABF I DevCo ApS"
+   ]
+  },
+  {
+   "name": "NI IV K/S",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "NI IV K/S"
+   ]
+  },
+  {
+   "name": "NI IV KS - Non Lu",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "NI IV KS - Non Lu"
+   ]
+  },
+  {
+   "name": "NI Offshore Wind Korea Co. Ltd - Non - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "NI Offshore Wind Korea Co. Ltd - Non - LU"
+   ]
+  },
+  {
+   "name": "NI Service Company ApS",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "NI Service Company ApS"
+   ]
+  },
+  {
+   "name": "NI Service Company Ltd",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "NI Service Company Ltd"
+   ]
+  },
+  {
+   "name": "NI CLOUDBERRY BESS TRUST - Non- LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "NI CLOUDBERRY BESS TRUST - Non- LU"
+   ]
+  },
+  {
+   "name": "NI US Service Co Inc. - Non - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "NI US Service Co Inc. - Non - LU"
+   ]
+  },
+  {
+   "name": "NI V COOPERATIEF U.A",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "NI V COOPERATIEF U.A"
+   ]
+  },
+  {
+   "name": "NIP Fund Solution ApS - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "NIP Fund Solution ApS - Non-LU"
+   ]
+  },
+  {
+   "name": "NIP FUND SOLUTIONS APS - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "NIP FUND SOLUTIONS APS - Non-LU",
+    "NIP FUND SOLUTIONS APS"
+   ]
+  },
+  {
+   "name": "NIP Inc. - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "NIP Inc. - Non-LU"
+   ]
+  },
+  {
+   "name": "NIP P/S",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "NIP P/S"
+   ]
+  },
+  {
+   "name": "NIP PLATFORM SOLUTIONS APS - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "NIP PLATFORM SOLUTIONS APS - Non-LU",
+    "NIP PLATFORM SOLUTIONS APS"
+   ]
+  },
+  {
+   "name": "NISC ApS - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "NISC ApS - Non-LU"
+   ]
+  },
+  {
+   "name": "NISC GmbH - Non - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "NISC GmbH - Non - LU",
+    "NISC GmbH - Non-LU"
+   ]
+  },
+  {
+   "name": "NISC Ltd - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "NISC Ltd - Non-LU",
+    "NISC Ltd"
+   ]
+  },
+  {
+   "name": "NISC Lux Sarl - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "NISC Lux Sarl - LU"
+   ]
+  },
+  {
+   "name": "NISC Pty Ltd - Australia",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "NISC Pty Ltd - Australia"
+   ]
+  },
+  {
+   "name": "NISC S.L - Non LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "NISC S.L - Non LU"
+   ]
+  },
+  {
+   "name": "Carrstead Brinworth - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Carrstead Brinworth - Non-LU"
+   ]
+  },
+  {
+   "name": "Renewables Sector Council - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Renewables Sector Council - Non-LU"
+   ]
+  },
+  {
+   "name": "Renewables Capital Association Limited - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Renewables Capital Association Limited - Non-LU"
+   ]
+  },
+  {
+   "name": "Fennford Fairford DEUTSCHLAND LLP - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Fennford Fairford DEUTSCHLAND LLP - Non-LU"
+   ]
+  },
+  {
+   "name": "Fennford Fairford Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Fennford Fairford Non-LU"
+   ]
+  },
+  {
+   "name": "KOW Jerrthorpe Luxembourg - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "KOW Jerrthorpe Luxembourg - LU"
+   ]
+  },
+  {
+   "name": "KOW Luxembourg 2.0",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "KOW Luxembourg 2.0"
+   ]
+  },
+  {
+   "name": "CNMV - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "CNMV - Non-LU"
+   ]
+  },
+  {
+   "name": "Comision Nacional Del Mercado De Valores",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Comision Nacional Del Mercado De Valores"
+   ]
+  },
+  {
+   "name": "BRACKFORD LOSWOLD CJSC - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "BRACKFORD LOSWOLD CJSC - Non-LU"
+   ]
+  },
+  {
+   "name": "Contivo",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Contivo"
+   ]
+  },
+  {
+   "name": "Kirkmere Assurance - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Kirkmere Assurance - Non-LU"
+   ]
+  },
+  {
+   "name": "Nordvik Concierges Driven ApS- Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Nordvik Concierges Driven ApS- Non-LU"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure Service Company ApS - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Nordvik Infrastructure Service Company ApS - Non-LU"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure V GP ApS - Non LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Nordvik Infrastructure V GP ApS - Non LU",
+    "Nordvik Infrastructure V GP ApS"
+   ]
+  },
+  {
+   "name": "Nordvik Offshore Partners A/S - Non - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Nordvik Offshore Partners A/S - Non - LU"
+   ]
+  },
+  {
+   "name": "Nordvik Streaming - Non - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Nordvik Streaming - Non - LU"
+   ]
+  },
+  {
+   "name": "Selthorpe Advisory P/S - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Selthorpe Advisory P/S - Non-LU"
+   ]
+  },
+  {
+   "name": "Registered Agent Services Company - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Registered Agent Services Company - Non-LU"
+   ]
+  },
+  {
+   "name": "BAC A/S - Non-Lu",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "BAC A/S - Non-Lu"
+   ]
+  },
+  {
+   "name": "PIG Quarvale ApS - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "PIG Quarvale ApS - Non-LU"
+   ]
+  },
+  {
+   "name": "Credit Verrance Corp. and Inv. Bank - Non - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Credit Verrance Corp. and Inv. Bank - Non - LU"
+   ]
+  },
+  {
+   "name": "MAG",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "MAG"
+   ]
+  },
+  {
+   "name": "MAG Global Solutions - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "MAG Global Solutions - LU"
+   ]
+  },
+  {
+   "name": "CHALFIELD Aps - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "CHALFIELD Aps - Non-LU"
+   ]
+  },
+  {
+   "name": "Danish Chamber of Commerce China - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Danish Chamber of Commerce China - Non-LU"
+   ]
+  },
+  {
+   "name": "Danish Institute of Arbitration - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Danish Institute of Arbitration - Non-LU"
+   ]
+  },
+  {
+   "name": "Danish-Chinese Business Forum - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Danish-Chinese Business Forum - Non-LU"
+   ]
+  },
+  {
+   "name": "Havnvik Bank - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Havnvik Bank - Non-LU"
+   ]
+  },
+  {
+   "name": "Havnvik Bank AS",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Havnvik Bank AS"
+   ]
+  },
+  {
+   "name": "Eddstead and Zellmere LLP -Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Eddstead and Zellmere LLP -Non-LU"
+   ]
+  },
+  {
+   "name": "Trentbeck",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Trentbeck",
+    "Trentbeck - LU",
+    "Trentbeck - Non-LU"
+   ]
+  },
+  {
+   "name": "Trentbeck Audit",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Trentbeck Audit",
+    "Trentbeck Audit - Lu"
+   ]
+  },
+  {
+   "name": "Trentbeck Consulting Pty Ltd - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Trentbeck Consulting Pty Ltd - Non-LU"
+   ]
+  },
+  {
+   "name": "Trentbeck LLP - Non LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Trentbeck LLP - Non LU"
+   ]
+  },
+  {
+   "name": "Trentbeck Revision",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Trentbeck Revision",
+    "Trentbeck Revision - Non-LU"
+   ]
+  },
+  {
+   "name": "Trentbeck Tax and Consulting LUX - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Trentbeck Tax and Consulting LUX - LU"
+   ]
+  },
+  {
+   "name": "Trentbeck Tax Services Pty Ltd - Non - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Trentbeck Tax Services Pty Ltd - Non - LU"
+   ]
+  },
+  {
+   "name": "Garrvale Merrworth - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Garrvale Merrworth - Non-LU"
+   ]
+  },
+  {
+   "name": "FEN LIMITED - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "FEN LIMITED - Non-LU"
+   ]
+  },
+  {
+   "name": "Calddale Renford A/S - Non - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Calddale Renford A/S - Non - LU"
+   ]
+  },
+  {
+   "name": "Bodil Norlund",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Bodil Norlund"
+   ]
+  },
+  {
+   "name": "Haldhurst Stroudcombe Garrshaw Inc - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Haldhurst Stroudcombe Garrshaw Inc - Non-LU"
+   ]
+  },
+  {
+   "name": "Hanne & Quargarth",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Hanne & Quargarth"
+   ]
+  },
+  {
+   "name": "Hanne & Quargarth LLP (US)",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Hanne & Quargarth LLP (US)"
+   ]
+  },
+  {
+   "name": "Hanne hollmont Quargarth LIT - Non LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Hanne hollmont Quargarth LIT - Non LU"
+   ]
+  },
+  {
+   "name": "Etude Notaire Torben Dalsgaard - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Etude Notaire Torben Dalsgaard - LU"
+   ]
+  },
+  {
+   "name": "Etude Notaire Johanne Ottesen - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Etude Notaire Johanne Ottesen - LU"
+   ]
+  },
+  {
+   "name": "GED Godkendt Revisionspartnerselskab - Non - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "GED Godkendt Revisionspartnerselskab - Non - LU"
+   ]
+  },
+  {
+   "name": "Financial Market Authority - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Financial Market Authority - Non-LU"
+   ]
+  },
+  {
+   "name": "ORMDALE HASLBURY APAC Energy and Infrastructure Pty Ltd - Non-Lu",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "ORMDALE HASLBURY APAC Energy and Infrastructure Pty Ltd - Non-Lu"
+   ]
+  },
+  {
+   "name": "Dunwold Steendale - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Dunwold Steendale - Non-LU"
+   ]
+  },
+  {
+   "name": "G3 Harrholm Governance Group Limited - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "G3 Harrholm Governance Group Limited - Non-LU"
+   ]
+  },
+  {
+   "name": "Merete Gronbaek - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Merete Gronbaek - Non-LU"
+   ]
+  },
+  {
+   "name": "GRSX B.V - Non - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "GRSX B.V - Non - LU"
+   ]
+  },
+  {
+   "name": "Jesper Pehrson - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Jesper Pehrson - Non-LU"
+   ]
+  },
+  {
+   "name": "Haslwick Carrfield Renbury LLP - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Haslwick Carrfield Renbury LLP - Non-LU"
+   ]
+  },
+  {
+   "name": "HMRC Birmingham stamp office",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "HMRC Birmingham stamp office"
+   ]
+  },
+  {
+   "name": "Rengarth Ravdale LLP - Non LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Rengarth Ravdale LLP - Non LU"
+   ]
+  },
+  {
+   "name": "Havwick Ltd - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Havwick Ltd - Non-LU"
+   ]
+  },
+  {
+   "name": "GRIDWORKS ALLIANCE AU LTD - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "GRIDWORKS ALLIANCE AU LTD - Non-LU"
+   ]
+  },
+  {
+   "name": "Thurwold Partners LLC - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Thurwold Partners LLC - Non-LU"
+   ]
+  },
+  {
+   "name": "International Energy Agency - Non LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "International Energy Agency - Non LU"
+   ]
+  },
+  {
+   "name": "Norcombe - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Norcombe - LU"
+   ]
+  },
+  {
+   "name": "Norcombe (Luxembourg) S.a r.l. - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Norcombe (Luxembourg) S.a r.l. - LU"
+   ]
+  },
+  {
+   "name": "Interlynk Inc",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Interlynk Inc",
+    "Interlynk Inc - Non-LU"
+   ]
+  },
+  {
+   "name": "Interlynk, Inc.",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Interlynk, Inc."
+   ]
+  },
+  {
+   "name": "Investment Redbeck Institute Pty - Non - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Investment Redbeck Institute Pty - Non - LU"
+   ]
+  },
+  {
+   "name": "QEZ Corporate Solutions, Inc. - Non-Lu",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "QEZ Corporate Solutions, Inc. - Non-Lu"
+   ]
+  },
+  {
+   "name": "Verrthorpe Finance B.V. - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Verrthorpe Finance B.V. - Non-LU"
+   ]
+  },
+  {
+   "name": "Ivar-Oskar Ahlmark-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Ivar-Oskar Ahlmark-LU"
+   ]
+  },
+  {
+   "name": "Jakob Dohrmann - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Jakob Dohrmann - LU"
+   ]
+  },
+  {
+   "name": "Selholm 360, Inc. - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Selholm 360, Inc. - Non-LU"
+   ]
+  },
+  {
+   "name": "XIR and Lanholm - Non - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "XIR and Lanholm - Non - LU"
+   ]
+  },
+  {
+   "name": "Quardale LLP - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Quardale LLP - Non-LU"
+   ]
+  },
+  {
+   "name": "Jerrholm",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Jerrholm",
+    "Jerrholm- Non-Lu"
+   ]
+  },
+  {
+   "name": "FUL",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "FUL",
+    "FUL - Non-LU"
+   ]
+  },
+  {
+   "name": "FUL Stanfield Tax (DK) - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "FUL Stanfield Tax (DK) - Non-LU"
+   ]
+  },
+  {
+   "name": "FUL Australian - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "FUL Australian - Non-LU"
+   ]
+  },
+  {
+   "name": "FUL P/S - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "FUL P/S - Non-LU"
+   ]
+  },
+  {
+   "name": "FUL US Tax Services (London) LLP",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "FUL US Tax Services (London) LLP",
+    "FUL US Tax Services (London) LLP - Non-LU"
+   ]
+  },
+  {
+   "name": "Zellwick Attorneys Ltd - Non - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Zellwick Attorneys Ltd - Non - LU"
+   ]
+  },
+  {
+   "name": "Lindstead and Partners Co., Ltd - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Lindstead and Partners Co., Ltd - Non-LU"
+   ]
+  },
+  {
+   "name": "Lanford i Tarncombe - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Lanford i Tarncombe - Non-LU"
+   ]
+  },
+  {
+   "name": "Oakmont Y Glancombe Lanley, S.L - Non - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Oakmont Y Glancombe Lanley, S.L - Non - LU"
+   ]
+  },
+  {
+   "name": "SEW & Ko - Non LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "SEW & Ko - Non LU"
+   ]
+  },
+  {
+   "name": "YARDFIELD PTY LTD - Non-Lu",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "YARDFIELD PTY LTD - Non-Lu"
+   ]
+  },
+  {
+   "name": "Aldervale Aps - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Aldervale Aps - Non-LU"
+   ]
+  },
+  {
+   "name": "Ellmont & Chalworth - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Ellmont & Chalworth - LU",
+    "Ellmont & Chalworth - Non-LU"
+   ]
+  },
+  {
+   "name": "Ellmont and Chalworth (USA) B.V. - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Ellmont and Chalworth (USA) B.V. - Non-LU"
+   ]
+  },
+  {
+   "name": "Ellmont and Chalworth Luxembourg Sarl",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Ellmont and Chalworth Luxembourg Sarl"
+   ]
+  },
+  {
+   "name": "Maitre Bent AHLGREN - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Maitre Bent AHLGREN - LU"
+   ]
+  },
+  {
+   "name": "TRENTSTEAD & ALDERWORTH S. - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "TRENTSTEAD & ALDERWORTH S. - Non-LU"
+   ]
+  },
+  {
+   "name": "FUZ - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "FUZ - Non-LU"
+   ]
+  },
+  {
+   "name": "Ida Palsgaard",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Ida Palsgaard",
+    "Ida Palsgaard - LU"
+   ]
+  },
+  {
+   "name": "Stanwold Davwold - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Stanwold Davwold - Non-LU"
+   ]
+  },
+  {
+   "name": "Grenfield LLP - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Grenfield LLP - Non-LU"
+   ]
+  },
+  {
+   "name": "Me Emil Hasselvik",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Me Emil Hasselvik"
+   ]
+  },
+  {
+   "name": "VOSSGARTH CONTRACT FENNCOMBE - Non Lu",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "VOSSGARTH CONTRACT FENNCOMBE - Non Lu"
+   ]
+  },
+  {
+   "name": "QED Law Offices (Steenholm) - Non LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "QED Law Offices (Steenholm) - Non LU"
+   ]
+  },
+  {
+   "name": "Trentberg & Skarsford - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Trentberg & Skarsford - Non-LU"
+   ]
+  },
+  {
+   "name": "Wickthorpe Denley (Amsterdam) - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Wickthorpe Denley (Amsterdam) - Non-LU"
+   ]
+  },
+  {
+   "name": "Ulla B. Hillebrandt Consulting - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Ulla B. Hillebrandt Consulting - Non-LU"
+   ]
+  },
+  {
+   "name": "Vibeke Egholm - Non LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Vibeke Egholm - Non LU"
+   ]
+  },
+  {
+   "name": "Bregnholm",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Bregnholm"
+   ]
+  },
+  {
+   "name": "Halddale Merrmere Tarnhurst (Asia) LLP",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Halddale Merrmere Tarnhurst (Asia) LLP"
+   ]
+  },
+  {
+   "name": "Halddale Merrmere Tarnhurst Canada LLP - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Halddale Merrmere Tarnhurst Canada LLP - Non-LU"
+   ]
+  },
+  {
+   "name": "Notare Yardmont Dunfield - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Notare Yardmont Dunfield - Non-LU"
+   ]
+  },
+  {
+   "name": "KOL",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "KOL"
+   ]
+  },
+  {
+   "name": "Grenthorpe Stanworth & Umbshaw (UK) LLP - Non Lu",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Grenthorpe Stanworth & Umbshaw (UK) LLP - Non Lu"
+   ]
+  },
+  {
+   "name": "BRACKMERE, REDDALE & CALDWICK S.E.N.C.R.L./S.R.L. - Non - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "BRACKMERE, REDDALE & CALDWICK S.E.N.C.R.L./S.R.L. - Non - LU"
+   ]
+  },
+  {
+   "name": "Haldholm Fennwick ApS - Non - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Haldholm Fennwick ApS - Non - LU"
+   ]
+  },
+  {
+   "name": "Pernille Gitte Grothe -Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Pernille Gitte Grothe -Non-LU"
+   ]
+  },
+  {
+   "name": "Malene Uggla",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Malene Uggla"
+   ]
+  },
+  {
+   "name": "Ellvale Brindale Brincombe Hollfield. Ashcombe. Ltd. Drayberg - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Ellvale Brindale Brincombe Hollfield. Ashcombe. Ltd. Drayberg - Non-LU"
+   ]
+  },
+  {
+   "name": "Ormmere-Kirkshaw Abogados - Non - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Ormmere-Kirkshaw Abogados - Non - LU"
+   ]
+  },
+  {
+   "name": "Clanworth.Cantmere Advogados - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Clanworth.Cantmere Advogados - Non-LU"
+   ]
+  },
+  {
+   "name": "Caldstead - Non - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Caldstead - Non - LU"
+   ]
+  },
+  {
+   "name": "Norbury - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Norbury - Non-LU"
+   ]
+  },
+  {
+   "name": "Norbury Advokatpartnerselskab",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Norbury Advokatpartnerselskab"
+   ]
+  },
+  {
+   "name": "Ashgarth Advisory Pty Ltd - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Ashgarth Advisory Pty Ltd - Non-LU"
+   ]
+  },
+  {
+   "name": "CIG",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "CIG",
+    "CIG - Non LU"
+   ]
+  },
+  {
+   "name": "VANSTEAD RENEWABLE ENERGY COUNCIL- NON - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "VANSTEAD RENEWABLE ENERGY COUNCIL- NON - LU"
+   ]
+  },
+  {
+   "name": "Fennberg Ashmere & Partners - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Fennberg Ashmere & Partners - Non-LU"
+   ]
+  },
+  {
+   "name": "Nordholt Management Consulting A/S - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Nordholt Management Consulting A/S - Non-LU"
+   ]
+  },
+  {
+   "name": "RiskLens BRACKEN - Non LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "RiskLens BRACKEN - Non LU"
+   ]
+  },
+  {
+   "name": "CECILIE TAZ - Non - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "CECILIE TAZ - Non - LU"
+   ]
+  },
+  {
+   "name": "Ravenscombe Oakworth Associates, Inc. - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Ravenscombe Oakworth Associates, Inc. - Non-LU"
+   ]
+  },
+  {
+   "name": "Norford and Trentbury - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Norford and Trentbury - Non-LU"
+   ]
+  },
+  {
+   "name": "S and S Umbfield - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "S and S Umbfield - LU"
+   ]
+  },
+  {
+   "name": "S. Vindeby&co - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "S. Vindeby&co - Non-LU"
+   ]
+  },
+  {
+   "name": "SPGX Global Zellthorpe Merrworth Lt - Non - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "SPGX Global Zellthorpe Merrworth Lt - Non - LU"
+   ]
+  },
+  {
+   "name": "Brackvale Group SA - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Brackvale Group SA - LU"
+   ]
+  },
+  {
+   "name": "OSVIK CONSULTING GROUP PTY LTD - Non-Lu",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "OSVIK CONSULTING GROUP PTY LTD - Non-Lu"
+   ]
+  },
+  {
+   "name": "GELMERE - Davdale Al Glanhurst and Partners - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "GELMERE - Davdale Al Glanhurst and Partners - Non-LU"
+   ]
+  },
+  {
+   "name": "Scopewell Zellthorpe GmbH - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Scopewell Zellthorpe GmbH - Non-LU"
+   ]
+  },
+  {
+   "name": "Carrmere Merrwold - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Carrmere Merrwold - Non-LU"
+   ]
+  },
+  {
+   "name": "Carrmere Brackgarth and Denwold LLP - Non - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Carrmere Brackgarth and Denwold LLP - Non - LU"
+   ]
+  },
+  {
+   "name": "POR Westberg Clanhurst - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "POR Westberg Clanhurst - LU"
+   ]
+  },
+  {
+   "name": "TAQ&C Innvale Cantshaw - Non - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "TAQ&C Innvale Cantshaw - Non - LU"
+   ]
+  },
+  {
+   "name": "HAP Fairgarth BV",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "HAP Fairgarth BV",
+    "HAP Fairgarth BV - Non-Lu"
+   ]
+  },
+  {
+   "name": "Northmont Glanvale LLP- Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Northmont Glanvale LLP- Non-LU"
+   ]
+  },
+  {
+   "name": "STUDIO LEGALE ASSOCIATO AD INNBERG LLP - Non LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "STUDIO LEGALE ASSOCIATO AD INNBERG LLP - Non LU",
+    "Studio Legale associato ad Innberg LLP"
+   ]
+  },
+  {
+   "name": "Studio Notarile De Kjeldsen - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Studio Notarile De Kjeldsen - Non-LU"
+   ]
+  },
+  {
+   "name": "Grenhurst Danmark AS - Non - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Grenhurst Danmark AS - Non - LU"
+   ]
+  },
+  {
+   "name": "The Ostdale Firm APS - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "The Ostdale Firm APS - Non-LU"
+   ]
+  },
+  {
+   "name": "The Vantle Advisory Group Ltd - Non - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "The Vantle Advisory Group Ltd - Non - LU"
+   ]
+  },
+  {
+   "name": "Eastfield",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Eastfield"
+   ]
+  },
+  {
+   "name": "Linguaprime - LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Linguaprime - LU"
+   ]
+  },
+  {
+   "name": "Ellworth Investment S.a r.l.",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Ellworth Investment S.a r.l."
+   ]
+  },
+  {
+   "name": "Vismar Financial Solutions AB",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Vismar Financial Solutions AB"
+   ]
+  },
+  {
+   "name": "Corveldt (Luxembourg) S.A.R.L.",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Corveldt (Luxembourg) S.A.R.L."
+   ]
+  },
+  {
+   "name": "Corveldt Luxembourg",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Corveldt Luxembourg"
+   ]
+  },
+  {
+   "name": "Corveldt USA, LLC",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Corveldt USA, LLC"
+   ]
+  },
+  {
+   "name": "Davworth Steenhurst Ltd - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Davworth Steenhurst Ltd - Non-LU"
+   ]
+  },
+  {
+   "name": "RENSTEAD MANAGEMENT AUSTRALIA - Non-Lu",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "RENSTEAD MANAGEMENT AUSTRALIA - Non-Lu"
+   ]
+  },
+  {
+   "name": "Wickcombe Brackshaw & Kirkbeck Spain S.L.U - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Wickcombe Brackshaw & Kirkbeck Spain S.L.U - Non-LU"
+   ]
+  },
+  {
+   "name": "Ellingsen & Vandell",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Ellingsen & Vandell",
+    "Ellingsen & Vandell - Non-LU"
+   ]
+  },
+  {
+   "name": "Caldthorpe Eddbeck LLP",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Caldthorpe Eddbeck LLP"
+   ]
+  },
+  {
+   "name": "Eaststead Ravcombe Law Firm - Non- LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "Eaststead Ravcombe Law Firm - Non- LU"
+   ]
+  },
+  {
+   "name": "MOC Notai - Non-LU",
+   "domain": "NIP",
+   "source_list": "vendor-master",
+   "variants": [
+    "MOC Notai - Non-LU"
+   ]
+  },
+  {
+   "name": "ASHGROVE Qtd Holdco Pty Ltd.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "ASHGROVE Qtd Holdco Pty Ltd."
+   ]
+  },
+  {
+   "name": "AGP NI CO-Invest I SCSP",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "AGP NI CO-Invest I SCSP"
+   ]
+  },
+  {
+   "name": "ADVOKATFIRMAET LAURITZEN AS",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "ADVOKATFIRMAET LAURITZEN AS"
+   ]
+  },
+  {
+   "name": "Anpartsselskabet af 20. Juni 2023",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Anpartsselskabet af 20. Juni 2023"
+   ]
+  },
+  {
+   "name": "Lindfield S.r.l.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Lindfield S.r.l."
+   ]
+  },
+  {
+   "name": "Penhurst Tormentil Limited",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Penhurst Tormentil Limited"
+   ]
+  },
+  {
+   "name": "Sandwick Biogas Aps",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Sandwick Biogas Aps"
+   ]
+  },
+  {
+   "name": "Stanmore NI Co-Invest SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Stanmore NI Co-Invest SCSp"
+   ]
+  },
+  {
+   "name": "WEXCOMBE S.R.L.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "WEXCOMBE S.R.L."
+   ]
+  },
+  {
+   "name": "YARMOOR 1 BESS S.R.L.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "YARMOOR 1 BESS S.R.L."
+   ]
+  },
+  {
+   "name": "YARMOOR 2 BESS S.R.L.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "YARMOOR 2 BESS S.R.L."
+   ]
+  },
+  {
+   "name": "California North Floating LLC",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "California North Floating LLC"
+   ]
+  },
+  {
+   "name": "California Offshore Holding LLC",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "California Offshore Holding LLC"
+   ]
+  },
+  {
+   "name": "Fjordvik Wind HoldCo LLC",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Fjordvik Wind HoldCo LLC"
+   ]
+  },
+  {
+   "name": "Holmvik S.r.l.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Holmvik S.r.l."
+   ]
+  },
+  {
+   "name": "Ravnsund S.R.L.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Ravnsund S.R.L."
+   ]
+  },
+  {
+   "name": "Sandhamn S.R.L.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Sandhamn S.R.L."
+   ]
+  },
+  {
+   "name": "NI ABF Vindhem HoldCo BV",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI ABF Vindhem HoldCo BV"
+   ]
+  },
+  {
+   "name": "NI ABF DevCo Aps",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI ABF DevCo Aps"
+   ]
+  },
+  {
+   "name": "NI ABF I Netherby Hold Co B.V.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI ABF I Netherby Hold Co B.V."
+   ]
+  },
+  {
+   "name": "NI ABF I Ulvik Holdco SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI ABF I Ulvik Holdco SCSp"
+   ]
+  },
+  {
+   "name": "NI ABF I Feeder SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI ABF I Feeder SCSp"
+   ]
+  },
+  {
+   "name": "NI ABF I FIN DevCo Holding SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI ABF I FIN DevCo Holding SCSp"
+   ]
+  },
+  {
+   "name": "NI ABF I FIN DevCo Oy",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI ABF I FIN DevCo Oy"
+   ]
+  },
+  {
+   "name": "NI ABF I GP S.a r.l.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI ABF I GP S.a r.l."
+   ]
+  },
+  {
+   "name": "NI ABF I Investment GP Sarl",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI ABF I Investment GP Sarl"
+   ]
+  },
+  {
+   "name": "NI ABF I Guillemot SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI ABF I Guillemot SCSp"
+   ]
+  },
+  {
+   "name": "NI ABF I Lapwing HoldCo Ltd",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI ABF I Lapwing HoldCo Ltd"
+   ]
+  },
+  {
+   "name": "NI ABF I SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI ABF I SCSp"
+   ]
+  },
+  {
+   "name": "NI ABF I SP Invest K/S",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI ABF I SP Invest K/S"
+   ]
+  },
+  {
+   "name": "NI ABF I Sponsor Investor KS",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI ABF I Sponsor Investor KS"
+   ]
+  },
+  {
+   "name": "NI ABF I Sponsor Investor US KS",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI ABF I Sponsor Investor US KS"
+   ]
+  },
+  {
+   "name": "NI ABF II Co-Invest SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI ABF II Co-Invest SCSp"
+   ]
+  },
+  {
+   "name": "NI ABF II MizarCo S.à r.l.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI ABF II MizarCo S.à r.l."
+   ]
+  },
+  {
+   "name": "NI ABF II QFPF Blocker SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI ABF II QFPF Blocker SCSp"
+   ]
+  },
+  {
+   "name": "NI Australia Land Holdings Trust",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI Australia Land Holdings Trust"
+   ]
+  },
+  {
+   "name": "NI ETF I Sponsor Investor US K/S",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI ETF I Sponsor Investor US K/S"
+   ]
+  },
+  {
+   "name": "NI ETF NMF JV GP",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI ETF NMF JV GP"
+   ]
+  },
+  {
+   "name": "NI Nanna SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI Nanna SCSp"
+   ]
+  },
+  {
+   "name": "NI Njord Ltd",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI Njord Ltd"
+   ]
+  },
+  {
+   "name": "NI Njord SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI Njord SCSp"
+   ]
+  },
+  {
+   "name": "NI Ostara SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI Ostara SCSp"
+   ]
+  },
+  {
+   "name": "NI Ranfjord II SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI Ranfjord II SCSp"
+   ]
+  },
+  {
+   "name": "NI Ranfjord SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI Ranfjord SCSp"
+   ]
+  },
+  {
+   "name": "NI Sagalund SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI Sagalund SCSp"
+   ]
+  },
+  {
+   "name": "NI GCF I Direct Lending Non-US SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI GCF I Direct Lending Non-US SCSp"
+   ]
+  },
+  {
+   "name": "NI GCF I Direct Lending US SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI GCF I Direct Lending US SCSp"
+   ]
+  },
+  {
+   "name": "NI GCF I Velaris SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI GCF I Velaris SCSp"
+   ]
+  },
+  {
+   "name": "NI GCF II EUR HedgeCo SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI GCF II EUR HedgeCo SCSp"
+   ]
+  },
+  {
+   "name": "NI GCF II Non-US Aggregator SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI GCF II Non-US Aggregator SCSp"
+   ]
+  },
+  {
+   "name": "NI GCF II Sponsor Investor K/S",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI GCF II Sponsor Investor K/S"
+   ]
+  },
+  {
+   "name": "NI GCF II USD HedgeCo SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI GCF II USD HedgeCo SCSp"
+   ]
+  },
+  {
+   "name": "NI GMF II Coöperatief U.A.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI GMF II Coöperatief U.A."
+   ]
+  },
+  {
+   "name": "NI GMF II Dutch GP B.V.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI GMF II Dutch GP B.V."
+   ]
+  },
+  {
+   "name": "NI GMF II Energy Chile Fondo de Ardvik",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI GMF II Energy Chile Fondo de Ardvik"
+   ]
+  },
+  {
+   "name": "NI GMF II Feeder SCA SICAV-RAIF – Access Compartment",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI GMF II Feeder SCA SICAV-RAIF – Access Compartment"
+   ]
+  },
+  {
+   "name": "NI GMF II Feeder SCA SICAV-RAIF – NKP Compartment",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI GMF II Feeder SCA SICAV-RAIF – NKP Compartment"
+   ]
+  },
+  {
+   "name": "NI GMF II Feeder SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI GMF II Feeder SCSp"
+   ]
+  },
+  {
+   "name": "NI GMF II Skirnir ProjectCo SpA",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI GMF II Skirnir ProjectCo SpA"
+   ]
+  },
+  {
+   "name": "NI GMF II GP S.a.r.l",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI GMF II GP S.a.r.l"
+   ]
+  },
+  {
+   "name": "NI GMF II HedgeCo SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI GMF II HedgeCo SCSp"
+   ]
+  },
+  {
+   "name": "NI GMF II La Dunlin ProjectCo SpA",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI GMF II La Dunlin ProjectCo SpA"
+   ]
+  },
+  {
+   "name": "NI GMF II MizarCo",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI GMF II MizarCo"
+   ]
+  },
+  {
+   "name": "NI GMF II Amazonite ProjectCo SpA",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI GMF II Amazonite ProjectCo SpA"
+   ]
+  },
+  {
+   "name": "NI GMF II Basaltic HoldCo B.V.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI GMF II Basaltic HoldCo B.V."
+   ]
+  },
+  {
+   "name": "NI GMF II SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI GMF II SCSp"
+   ]
+  },
+  {
+   "name": "NI GMF II Sponsor Investor K/S",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI GMF II Sponsor Investor K/S"
+   ]
+  },
+  {
+   "name": "NI Kairos HoldCo Pty Ltd",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI Kairos HoldCo Pty Ltd"
+   ]
+  },
+  {
+   "name": "NI Italy TopCo I S.r.l",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI Italy TopCo I S.r.l"
+   ]
+  },
+  {
+   "name": "NI Italy Topco II S.R.L.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI Italy Topco II S.R.L."
+   ]
+  },
+  {
+   "name": "NI Italy TopCo III S.r.l",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI Italy TopCo III S.r.l"
+   ]
+  },
+  {
+   "name": "NI Italy TopCo IV S.r.l",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI Italy TopCo IV S.r.l"
+   ]
+  },
+  {
+   "name": "NI Italy TopCo V S.r.l",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI Italy TopCo V S.r.l"
+   ]
+  },
+  {
+   "name": "NI IV",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI IV"
+   ]
+  },
+  {
+   "name": "NI IV Fenwick HoldCo Ltd",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI IV Fenwick HoldCo Ltd"
+   ]
+  },
+  {
+   "name": "NI IV Cooperatief U.A.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI IV Cooperatief U.A."
+   ]
+  },
+  {
+   "name": "NI IV Kalvik Holdco Ltd",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI IV Kalvik Holdco Ltd"
+   ]
+  },
+  {
+   "name": "NI IV Irish Sea HoldCo I BV",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI IV Irish Sea HoldCo I BV"
+   ]
+  },
+  {
+   "name": "NI IV Irish Sea HoldCo I Limited",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI IV Irish Sea HoldCo I Limited"
+   ]
+  },
+  {
+   "name": "NI IV IRISH SEA HOLDCO II LIMITED",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI IV IRISH SEA HOLDCO II LIMITED"
+   ]
+  },
+  {
+   "name": "NI IV Draconis I Holding ApS",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI IV Draconis I Holding ApS"
+   ]
+  },
+  {
+   "name": "NI IV Draconis II Holding ApS",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI IV Draconis II Holding ApS"
+   ]
+  },
+  {
+   "name": "NI IV Draconis III Holding ApS",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI IV Draconis III Holding ApS"
+   ]
+  },
+  {
+   "name": "NI IV Draconis IV Holding ApS",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI IV Draconis IV Holding ApS"
+   ]
+  },
+  {
+   "name": "NI IV Draconis V Holding ApS",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI IV Draconis V Holding ApS"
+   ]
+  },
+  {
+   "name": "NI IV Offshore DevCo QFPF LLC",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI IV Offshore DevCo QFPF LLC"
+   ]
+  },
+  {
+   "name": "NI IV Serpentine HoldCo Ltd.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI IV Serpentine HoldCo Ltd."
+   ]
+  },
+  {
+   "name": "NI IV Serpentine Lender Ltd",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI IV Serpentine Lender Ltd"
+   ]
+  },
+  {
+   "name": "NI IV Halcyon HoldCo Ltd",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI IV Halcyon HoldCo Ltd"
+   ]
+  },
+  {
+   "name": "NI IV Westerly II HoldCo A Ltd",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI IV Westerly II HoldCo A Ltd"
+   ]
+  },
+  {
+   "name": "NI IV Dunsford HoldCo Ltd.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI IV Dunsford HoldCo Ltd."
+   ]
+  },
+  {
+   "name": "NI IV Garstang Wind QFPF US LLC",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI IV Garstang Wind QFPF US LLC"
+   ]
+  },
+  {
+   "name": "NI Bellatrix HoldCo Pty Ltd",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI Bellatrix HoldCo Pty Ltd"
+   ]
+  },
+  {
+   "name": "NI NKP Co-Invest I SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI NKP Co-Invest I SCSp"
+   ]
+  },
+  {
+   "name": "NI DRACONIS HOLDCO I SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI DRACONIS HOLDCO I SCSp"
+   ]
+  },
+  {
+   "name": "NI DRACONIS HOLDCO II SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI DRACONIS HOLDCO II SCSp"
+   ]
+  },
+  {
+   "name": "NI DRACONIS HOLDCO III SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI DRACONIS HOLDCO III SCSp"
+   ]
+  },
+  {
+   "name": "NI NMF (PH) Corp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI NMF (PH) Corp"
+   ]
+  },
+  {
+   "name": "NI NMF I Farnborough ProjectCo SpA",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI NMF I Farnborough ProjectCo SpA"
+   ]
+  },
+  {
+   "name": "NI NMF I Merevale 15 HoldCo Coöperatief U.A.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI NMF I Merevale 15 HoldCo Coöperatief U.A."
+   ]
+  },
+  {
+   "name": "NI NMF I Merevale 16 HoldCo Coöperatief U.A.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI NMF I Merevale 16 HoldCo Coöperatief U.A."
+   ]
+  },
+  {
+   "name": "NI NMF I Merevale 17 HoldCo Coöperatief U.A.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI NMF I Merevale 17 HoldCo Coöperatief U.A."
+   ]
+  },
+  {
+   "name": "NI NMF I Merevale 18 HoldCo Coöperatief U.A.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI NMF I Merevale 18 HoldCo Coöperatief U.A."
+   ]
+  },
+  {
+   "name": "NI NMF I Merevale 19 HoldCo Coöperatief U.A.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI NMF I Merevale 19 HoldCo Coöperatief U.A."
+   ]
+  },
+  {
+   "name": "NI Oceania Offshore Trust",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI Oceania Offshore Trust"
+   ]
+  },
+  {
+   "name": "NI Carnelian HoldCo Pty Ltd",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI Carnelian HoldCo Pty Ltd"
+   ]
+  },
+  {
+   "name": "NI Garnetfield HoldCo Pty Ltd",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI Garnetfield HoldCo Pty Ltd"
+   ]
+  },
+  {
+   "name": "NI QLD PHES 1 Holdings Pty Ltd",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI QLD PHES 1 Holdings Pty Ltd"
+   ]
+  },
+  {
+   "name": "NI REG GP S.a.r.l",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI REG GP S.a.r.l"
+   ]
+  },
+  {
+   "name": "NI REG GP S.a.r.l.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI REG GP S.a.r.l."
+   ]
+  },
+  {
+   "name": "NI Regulated Energy Grids SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI Regulated Energy Grids SCSp"
+   ]
+  },
+  {
+   "name": "NI Regulated Energy SCA SICAV-RAIF",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI Regulated Energy SCA SICAV-RAIF"
+   ]
+  },
+  {
+   "name": "NI Cloudberry Holding Trust",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI Cloudberry Holding Trust"
+   ]
+  },
+  {
+   "name": "NI Cloudberry North Project Trust",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI Cloudberry North Project Trust"
+   ]
+  },
+  {
+   "name": "NI V Bramshaw HoldCo Ltd.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Bramshaw HoldCo Ltd."
+   ]
+  },
+  {
+   "name": "NI V Bess OpCo LLC",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Bess OpCo LLC"
+   ]
+  },
+  {
+   "name": "NI V Fjordvik Wind Non-QFPF Inc",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Fjordvik Wind Non-QFPF Inc"
+   ]
+  },
+  {
+   "name": "NI V Fjordvik Wind QFPF LLC",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Fjordvik Wind QFPF LLC"
+   ]
+  },
+  {
+   "name": "NI V CN SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V CN SCSp"
+   ]
+  },
+  {
+   "name": "NI V Co-Invest Vehicle A SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Co-Invest Vehicle A SCSp"
+   ]
+  },
+  {
+   "name": "NI V Coöperatief U.A.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Coöperatief U.A."
+   ]
+  },
+  {
+   "name": "NI V DevCo ApS",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V DevCo ApS"
+   ]
+  },
+  {
+   "name": "NI V Kalvik Holdco Ltd",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Kalvik Holdco Ltd"
+   ]
+  },
+  {
+   "name": "NI V Kalvik TopCo Limited.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Kalvik TopCo Limited."
+   ]
+  },
+  {
+   "name": "NI V Fenrir Platform Coöperatief U.A.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Fenrir Platform Coöperatief U.A."
+   ]
+  },
+  {
+   "name": "NI V Energy DevCo LLC",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Energy DevCo LLC"
+   ]
+  },
+  {
+   "name": "NI V Energy Storage Co-invest Inc",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Energy Storage Co-invest Inc"
+   ]
+  },
+  {
+   "name": "NI V Energy Storage Co-Invest LP",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Energy Storage Co-Invest LP"
+   ]
+  },
+  {
+   "name": "NI V Energy Storage DevCo Non-QFPF Inc.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Energy Storage DevCo Non-QFPF Inc."
+   ]
+  },
+  {
+   "name": "NI V Energy Storage DevCo QFPF LLC",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Energy Storage DevCo QFPF LLC"
+   ]
+  },
+  {
+   "name": "NI V Sindri HoldCo SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Sindri HoldCo SCSp"
+   ]
+  },
+  {
+   "name": "NI V Aether HoldCo GmbH",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Aether HoldCo GmbH"
+   ]
+  },
+  {
+   "name": "NI V Ampelos BESS LLC",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Ampelos BESS LLC"
+   ]
+  },
+  {
+   "name": "NI V Ampelos HoldCo LLC",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Ampelos HoldCo LLC"
+   ]
+  },
+  {
+   "name": "NI V GP I SCSP",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V GP I SCSP"
+   ]
+  },
+  {
+   "name": "NI V Tethys New Energy DevCo Ltd",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Tethys New Energy DevCo Ltd"
+   ]
+  },
+  {
+   "name": "NI V Investment GP Sarl",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Investment GP Sarl"
+   ]
+  },
+  {
+   "name": "NI V Avocet TopCo Limited",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Avocet TopCo Limited"
+   ]
+  },
+  {
+   "name": "NI V NO SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V NO SCSp"
+   ]
+  },
+  {
+   "name": "NI V Offshore DevCo Non-QFPF Inc",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Offshore DevCo Non-QFPF Inc"
+   ]
+  },
+  {
+   "name": "NI V Offshore DevCo QFPF LLC",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Offshore DevCo QFPF LLC"
+   ]
+  },
+  {
+   "name": "NI V Agatestone Grove 2 Non-QFPF Inc.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Agatestone Grove 2 Non-QFPF Inc."
+   ]
+  },
+  {
+   "name": "NI V Agatestone Grove 2 QFPF LLC",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Agatestone Grove 2 QFPF LLC"
+   ]
+  },
+  {
+   "name": "NI V Agatestone Grove Non-QFPF Inc",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Agatestone Grove Non-QFPF Inc"
+   ]
+  },
+  {
+   "name": "NI V Agatestone Grove QFPF LLC",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Agatestone Grove QFPF LLC"
+   ]
+  },
+  {
+   "name": "NI V ParkCo ANTARES GK",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V ParkCo ANTARES GK"
+   ]
+  },
+  {
+   "name": "NI V Azurite HoldCo Limited",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Azurite HoldCo Limited"
+   ]
+  },
+  {
+   "name": "NI V Corundum TopCo Ltd",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Corundum TopCo Ltd"
+   ]
+  },
+  {
+   "name": "NI V Gneiss HoldCo Ltd",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Gneiss HoldCo Ltd"
+   ]
+  },
+  {
+   "name": "NI V Firnwind Cravenhill QFPF LLC",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Firnwind Cravenhill QFPF LLC"
+   ]
+  },
+  {
+   "name": "NI V South West Wind HoldCo Ltd",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V South West Wind HoldCo Ltd"
+   ]
+  },
+  {
+   "name": "NI V Sponsor Investor F&F K/S",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Sponsor Investor F&F K/S"
+   ]
+  },
+  {
+   "name": "NI V Sponsor Investor FANDF K/S",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Sponsor Investor FANDF K/S"
+   ]
+  },
+  {
+   "name": "NI V Sponsor Investor II K/S",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Sponsor Investor II K/S"
+   ]
+  },
+  {
+   "name": "NI V Sponsor Investor KS",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Sponsor Investor KS"
+   ]
+  },
+  {
+   "name": "NI V Sponsor Investor PD K/S",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Sponsor Investor PD K/S"
+   ]
+  },
+  {
+   "name": "NI V Sponsor Investor US KS",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Sponsor Investor US KS"
+   ]
+  },
+  {
+   "name": "NI V Sponsor Investor US LP",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Sponsor Investor US LP"
+   ]
+  },
+  {
+   "name": "NI V Blackcurrant HoldCo Srl",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Blackcurrant HoldCo Srl"
+   ]
+  },
+  {
+   "name": "NI V Foxglove HoldCo LLC",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Foxglove HoldCo LLC"
+   ]
+  },
+  {
+   "name": "NI V Sweden Greenfield OFW SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Sweden Greenfield OFW SCSp"
+   ]
+  },
+  {
+   "name": "NI V Bramblehill HoldCo BV",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Bramblehill HoldCo BV"
+   ]
+  },
+  {
+   "name": "NI V Bramblehill Lender Oy",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Bramblehill Lender Oy"
+   ]
+  },
+  {
+   "name": "NI V Hedgerow TopCo 3 Limited",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V Hedgerow TopCo 3 Limited"
+   ]
+  },
+  {
+   "name": "NI V US A LP",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V US A LP"
+   ]
+  },
+  {
+   "name": "NI V US B LP",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V US B LP"
+   ]
+  },
+  {
+   "name": "NI V US C LP",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V US C LP"
+   ]
+  },
+  {
+   "name": "NI V US Co-invest LP",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V US Co-invest LP"
+   ]
+  },
+  {
+   "name": "NI V US D LP",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V US D LP"
+   ]
+  },
+  {
+   "name": "NI V US Sponsor Investor Inc.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V US Sponsor Investor Inc."
+   ]
+  },
+  {
+   "name": "NI V USD feeder K/S",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI V USD feeder K/S"
+   ]
+  },
+  {
+   "name": "NI VIC-2 Hold Trust",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI VIC-2 Hold Trust"
+   ]
+  },
+  {
+   "name": "NI VIC-3 Hold Trust",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI VIC-3 Hold Trust"
+   ]
+  },
+  {
+   "name": "NI Cardenhall HoldCo Pty Ltd",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI Cardenhall HoldCo Pty Ltd"
+   ]
+  },
+  {
+   "name": "NI Charnwood HoldCo Pty Ltd",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI Charnwood HoldCo Pty Ltd"
+   ]
+  },
+  {
+   "name": "NI Elmsworth Hold Trust",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI Elmsworth Hold Trust"
+   ]
+  },
+  {
+   "name": "NI Elmsworth TopCo SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NI Elmsworth TopCo SCSp"
+   ]
+  },
+  {
+   "name": "NIP GP Interests Holding K/S",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NIP GP Interests Holding K/S"
+   ]
+  },
+  {
+   "name": "NIP Platform Cooperative A.M.B.A.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NIP Platform Cooperative A.M.B.A."
+   ]
+  },
+  {
+   "name": "NIP PLATFORM SOLUTIONS US INC.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "NIP PLATFORM SOLUTIONS US INC."
+   ]
+  },
+  {
+   "name": "CIV III 2017 K/S",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "CIV III 2017 K/S"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure Advanced Bioenergy Fund I DK A K/S",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure Advanced Bioenergy Fund I DK A K/S"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure Advanced Bioenergy Fund I Feeder SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure Advanced Bioenergy Fund I Feeder SCSp"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure Advanced Bioenergy Fund II QFPF SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure Advanced Bioenergy Fund II QFPF SCSp"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure Advanced Bioenergy Fund II SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure Advanced Bioenergy Fund II SCSp"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure Co-invest GP S.A.RL (NIP)",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure Co-invest GP S.A.RL (NIP)"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure Evergreen Credit Fund EUR SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure Evergreen Credit Fund EUR SCSp"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure Evergreen Non-US Blocker SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure Evergreen Non-US Blocker SCSp"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure Evergreen US Blocker SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure Evergreen US Blocker SCSp"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure GCF I GP S.à r.l. (SGL)",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure GCF I GP S.à r.l. (SGL)"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure GCF II GP S.à r.l.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure GCF II GP S.à r.l."
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure Green Credit Fund I Non-SRT AIV SCSp (SGL)",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure Green Credit Fund I Non-SRT AIV SCSp (SGL)"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure Green Credit Fund I SCSp (SGL)",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure Green Credit Fund I SCSp (SGL)"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure Green Credit Fund II EUR Non-US Blocker SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure Green Credit Fund II EUR Non-US Blocker SCSp"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure Green Credit Fund II EUR SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure Green Credit Fund II EUR SCSp"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure Green Credit Fund II EUR US Blocker SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure Green Credit Fund II EUR US Blocker SCSp"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure Green Credit Fund II USD Blocked SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure Green Credit Fund II USD Blocked SCSp"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure Green Credit Fund II USD Blocked SCSp (Do not use)",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure Green Credit Fund II USD Blocked SCSp (Do not use)"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure Green Credit Fund II USD Non-US Blocker SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure Green Credit Fund II USD Non-US Blocker SCSp"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure Green Credit Fund II USD SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure Green Credit Fund II USD SCSp"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure Green Credit Fund II USD US Blocker SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure Green Credit Fund II USD US Blocker SCSp"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure Growth Markets Fund II Feeder SCA SICAV-RAIF",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure Growth Markets Fund II Feeder SCA SICAV-RAIF"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure I New Markets Fund I K/S",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure I New Markets Fund I K/S"
+   ]
+  },
+  {
+   "name": "Nordvik infrastructure IV AUS Trust K/S",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik infrastructure IV AUS Trust K/S"
+   ]
+  },
+  {
+   "name": "Nordvik infrastructure IV Dutch K/S",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik infrastructure IV Dutch K/S"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure IV GP S.à r.l.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure IV GP S.à r.l."
+   ]
+  },
+  {
+   "name": "Nordvik infrastructure IV K/S",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik infrastructure IV K/S"
+   ]
+  },
+  {
+   "name": "Nordvik infrastructure IV SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik infrastructure IV SCSp"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure NMF I K/S",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure NMF I K/S"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure SWIC Co-Invest Vehicle I SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure SWIC Co-Invest Vehicle I SCSp"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure Partners GP Interests Holding K/S",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure Partners GP Interests Holding K/S"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure Partners Inc. - Non LU",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure Partners Inc. - Non LU"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure V EUR Blocker Feeder SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure V EUR Blocker Feeder SCSp"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure V Feeder SCA SICAV-RAIF",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure V Feeder SCA SICAV-RAIF"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure V Feeder SCA SICAV-RAIF B compartment",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure V Feeder SCA SICAV-RAIF B compartment"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure V Feeder SCA SICAV-RAIF EUR compartment",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure V Feeder SCA SICAV-RAIF EUR compartment"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure V GP I SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure V GP I SCSp"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure V GP S.à r.l",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure V GP S.à r.l"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure V NO SCSp (Do not use)",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure V NO SCSp (Do not use)"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure V SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure V SCSp"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure V US A USD SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure V US A USD SCSp"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure V US B USD SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure V US B USD SCSp"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure V US C LP",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure V US C LP"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure V US D LP",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure V US D LP"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure V US GP A LLC",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure V US GP A LLC"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure V US Non-QFPF EUR Blocker SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure V US Non-QFPF EUR Blocker SCSp"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure V US Non-QFPF EUR SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure V US Non-QFPF EUR SCSp"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure V US Non-QFPF USD Feeder SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure V US Non-QFPF USD Feeder SCSp"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure V US QFPF EUR SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure V US QFPF EUR SCSp"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure V US QFPF USD Feeder SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure V US QFPF USD Feeder SCSp"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure V USD Blocker Feeder SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure V USD Blocker Feeder SCSp"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure V USD Feeder SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure V USD Feeder SCSp"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure VI GP Sarl",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure VI GP Sarl"
+   ]
+  },
+  {
+   "name": "Nordvik Infrastructure VI SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nordvik Infrastructure VI SCSp"
+   ]
+  },
+  {
+   "name": "Director - Rikke Fenger",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Director - Rikke Fenger"
+   ]
+  },
+  {
+   "name": "Director - Ida Palsgaard",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Director - Ida Palsgaard"
+   ]
+  },
+  {
+   "name": "FREYR NI CO-Invest LP",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "FREYR NI CO-Invest LP"
+   ]
+  },
+  {
+   "name": "Estonia Offshore Wind DevCo OÜ",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Estonia Offshore Wind DevCo OÜ"
+   ]
+  },
+  {
+   "name": "Kvasir Wind Holdings Pty Ltd",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Kvasir Wind Holdings Pty Ltd"
+   ]
+  },
+  {
+   "name": "Magni NI Co-Invest SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Magni NI Co-Invest SCSp"
+   ]
+  },
+  {
+   "name": "Ampelos HoldCo LLC",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Ampelos HoldCo LLC"
+   ]
+  },
+  {
+   "name": "Cephalus Biogas 001 Limited",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Cephalus Biogas 001 Limited"
+   ]
+  },
+  {
+   "name": "Nereus Chrysos SL S de RL de CV",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Nereus Chrysos SL S de RL de CV"
+   ]
+  },
+  {
+   "name": "Pleione NI Co-invest SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Pleione NI Co-invest SCSp"
+   ]
+  },
+  {
+   "name": "IP NI Co-Invest K/S",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "IP NI Co-Invest K/S"
+   ]
+  },
+  {
+   "name": "Castalia Platform CV",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Castalia Platform CV"
+   ]
+  },
+  {
+   "name": "Alcor NI Co-Invest SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Alcor NI Co-Invest SCSp"
+   ]
+  },
+  {
+   "name": "JBESS SRL",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "JBESS SRL"
+   ]
+  },
+  {
+   "name": "ANTARES Ottesen",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "ANTARES Ottesen"
+   ]
+  },
+  {
+   "name": "Kommanditselskabet af 20 juni 2023",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Kommanditselskabet af 20 juni 2023"
+   ]
+  },
+  {
+   "name": "Pavo Renewables INC",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Pavo Renewables INC"
+   ]
+  },
+  {
+   "name": "Talitha Stenvik Renewables LLC",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Talitha Stenvik Renewables LLC"
+   ]
+  },
+  {
+   "name": "Alnair NI Co-Invest SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Alnair NI Co-Invest SCSp"
+   ]
+  },
+  {
+   "name": "Avior NI Co-Invest SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Avior NI Co-Invest SCSp"
+   ]
+  },
+  {
+   "name": "Diphda Solar DevCo II LLC",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Diphda Solar DevCo II LLC"
+   ]
+  },
+  {
+   "name": "Avocet Offshore Windfarm Limited",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Avocet Offshore Windfarm Limited"
+   ]
+  },
+  {
+   "name": "Vantle Resource Technologies",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Vantle Resource Technologies"
+   ]
+  },
+  {
+   "name": "Harrier Rowanhill Oy",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Harrier Rowanhill Oy"
+   ]
+  },
+  {
+   "name": "Edddale Lars de KJELDSEN",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Edddale Lars de KJELDSEN"
+   ]
+  },
+  {
+   "name": "SCRF NI Co-Invest GP S.à r.l.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "SCRF NI Co-Invest GP S.à r.l."
+   ]
+  },
+  {
+   "name": "SCRF NI Co-Invest SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "SCRF NI Co-Invest SCSp"
+   ]
+  },
+  {
+   "name": "Whimbrel NI Co-Invest SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Whimbrel NI Co-Invest SCSp"
+   ]
+  },
+  {
+   "name": "Agatestone Grove 2 Holdco LLC",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Agatestone Grove 2 Holdco LLC"
+   ]
+  },
+  {
+   "name": "Agatestone Grove 2 LLC",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Agatestone Grove 2 LLC"
+   ]
+  },
+  {
+   "name": "Agatestone Grove DevCo LLC",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Agatestone Grove DevCo LLC"
+   ]
+  },
+  {
+   "name": "Agatestone Grove II HoldCo LLC",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Agatestone Grove II HoldCo LLC"
+   ]
+  },
+  {
+   "name": "Agatestone Grove Wind LLC",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Agatestone Grove Wind LLC"
+   ]
+  },
+  {
+   "name": "Kyanite Power S.R.L.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Kyanite Power S.R.L."
+   ]
+  },
+  {
+   "name": "MOONSTONE BESS S.R.L.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "MOONSTONE BESS S.R.L."
+   ]
+  },
+  {
+   "name": "OLIVINE BESS S.R.L.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "OLIVINE BESS S.R.L."
+   ]
+  },
+  {
+   "name": "Onyxvale S.r.l.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Onyxvale S.r.l."
+   ]
+  },
+  {
+   "name": "PYRITEHILL S.R.L.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "PYRITEHILL S.R.L."
+   ]
+  },
+  {
+   "name": "Quartzite Bess S.r.l.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Quartzite Bess S.r.l."
+   ]
+  },
+  {
+   "name": "Austerwind Alpheratz S.r.l.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Austerwind Alpheratz S.r.l."
+   ]
+  },
+  {
+   "name": "Firnwind Cravenhill LLC",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Firnwind Cravenhill LLC"
+   ]
+  },
+  {
+   "name": "Firnwind Cravenhill TopCo LLC",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Firnwind Cravenhill TopCo LLC"
+   ]
+  },
+  {
+   "name": "Rainshadow Biogas A/S",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Rainshadow Biogas A/S"
+   ]
+  },
+  {
+   "name": "Storage Portfolio II LLC",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Storage Portfolio II LLC"
+   ]
+  },
+  {
+   "name": "Storage Portfolio LLC",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Storage Portfolio LLC"
+   ]
+  },
+  {
+   "name": "Dogrose Assets OÜ",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Dogrose Assets OÜ"
+   ]
+  },
+  {
+   "name": "Juniperhill Power, S. de R.L de C.V",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Juniperhill Power, S. de R.L de C.V"
+   ]
+  },
+  {
+   "name": "MARRAMFIELD S.R.L.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "MARRAMFIELD S.R.L."
+   ]
+  },
+  {
+   "name": "Woodruff NI Co-Invest SCSp",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Woodruff NI Co-Invest SCSp"
+   ]
+  },
+  {
+   "name": "Bexmoor Platform C.V.",
+   "domain": "NIP",
+   "source_list": "related-party",
+   "variants": [
+    "Bexmoor Platform C.V."
+   ]
+  }
+ ]
+}

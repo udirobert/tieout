@@ -17,6 +17,7 @@ CLI: python harness/graph.py query "NIP LIT" ["NIP PLATFORM SOLUTIONS APS" ...]
 import os
 import re
 import sys
+import unicodedata
 import uuid
 from pathlib import Path
 
@@ -92,21 +93,33 @@ FOREACH (x IN CASE WHEN c.exception IS NULL THEN [] ELSE [1] END |
 )
 """
 
-# Lexical candidate-vendor retrieval: token-overlap substring scan over the
+# Lexical candidate-vendor retrieval: symmetric token overlap over the
 # jurisdiction-stripped clean_name. Substring beats full-text for truncated bank
-# narratives ("NIP LIT"); overlap DESC floats the discriminative token above the
-# constant legal-entity token. Needs no index, so it works the moment we seed.
+# narratives ("NIP LIT"). Score is Jaccard (overlap / union of query and candidate
+# tokens), not overlap / query tokens: recall-only scoring lets a short pulled name
+# score 1.0 against a much longer, more specific entity ("NORDVIK INFRASTRUCTURE
+# ADVANCED" vs "...Advanced Bioenergy Fund II SCSp"), which are not the same
+# counterparty. Exact hits outrank fuzzy ones regardless of score. Needs no index,
+# so it works the moment we seed.
 _SCAN_CYPHER = """
-UNWIND $names AS raw
-WITH raw, [t IN split(toLower(trim(raw)), ' ') WHERE size(t) > 1] AS toks
+UNWIND $queries AS q
+WITH q.raw AS raw, q.needle AS needle, q.norm AS norm,
+     [t IN split(q.needle, ' ') WHERE size(t) > 1] AS toks
 WHERE size(toks) > 0
 MATCH (v:Vendor)
-WITH raw, toks, v, [t IN toks WHERE toLower(v.clean_name) CONTAINS t] AS hits
+WITH raw, needle, norm, toks, v, toLower(v.clean_name) AS clean,
+     [t IN split(toLower(v.clean_name), ' ') WHERE size(t) > 1] AS ctoks
+WITH raw, needle, norm, toks, v, clean, ctoks, [t IN toks WHERE clean CONTAINS t] AS hits
 WHERE size(hits) > 0
-WITH raw, v, size(hits) AS overlap, toFloat(size(hits)) / size(toks) AS score
-ORDER BY raw, overlap DESC, score DESC, size(v.clean_name) ASC
+WITH raw, needle, norm, v, clean, size(hits) AS overlap,
+     size(toks) + size(ctoks) - size(hits) AS union
+WITH raw, v, overlap, toFloat(overlap) / union AS score,
+     (coalesce(v.norm_key, '') = norm OR coalesce(v.norm_clean, '') = norm
+      OR toLower(trim(v.name)) = needle OR clean = needle) AS exact
+ORDER BY raw, exact DESC, overlap DESC, score DESC, size(v.clean_name) ASC
 WITH raw, collect({name: v.name, clean: v.clean_name, juris: v.jurisdiction,
-                   score: round(score * 1000) / 1000})[0..$k] AS cands
+                   variants: v.variants,
+                   score: round(score * 1000) / 1000, exact: exact})[0..$k] AS cands
 RETURN raw AS pulled, cands
 """
 
@@ -117,13 +130,50 @@ RETURN raw AS pulled, cands
 _FULLTEXT_CYPHER = """
 CALL db.index.fulltext.queryNodes('vendor_name_ft', $term) YIELD node, score
 RETURN node.name AS name, node.clean_name AS clean, node.jurisdiction AS juris,
-       round(score * 1000) / 1000 AS score
+       node.variants AS variants, round(score * 1000) / 1000 AS score
 ORDER BY score DESC
 LIMIT $k
 """
 
 _JURIS = re.compile(r"\s*-\s*(non[\s-]*)?lu\s*$", re.IGNORECASE)
 _WS = re.compile(r"\s+")
+
+# Exactness is the only gate that survives held-out data. Over the 42 real staging
+# rows the 15-row benchmark fixture does not use, ">= 0.90 or exact" fills identically
+# to "exact only" (18 fills, 8 exactly right), while threshold 0.6 fills 33 with no
+# additional exact hit and 14 more wrong ones — a threshold tuned on 15 graded cells.
+# Folding case/diacritics/punctuation is what makes exactness usable at all — the
+# bank narrative "S.A R.L." and the master's "S.à r.l." are the same entity.
+_FOLD = re.compile(r"[^a-z0-9]+")
+
+_HEADER = (
+    "Counterparty master retrieved from the knowledge graph, which is the system of "
+    "record for counterparty names; the vendor sheet in the workbook is a partial "
+    "local copy of it. Where the sheet already gives a match, use the sheet. Where "
+    "the sheet has no match, an [exact] candidate below is that counterparty — write "
+    "it EXACTLY as spelled, and where alternate spellings are listed pick the one "
+    "that fits the row, since a jurisdiction suffix such as '- Non-LU' is part of "
+    "the value. Candidates without [exact] are only similar names: do NOT write "
+    "them. If a row has no [exact] candidate and no match in the sheet, leave the "
+    "cell blank for the exception queue. Best candidate first."
+)
+
+
+def norm_key(value) -> str:
+    """Case/diacritic/punctuation-insensitive identity of a counterparty name."""
+    if not isinstance(value, str):
+        return ""
+    folded = unicodedata.normalize("NFKD", value).encode("ascii", "ignore").decode()
+    return _FOLD.sub("", folded.lower())
+
+
+def _render_candidate(c: dict) -> str:
+    """One candidate as the model must write it: verbatim name, then provenance."""
+    name = c.get("name") or c.get("clean") or ""
+    alts = [v for v in (c.get("variants") or []) if v != name]
+    exact = " [exact]" if c.get("exact") else ""
+    alt = f" [also spelled: {' | '.join(alts)}]" if alts else ""
+    return f"{name}{exact}{alt} (score {c.get('score')})"
 
 
 def split_vendor(name: str) -> tuple[str, str]:
@@ -279,6 +329,7 @@ def _fulltext_candidates(term: str, k: int) -> list:
             "name": rec.get("name"),
             "clean": rec.get("clean"),
             "juris": rec.get("juris"),
+            "variants": rec.get("variants"),
             "score": rec.get("score"),
         }
         for rec in result.records
@@ -289,8 +340,9 @@ def query_vendor_context(pulled_names, k: int = 3, limit: int = 40) -> str:
     """Lexical GraphRAG: candidate vendors per pulled name, as a prompt block.
 
     Substring scan is primary (best for truncated bank narratives); any name it
-    misses falls back to the full-text index. Empty/disabled ⇒ "" (byte-identical
-    prompt seam).
+    misses falls back to the full-text index. The symmetric score only ranks —
+    `exact` (folded identity) is what the header tells the model it may write.
+    Empty/disabled ⇒ "" (byte-identical prompt seam).
     """
     if not enabled():
         return ""
@@ -302,13 +354,14 @@ def query_vendor_context(pulled_names, k: int = 3, limit: int = 40) -> str:
     names = names[:limit]
     if not names:
         return ""
+    queries = [{"raw": s, "needle": s.lower(), "norm": norm_key(s)} for s in names]
     cands_by_name: dict[str, list] = {}
     try:
         from neo4j import RoutingControl
 
         result = _DRIVER.execute_query(
             _SCAN_CYPHER,
-            parameters_={"names": names, "k": k},
+            parameters_={"queries": queries, "k": k},
             database_=_DB,
             routing_=RoutingControl.READ,
         )
@@ -326,17 +379,11 @@ def query_vendor_context(pulled_names, k: int = 3, limit: int = 40) -> str:
         cands = cands_by_name.get(name) or []
         if not cands:
             continue
-        rendered = "; ".join(
-            f"{c.get('clean') or c.get('name')} "
-            f"({c.get('juris') or 'n/a'}, {c.get('score')})"
-            for c in cands
-        )
+        rendered = "; ".join(_render_candidate(c) for c in cands)
         lines.append(f"- {name} -> {rendered}")
     if not lines:
         return ""
-    return (
-        "Candidate vendor matches (lexical — verify before use):\n" + "\n".join(lines)
-    )
+    return _HEADER + "\n" + "\n".join(lines)
 
 
 def _cli(argv: list[str]) -> int:
