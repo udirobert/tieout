@@ -62,6 +62,12 @@ research/.venv/bin/python -m close_keeper \
   "Tie out the close package (all tasks), then tell me which cells need my decision and why."
 ```
 
+**Live demo (no keys needed):** `demo_app.py` — a guided molab walk through the
+exception queue, the recorded write path, and the governance gate, including the
+refusals. **Deploy:** [DEPLOY.md](DEPLOY.md) puts the agent on Bedrock AgentCore
+Runtime; [policies/](policies/) restates the governance as Cedar at the Gateway
+boundary, so a compromised loop still can't write a decision or activate a rule.
+
 Then decide, and the agent writes through the governed path:
 
 ```

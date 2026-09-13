@@ -316,41 +316,48 @@ Workspace for this session:
 """
 
 
-def build_agent(args: argparse.Namespace) -> Agent:
+def make_model(use_bedrock: bool):
+    """Resolve the agent-loop model. None means Strands' default (Bedrock)."""
     load_env()
-    if args.bedrock:
-        model = None  # Strands default: Bedrock
-    else:
-        from strands.models.openai import OpenAIModel
+    if use_bedrock:
+        return None
+    from strands.models.openai import OpenAIModel
 
-        if os.environ.get("CLOSE_KEEPER_API_KEY"):
-            base_url = os.environ.get("CLOSE_KEEPER_BASE_URL")
-            api_key = os.environ["CLOSE_KEEPER_API_KEY"]
-            model_id = os.environ.get("CLOSE_KEEPER_MODEL", "meta-llama/Llama-3.3-70B-Instruct")
-        elif os.environ.get("WANDB_API_KEY"):
-            # the repo's funded path: W&B Serverless Inference (OpenAI-compatible)
-            base_url = "https://api.inference.wandb.ai/v1"
-            api_key = os.environ["WANDB_API_KEY"]
-            model_id = os.environ.get("CLOSE_KEEPER_MODEL", "meta-llama/Llama-3.3-70B-Instruct")
-        else:
-            base_url = os.environ.get("OPENAI_BASE_URL")
-            api_key = os.environ.get("OPENAI_API_KEY")
-            model_id = os.environ.get("OPENAI_MODEL", "gpt-4o-mini")
-        if not api_key:
-            raise SystemExit(
-                "no API key: set CLOSE_KEEPER_API_KEY or WANDB_API_KEY, or pass --bedrock"
-            )
-        model = OpenAIModel(
-            client_args={"api_key": api_key, **({"base_url": base_url} if base_url else {})},
-            model_id=model_id,
+    if os.environ.get("CLOSE_KEEPER_API_KEY"):
+        base_url = os.environ.get("CLOSE_KEEPER_BASE_URL")
+        api_key = os.environ["CLOSE_KEEPER_API_KEY"]
+        model_id = os.environ.get("CLOSE_KEEPER_MODEL", "meta-llama/Llama-3.3-70B-Instruct")
+    elif os.environ.get("WANDB_API_KEY"):
+        # the repo's funded path: W&B Serverless Inference (OpenAI-compatible)
+        base_url = "https://api.inference.wandb.ai/v1"
+        api_key = os.environ["WANDB_API_KEY"]
+        model_id = os.environ.get("CLOSE_KEEPER_MODEL", "meta-llama/Llama-3.3-70B-Instruct")
+    else:
+        base_url = os.environ.get("OPENAI_BASE_URL")
+        api_key = os.environ.get("OPENAI_API_KEY")
+        model_id = os.environ.get("OPENAI_MODEL", "gpt-4o-mini")
+    if not api_key:
+        raise SystemExit(
+            "no API key: set CLOSE_KEEPER_API_KEY or WANDB_API_KEY, or pass --bedrock"
         )
+    return OpenAIModel(
+        client_args={"api_key": api_key, **({"base_url": base_url} if base_url else {})},
+        model_id=model_id,
+    )
+
+
+def make_agent(model, dataset_dir: str, out_dir: str, memory_db: str) -> Agent:
     return Agent(
         model=model,
         tools=TOOLS,
         system_prompt=SYSTEM_PROMPT.format(
-            dataset_dir=args.dataset_dir, out_dir=args.out_dir, memory_db=args.memory_db
+            dataset_dir=dataset_dir, out_dir=out_dir, memory_db=memory_db
         ),
     )
+
+
+def build_agent(args: argparse.Namespace) -> Agent:
+    return make_agent(make_model(args.bedrock), args.dataset_dir, args.out_dir, args.memory_db)
 
 
 def main() -> None:
