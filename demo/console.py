@@ -27,6 +27,13 @@ because `graph.enabled()` would ensure schema on page load.
 Every write is a form `on_change` callback rather than a `mo.ui.button` read in
 the cell body. A callback fires only on submit; a button value is a dependency, so
 a cell that both reads it and bumps the state it depends on can re-run itself.
+
+Run standalone (molab / GitHub mirror): the first cell notices the missing repo
+layout and clones the repo into a cache dir, and the second seeds synthetic
+scratch data (a simulated run + the two-cycle memory scenario) when nothing else
+exists — each viewer's ephemeral container gets its own sandbox. Live Aura is
+never part of that path: no creds are bundled, so the Graph tab renders offline
+lineage only.
 """
 
 import marimo
@@ -45,8 +52,63 @@ def _():
     import marimo as mo
 
     HERE = Path(__file__).resolve().parent
-    if str(HERE) not in sys.path:
-        sys.path.insert(0, str(HERE))
+
+    def _fetch_repo():
+        """Clone the repo this notebook belongs to, once, into a cache dir.
+
+        molab mirrors only the notebook file from GitHub; the console also needs
+        harness/, research/ and the rest of demo/ beside it. Env overrides exist
+        so the flow can be rehearsed against a local checkout: TIEOUT_REPO_URL
+        (any git URL or local path), TIEOUT_REPO_REF, TIEOUT_REPO_CACHE.
+        """
+        import os
+        import subprocess
+
+        cache = Path(
+            os.environ.get(
+                "TIEOUT_REPO_CACHE", str(Path.home() / ".cache" / "tieout-repo")
+            )
+        )
+        if (cache / "harness").is_dir():
+            return cache
+        url = os.environ.get(
+            "TIEOUT_REPO_URL", "https://github.com/udirobert/tieout.git"
+        )
+        ref = os.environ.get("TIEOUT_REPO_REF", "main")
+        cache.parent.mkdir(parents=True, exist_ok=True)
+        try:
+            subprocess.run(
+                ["git", "clone", "--depth", "1", "--branch", ref, url, str(cache)],
+                check=True,
+                capture_output=True,
+                timeout=300,
+            )
+        except Exception:  # noqa: BLE001 — no git in the container: tarball fallback
+            import tarfile
+            import tempfile
+            import urllib.request
+
+            tarball = (
+                url.removesuffix(".git").replace("github.com", "codeload.github.com")
+                + f"/tar.gz/refs/heads/{ref}"
+            )
+            with tempfile.TemporaryDirectory() as tmp:
+                archive = Path(tmp) / "repo.tar.gz"
+                urllib.request.urlretrieve(tarball, archive)
+                with tarfile.open(archive) as tf:
+                    tf.extractall(tmp, filter="data")
+                extracted = next(p for p in Path(tmp).iterdir() if p.is_dir())
+                extracted.rename(cache)
+        return cache
+
+    if (HERE.parent / "harness").is_dir():
+        REPO = HERE.parent
+        CLONED = None
+    else:
+        REPO = CLONED = _fetch_repo()
+    _demo = str(REPO / "demo")
+    if _demo not in sys.path:
+        sys.path.insert(0, _demo)
     import ui_common
 
     ui_common.bootstrap()
@@ -59,6 +121,7 @@ def _():
     import sb
 
     return (
+        CLONED,
         Path,
         exc_mod,
         graph,
@@ -71,6 +134,61 @@ def _():
         time,
         ui_common,
     )
+
+
+@app.cell
+def _(CLONED, Path, exc_mod, mo, sb, ui_common):
+    """Seed a scratch workspace — only on a cloned repo (molab) with an empty /tmp.
+
+    Everything seeded is synthetic and stamped as such: the run is written by the
+    same simulation as demo/simulate_demo.sh (`ok: simulated golden`), so every
+    surface carries the "construction, not model evidence" banner, and the memory
+    scenario ends with its rule revoked, like the docs promise. TIEOUT_SEED_DIR
+    redirects the seed root so the flow can be rehearsed without touching /tmp.
+    """
+    import os
+
+    seed_note = ""
+    _seed_root = Path(os.environ.get("TIEOUT_SEED_DIR", "/tmp"))
+    if CLONED is not None and (
+        os.environ.get("TIEOUT_SEED_DIR")
+        or (not ui_common.discover_runs() and not ui_common.discover_memory_dbs())
+    ):
+        import shutil
+
+        import memory_scenario
+        import openpyxl
+        from parsing import cell_ref
+
+        _run_dir = _seed_root / "syndicate-demo"
+        (_run_dir / "outputs").mkdir(parents=True, exist_ok=True)
+        _dataset = CLONED / "demo" / "close-tieout"
+        _task = {t["id"]: t for t in sb.load_dataset(_dataset)}["close-tieout-bank-cp"]
+        _out = _run_dir / "outputs" / "close-tieout-bank-cp.xlsx"
+        shutil.copy(_task["golden_xlsx"], _out)
+        _wb = openpyxl.load_workbook(_out, data_only=True)
+        _written = {}
+        for _sheet, _coord in sb.answer_cells(_task, _wb):
+            _ws = _wb[_sheet] if _sheet in _wb.sheetnames else _wb.active
+            _written[cell_ref(_sheet or _ws.title, _coord)] = _ws[_coord].value
+        _wb.close()
+        exc_mod.write_exceptions(
+            _run_dir,
+            _task,
+            "ok: simulated golden",
+            "molab seed",
+            {"written": _written},
+            _out,
+        )
+        memory_scenario.run(_seed_root / "tieout-memory-demo")
+        seed_note = (
+            "**Seeded scratch demo data** — a simulated run (`ok: simulated "
+            "golden`, so its score is construction, not model evidence) and a "
+            "synthetic governed-memory scenario. Everything here is an ephemeral "
+            "sandbox: writes only touch this copy, and nothing reaches a ledger "
+            "or a source workbook."
+        )
+    return (seed_note,)
 
 
 @app.cell
@@ -95,7 +213,7 @@ def _(mo):
 
 
 @app.cell
-def _(Path, mo, set_msg, set_ws, ui_common):
+def _(Path, mo, seed_note, set_msg, set_ws, ui_common):
     def _load(value):
         if value is None:
             return
@@ -143,6 +261,7 @@ def _(Path, mo, set_msg, set_ws, ui_common):
     ).form(submit_button_label="load workspace", on_change=_load)
     mo.vstack(
         [
+            mo.md(seed_note) if seed_note else mo.md(""),
             mo.md(
                 "## Workspace — load on explicit submit only\n\n"
                 "Scanned once at start from `/tmp` and `runs/` (two levels). Restart "

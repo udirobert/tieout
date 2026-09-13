@@ -33,6 +33,18 @@ the same `graph_payload()` a live run used
 retrieval, on explicit submit. The graph remains readable from the CLI
 (`harness/graph.py query`) or from Cypher in the Aura console.
 
+**Public interactive demo (molab).** `console.py` is self-contained for
+[molab](https://molab.marimo.io): mirrored from GitHub, its first cell clones
+this repo into the container and seeds synthetic scratch data (a simulated run
+plus the two-cycle memory scenario), so each visitor's ephemeral sandbox has a
+workspace to explore. Writes only touch that sandbox; no credentials are
+bundled, so the Graph tab shows offline lineage and says why retrieval is off.
+Once `main` is pushed, anyone can open it via
+`https://molab.marimo.io/github/udirobert/tieout/blob/main/demo/console.py`
+(share as app for the cleanest view):
+
+[![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/udirobert/tieout/blob/main/demo/console.py)
+
 Captured once, under explicit permission, against real artifacts on this machine
 (verification boundary in [COREWEAVE.md](COREWEAVE.md#verification-status)). The
 run pictured is `/tmp/syndicate-demo`, written by `demo/simulate_demo.sh`, so its
