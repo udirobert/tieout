@@ -1,0 +1,165 @@
+{
+  "version": "1",
+  "metadata": {
+    "marimo_version": "0.24.2",
+    "script_metadata_hash": "64f882e0407bad00082690a68f5b379b"
+  },
+  "cells": [
+    {
+      "id": "Hbol",
+      "code_hash": "6e95667c3c153cea552aaae856773a4c",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "MJUe",
+      "code_hash": "b2043b140e1732c4464c1088900f5b21",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "vblA",
+      "code_hash": "f6ca57cbf27f2033e1f409aa3beb6e74",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h1 id=\"close-keeper-the-close-runs-in-the-background-youre-pinged-only-for-real-decisions\">close-keeper \u2014 the close runs in the background; you're pinged only for real decisions</h1>\n<span class=\"paragraph\">An agent for finance professionals, built with the <strong>Strands Agents SDK</strong> on tieout's verified machinery. Its working agreement: <strong>blank is an answer</strong> (unverified cells route to you, with evidence \u2014 nothing is guessed), <strong>one recorded write path</strong> (a decision is persisted before any workbook cell changes), and <strong>memory learns only through governance</strong> (record \u2192 propose \u2192 validate \u2192 activate, enforced by the tools, not the prompt).</span>\n<blockquote>\n<span class=\"paragraph\">\u26a0 <strong>Seeded synthetic sandbox</strong> \u2014 a simulated partial tie-out (the Strands agent loop and the pipeline model need API keys; this sandbox bundles none) and an empty governed-memory store with labeled replay cases. Everything after the run is real: the write path and the governance gate are the same functions the CLI and the agent's tools call.</span>\n</blockquote>\n<span class=\"paragraph\"><strong>1 \u00b7 the quiet run</strong> \u2014 what needs you \u00b7 <strong>2 \u00b7 your decision</strong> \u2014 the one write path \u00b7 <strong>3 \u00b7 teach it once</strong> \u2014 governance-gated memory</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "bkHC",
+      "code_hash": "9769761495bc30c6cbadee81c8536f3c",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "lEQa",
+      "code_hash": "aeeb7e1e423a5ef7b19f4c59012776ce",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "PKri",
+      "code_hash": "ba5b84ad25242a518e27a29900fcccfe",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Xref",
+      "code_hash": "aa9c0548a638782da8150ef5d9b3d494",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "SFPL",
+      "code_hash": "8e6feb478ed864d46e326049c58516d0",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "BYtC",
+      "code_hash": "117ab852c35852240a1e2b8672abf4e1",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"1-the-quiet-run-these-cells-need-you\">1 \u00b7 The quiet run \u2014 these cells need you</h2>\n<span class=\"paragraph\">The close package was tied out; <strong>29 cell(s)</strong> could not be verified and routed here with evidence instead of a guess. Approving writes the proposed value; rejecting reverts to the init value \u2014 both through <code>exceptions.apply_decisions</code>, the one write path the agent has.</span></span><marimo-ui-element object-id='PKri-8' random-id='33db7028-abf8-f4ad-d726-ade32ffb5b8e'><marimo-form data-initial-value='null' data-label='null' data-element-id='&quot;PKri-7&quot;' data-loading='false' data-bordered='true' data-submit-button-label='&quot;apply decision&quot;' data-submit-button-disabled='false' data-clear-on-submit='false' data-show-clear-button='false' data-clear-button-label='&quot;Clear&quot;' data-should-validate='false'><marimo-ui-element object-id='PKri-7' random-id='f81b94e3-6d8d-154f-a614-12e88749d5c5'><marimo-dict data-initial-value='{&quot;rows&quot;:[],&quot;decision&quot;:[]}' data-label='null' data-element-ids='{&quot;PKri-5&quot;:&quot;rows&quot;,&quot;PKri-6&quot;:&quot;decision&quot;}'><marimo-json-output data-json-data='{&quot;rows&quot;:&quot;text/html:&#92;u003cmarimo-ui-element object-id=&#x27;PKri-5&#x27; random-id=&#x27;7e124b99-a103-7249-acfd-a433fced1cfc&#x27;&#92;u003e&#92;u003cmarimo-table data-initial-value=&#x27;[]&#x27; data-label=&#x27;&amp;quot;&amp;#92;u003cspan class=&amp;#92;&amp;quot;markdown prose dark:prose-invert contents&amp;#92;&amp;quot;&amp;#92;u003e&amp;#92;u003cspan class=&amp;#92;&amp;quot;paragraph&amp;#92;&amp;quot;&amp;#92;u003eselect rows, then decide&amp;#92;u003c/span&amp;#92;u003e&amp;#92;u003c/span&amp;#92;u003e&amp;quot;&#x27; data-data=&#x27;&amp;quot;[{&amp;#92;&amp;quot;task&amp;#92;&amp;quot;:&amp;#92;&amp;quot;close-tieout-le-map&amp;#92;&amp;quot;,&amp;#92;&amp;quot;cell&amp;#92;&amp;quot;:&amp;#92;&amp;quot;LE Mapping!E4&amp;#92;&amp;quot;,&amp;#92;&amp;quot;reason&amp;#92;&amp;quot;:&amp;#92;&amp;quot;missing answer cell&amp;#92;&amp;quot;,&amp;#92;&amp;quot;proposed&amp;#92;&amp;quot;:&amp;#92;&amp;quot;&amp;#92;&amp;quot;,&amp;#92;&amp;quot;status&amp;#92;&amp;quot;:&amp;#92;&amp;quot;pending&amp;#92;&amp;quot;},{&amp;#92;&amp;quot;task&amp;#92;&amp;quot;:&amp;#92;&amp;quot;close-tieout-le-map&amp;#92;&amp;quot;,&amp;#92;&amp;quot;cell&amp;#92;&amp;quot;:&amp;#92;&amp;quot;LE Mapping!E6&amp;#92;&amp;quot;,&amp;#92;&amp;quot;reason&amp;#92;&amp;quot;:&amp;#92;&amp;quot;missing answer cell&amp;#92;&amp;quot;,&amp;#92;&amp;quot;proposed&amp;#92;&amp;quot;:&amp;#92;&amp;quot;&amp;#92;&amp;quot;,&amp;#92;&amp;quot;status&amp;#92;&amp;quot;:&amp;#92;&amp;quot;pending&amp;#92;&amp;quot;},{&amp;#92;&amp;quot;task&amp;#92;&amp;quot;:&amp;#92;&amp;quot;close-tieout-le-map&amp;#92;&amp;quot;,&amp;#92;&amp;quot;cell&amp;#92;&amp;quot;:&amp;#92;&amp;quot;LE Mapping!E8&amp;#92;&amp;quot;,&amp;#92;&amp;quot;reason&amp;#92;&amp;quot;:&amp;#92;&amp;quot;missing answer cell&amp;#92;&amp;quot;,&amp;#92;&amp;quot;proposed&amp;#92;&amp;quot;:&amp;#92;&amp;quot;&amp;#92;&amp;quot;,&amp;#92;&amp;quot;status&amp;#92;&amp;quot;:&amp;#92;&amp;quot;pending&amp;#92;&amp;quot;},{&amp;#92;&amp;quot;task&amp;#92;&amp;quot;:&amp;#92;&amp;quot;close-tieout-le-map&amp;#92;&amp;quot;,&amp;#92;&amp;quot;cell&amp;#92;&amp;quot;:&amp;#92;&amp;quot;LE Mapping!E10&amp;#92;&amp;quot;,&amp;#92;&amp;quot;reason&amp;#92;&amp;quot;:&amp;#92;&amp;quot;missing answer cell&amp;#92;&amp;quot;,&amp;#92;&amp;quot;proposed&amp;#92;&amp;quot;:&amp;#92;&amp;quot;&amp;#92;&amp;quot;,&amp;#92;&amp;quot;status&amp;#92;&amp;quot;:&amp;#92;&amp;quot;pending&amp;#92;&amp;quot;},{&amp;#92;&amp;quot;task&amp;#92;&amp;quot;:&amp;#92;&amp;quot;close-tieout-le-map&amp;#92;&amp;quot;,&amp;#92;&amp;quot;cell&amp;#92;&amp;quot;:&amp;#92;&amp;quot;LE Mapping!E12&amp;#92;&amp;quot;,&amp;#92;&amp;quot;reason&amp;#92;&amp;quot;:&amp;#92;&amp;quot;missing answer cell&amp;#92;&amp;quot;,&amp;#92;&amp;quot;proposed&amp;#92;&amp;quot;:&amp;#92;&amp;quot;&amp;#92;&amp;quot;,&amp;#92;&amp;quot;status&amp;#92;&amp;quot;:&amp;#92;&amp;quot;pending&amp;#92;&amp;quot;},{&amp;#92;&amp;quot;task&amp;#92;&amp;quot;:&amp;#92;&amp;quot;close-tieout-le-map&amp;#92;&amp;quot;,&amp;#92;&amp;quot;cell&amp;#92;&amp;quot;:&amp;#92;&amp;quot;LE Mapping!E14&amp;#92;&amp;quot;,&amp;#92;&amp;quot;reason&amp;#92;&amp;quot;:&amp;#92;&amp;quot;missing answer cell&amp;#92;&amp;quot;,&amp;#92;&amp;quot;proposed&amp;#92;&amp;quot;:&amp;#92;&amp;quot;&amp;#92;&amp;quot;,&amp;#92;&amp;quot;status&amp;#92;&amp;quot;:&amp;#92;&amp;quot;pending&amp;#92;&amp;quot;},{&amp;#92;&amp;quot;task&amp;#92;&amp;quot;:&amp;#92;&amp;quot;close-tieout-le-map&amp;#92;&amp;quot;,&amp;#92;&amp;quot;cell&amp;#92;&amp;quot;:&amp;#92;&amp;quot;LE Mapping!E16&amp;#92;&amp;quot;,&amp;#92;&amp;quot;reason&amp;#92;&amp;quot;:&amp;#92;&amp;quot;missing answer cell&amp;#92;&amp;quot;,&amp;#92;&amp;quot;proposed&amp;#92;&amp;quot;:&amp;#92;&amp;quot;&amp;#92;&amp;quot;,&amp;#92;&amp;quot;status&amp;#92;&amp;quot;:&amp;#92;&amp;quot;pending&amp;#92;&amp;quot;},{&amp;#92;&amp;quot;task&amp;#92;&amp;quot;:&amp;#92;&amp;quot;close-tieout-le-map&amp;#92;&amp;quot;,&amp;#92;&amp;quot;cell&amp;#92;&amp;quot;:&amp;#92;&amp;quot;LE Mapping!E18&amp;#92;&amp;quot;,&amp;#92;&amp;quot;reason&amp;#92;&amp;quot;:&amp;#92;&amp;quot;missing answer cell&amp;#92;&amp;quot;,&amp;#92;&amp;quot;proposed&amp;#92;&amp;quot;:&amp;#92;&amp;quot;&amp;#92;&amp;quot;,&amp;#92;&amp;quot;status&amp;#92;&amp;quot;:&amp;#92;&amp;quot;pending&amp;#92;&amp;quot;},{&amp;#92;&amp;quot;task&amp;#92;&amp;quot;:&amp;#92;&amp;quot;close-tieout-le-map&amp;#92;&amp;quot;,&amp;#92;&amp;quot;cell&amp;#92;&amp;quot;:&amp;#92;&amp;quot;LE Mapping!E20&amp;#92;&amp;quot;,&amp;#92;&amp;quot;reason&amp;#92;&amp;quot;:&amp;#92;&amp;quot;missing answer cell&amp;#92;&amp;quot;,&amp;#92;&amp;quot;proposed&amp;#92;&amp;quot;:&amp;#92;&amp;quot;&amp;#92;&amp;quot;,&amp;#92;&amp;quot;status&amp;#92;&amp;quot;:&amp;#92;&amp;quot;pending&amp;#92;&amp;quot;},{&amp;#92;&amp;quot;task&amp;#92;&amp;quot;:&amp;#92;&amp;quot;close-tieout-le-map&amp;#92;&amp;quot;,&amp;#92;&amp;quot;cell&amp;#92;&amp;quot;:&amp;#92;&amp;quot;LE Mapping!E22&amp;#92;&amp;quot;,&amp;#92;&amp;quot;reason&amp;#92;&amp;quot;:&amp;#92;&amp;quot;missing answer cell&amp;#92;&amp;quot;,&amp;#92;&amp;quot;proposed&amp;#92;&amp;quot;:&amp;#92;&amp;quot;&amp;#92;&amp;quot;,&amp;#92;&amp;quot;status&amp;#92;&amp;quot;:&amp;#92;&amp;quot;pending&amp;#92;&amp;quot;}]&amp;quot;&#x27; data-total-rows=&#x27;29&#x27; data-total-columns=&#x27;5&#x27; data-max-columns=&#x27;50&#x27; data-banner-text=&#x27;&amp;quot;&amp;quot;&#x27; data-pagination=&#x27;true&#x27; data-page-size=&#x27;10&#x27; data-selection=&#x27;&amp;quot;multi&amp;quot;&#x27; data-show-filters=&#x27;false&#x27; data-show-download=&#x27;true&#x27; data-show-search=&#x27;true&#x27; data-show-column-summaries=&#x27;true&#x27; data-show-data-types=&#x27;true&#x27; data-show-page-size-selector=&#x27;true&#x27; data-show-column-explorer=&#x27;true&#x27; data-show-chart-builder=&#x27;true&#x27; data-row-headers=&#x27;[]&#x27; data-hidden-columns=&#x27;[]&#x27; data-has-stable-row-id=&#x27;false&#x27; data-lazy=&#x27;false&#x27; data-preload=&#x27;false&#x27;&#92;u003e&#92;u003c/marimo-table&#92;u003e&#92;u003c/marimo-ui-element&#92;u003e&quot;,&quot;decision&quot;:&quot;text/html:&#92;u003cmarimo-ui-element object-id=&#x27;PKri-6&#x27; random-id=&#x27;19551367-3dc2-0e2b-52e6-382e19a23c4e&#x27;&#92;u003e&#92;u003cmarimo-dropdown data-initial-value=&#x27;[]&#x27; data-label=&#x27;&amp;quot;&amp;#92;u003cspan class=&amp;#92;&amp;quot;markdown prose dark:prose-invert contents&amp;#92;&amp;quot;&amp;#92;u003e&amp;#92;u003cspan class=&amp;#92;&amp;quot;paragraph&amp;#92;&amp;quot;&amp;#92;u003edecision&amp;#92;u003c/span&amp;#92;u003e&amp;#92;u003c/span&amp;#92;u003e&amp;quot;&#x27; data-options=&#x27;[&amp;quot;approve&amp;quot;,&amp;quot;reject&amp;quot;]&#x27; data-allow-select-none=&#x27;true&#x27; data-searchable=&#x27;false&#x27; data-full-width=&#x27;false&#x27; data-disabled=&#x27;false&#x27;&#92;u003e&#92;u003c/marimo-dropdown&#92;u003e&#92;u003c/marimo-ui-element&#92;u003e&quot;}' data-value-types='&quot;python&quot;' data-name='&quot;dictionary&quot;'></marimo-json-output></marimo-dict></marimo-ui-element></marimo-form></marimo-ui-element><span class=\"markdown prose dark:prose-invert contents\"></span></div><span class=\"markdown prose dark:prose-invert contents\"><hr />\n<h2 id=\"2-what-memory-learned\">2 \u00b7 What memory learned</h2></span><div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"memory-right-now\">Memory right now</h3></span><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><em>no rules yet \u2014 teach one below</em></span></span><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Next close's transactions</strong> \u2014 what memory would do with them today. <code>review</code> means: route to a human, do not guess.</span></span><marimo-ui-element object-id='Xref-0' random-id='3278cdea-cde2-7d08-fd26-26809bcd4ad2'><marimo-table data-initial-value='[]' data-label='null' data-data='&quot;[{&#92;&quot;narrative&#92;&quot;:&#92;&quot;EXAMPLE SERVICES HOLDINGS&#92;&quot;,&#92;&quot;entity&#92;&quot;:&#92;&quot;Example Fund A&#92;&quot;,&#92;&quot;hint&#92;&quot;:&#92;&quot;&#92;&quot;,&#92;&quot;decision&#92;&quot;:&#92;&quot;review&#92;&quot;,&#92;&quot;vendor&#92;&quot;:&#92;&quot;\u2014&#92;&quot;},{&#92;&quot;narrative&#92;&quot;:&#92;&quot;Example    Services&#92;&quot;,&#92;&quot;entity&#92;&quot;:&#92;&quot;Example Fund A&#92;&quot;,&#92;&quot;hint&#92;&quot;:&#92;&quot;&#92;&quot;,&#92;&quot;decision&#92;&quot;:&#92;&quot;review&#92;&quot;,&#92;&quot;vendor&#92;&quot;:&#92;&quot;\u2014&#92;&quot;},{&#92;&quot;narrative&#92;&quot;:&#92;&quot;EXAMPLE SERVICES&#92;&quot;,&#92;&quot;entity&#92;&quot;:&#92;&quot;Example Fund A&#92;&quot;,&#92;&quot;hint&#92;&quot;:&#92;&quot;Different Services Ltd&#92;&quot;,&#92;&quot;decision&#92;&quot;:&#92;&quot;review&#92;&quot;,&#92;&quot;vendor&#92;&quot;:&#92;&quot;\u2014&#92;&quot;},{&#92;&quot;narrative&#92;&quot;:&#92;&quot;EXAMPLE SERVICES&#92;&quot;,&#92;&quot;entity&#92;&quot;:&#92;&quot;Example Fund A&#92;&quot;,&#92;&quot;hint&#92;&quot;:&#92;&quot;&#92;&quot;,&#92;&quot;decision&#92;&quot;:&#92;&quot;review&#92;&quot;,&#92;&quot;vendor&#92;&quot;:&#92;&quot;\u2014&#92;&quot;}]&quot;' data-total-rows='4' data-total-columns='5' data-max-columns='50' data-banner-text='&quot;&quot;' data-pagination='false' data-page-size='4' data-selection='&quot;multi&quot;' data-show-filters='false' data-show-download='true' data-show-search='true' data-show-column-summaries='false' data-show-data-types='true' data-show-page-size-selector='false' data-show-column-explorer='true' data-show-chart-builder='true' data-row-headers='[]' data-hidden-columns='[]' data-has-stable-row-id='false' data-lazy='false' data-preload='false'></marimo-table></marimo-ui-element></div><div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"3-teach-it-once-memory-learns-with-permission\">3 \u00b7 Teach it once \u2014 memory learns with permission</h2>\n<span class=\"paragraph\">A correction only becomes behavior through governance. Try activating before validating: the tool refuses. That refusal is the product.</span></span><div style='display: flex;flex: 1;flex-direction: row;justify-content: space-between;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><marimo-ui-element object-id='SFPL-5' random-id='01c1124e-2e71-f09a-788a-da70e034c5fa'><marimo-form data-initial-value='null' data-label='null' data-element-id='&quot;SFPL-4&quot;' data-loading='false' data-bordered='true' data-submit-button-label='&quot;1 \u00b7 record correction&quot;' data-submit-button-disabled='false' data-clear-on-submit='false' data-show-clear-button='false' data-clear-button-label='&quot;Clear&quot;' data-should-validate='false'><marimo-ui-element object-id='SFPL-4' random-id='1a6f4656-6b87-58fe-6db2-3d491da510a1'><marimo-dict data-initial-value='{&quot;reviewer&quot;:&quot;&quot;}' data-label='null' data-element-ids='{&quot;SFPL-3&quot;:&quot;reviewer&quot;}'><marimo-json-output data-json-data='{&quot;reviewer&quot;:&quot;text/html:&#92;u003cmarimo-ui-element object-id=&#x27;SFPL-3&#x27; random-id=&#x27;2e37f57d-df8b-2658-1534-f4d9d9422c66&#x27;&#92;u003e&#92;u003cmarimo-text data-initial-value=&#x27;&amp;quot;&amp;quot;&#x27; data-label=&#x27;&amp;quot;&amp;#92;u003cspan class=&amp;#92;&amp;quot;markdown prose dark:prose-invert contents&amp;#92;&amp;quot;&amp;#92;u003e&amp;#92;u003cspan class=&amp;#92;&amp;quot;paragraph&amp;#92;&amp;quot;&amp;#92;u003eyour name (self-attested)&amp;#92;u003c/span&amp;#92;u003e&amp;#92;u003c/span&amp;#92;u003e&amp;quot;&#x27; data-placeholder=&#x27;&amp;quot;&amp;quot;&#x27; data-kind=&#x27;&amp;quot;text&amp;quot;&#x27; data-full-width=&#x27;false&#x27; data-disabled=&#x27;false&#x27; data-debounce=&#x27;true&#x27;&#92;u003e&#92;u003c/marimo-text&#92;u003e&#92;u003c/marimo-ui-element&#92;u003e&quot;}' data-value-types='&quot;python&quot;' data-name='&quot;dictionary&quot;'></marimo-json-output></marimo-dict></marimo-ui-element></marimo-form></marimo-ui-element><marimo-ui-element object-id='SFPL-11' random-id='0e48647f-14b0-74d3-28af-90e80c508937'><marimo-form data-initial-value='null' data-label='null' data-element-id='&quot;SFPL-10&quot;' data-loading='false' data-bordered='true' data-submit-button-label='&quot;2 \u00b7 propose candidate&quot;' data-submit-button-disabled='false' data-clear-on-submit='false' data-show-clear-button='false' data-clear-button-label='&quot;Clear&quot;' data-should-validate='false'><marimo-ui-element object-id='SFPL-10' random-id='eca47d5c-ed23-82c2-6099-2f1b4b0e7f18'><marimo-dict data-initial-value='{&quot;correction&quot;:&quot;&quot;}' data-label='null' data-element-ids='{&quot;SFPL-9&quot;:&quot;correction&quot;}'><marimo-json-output data-json-data='{&quot;correction&quot;:&quot;text/html:&#92;u003cmarimo-ui-element object-id=&#x27;SFPL-9&#x27; random-id=&#x27;768fe8ed-aec1-ddc1-02fc-b39ad4c214f5&#x27;&#92;u003e&#92;u003cmarimo-text data-initial-value=&#x27;&amp;quot;&amp;quot;&#x27; data-label=&#x27;&amp;quot;&amp;#92;u003cspan class=&amp;#92;&amp;quot;markdown prose dark:prose-invert contents&amp;#92;&amp;quot;&amp;#92;u003e&amp;#92;u003cspan class=&amp;#92;&amp;quot;paragraph&amp;#92;&amp;quot;&amp;#92;u003ecorrection&amp;#92;u003c/span&amp;#92;u003e&amp;#92;u003c/span&amp;#92;u003e&amp;quot;&#x27; data-placeholder=&#x27;&amp;quot;&amp;quot;&#x27; data-kind=&#x27;&amp;quot;text&amp;quot;&#x27; data-full-width=&#x27;false&#x27; data-disabled=&#x27;true&#x27; data-debounce=&#x27;true&#x27;&#92;u003e&#92;u003c/marimo-text&#92;u003e&#92;u003c/marimo-ui-element&#92;u003e&quot;}' data-value-types='&quot;python&quot;' data-name='&quot;dictionary&quot;'></marimo-json-output></marimo-dict></marimo-ui-element></marimo-form></marimo-ui-element></div><div style='display: flex;flex: 1;flex-direction: row;justify-content: space-between;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><marimo-ui-element object-id='SFPL-17' random-id='41580159-270d-3978-17e5-970eb6722681'><marimo-form data-initial-value='null' data-label='null' data-element-id='&quot;SFPL-16&quot;' data-loading='false' data-bordered='true' data-submit-button-label='&quot;3 \u00b7 validate (replay gate)&quot;' data-submit-button-disabled='false' data-clear-on-submit='false' data-show-clear-button='false' data-clear-button-label='&quot;Clear&quot;' data-should-validate='false'><marimo-ui-element object-id='SFPL-16' random-id='228c5257-ed06-dd51-9bc7-bda4f061ea07'><marimo-dict data-initial-value='{&quot;rule&quot;:&quot;&quot;}' data-label='null' data-element-ids='{&quot;SFPL-15&quot;:&quot;rule&quot;}'><marimo-json-output data-json-data='{&quot;rule&quot;:&quot;text/html:&#92;u003cmarimo-ui-element object-id=&#x27;SFPL-15&#x27; random-id=&#x27;ea3abe8b-40d1-7e52-7d72-7a66a26a907e&#x27;&#92;u003e&#92;u003cmarimo-text data-initial-value=&#x27;&amp;quot;&amp;quot;&#x27; data-label=&#x27;&amp;quot;&amp;#92;u003cspan class=&amp;#92;&amp;quot;markdown prose dark:prose-invert contents&amp;#92;&amp;quot;&amp;#92;u003e&amp;#92;u003cspan class=&amp;#92;&amp;quot;paragraph&amp;#92;&amp;quot;&amp;#92;u003ecandidate&amp;#92;u003c/span&amp;#92;u003e&amp;#92;u003c/span&amp;#92;u003e&amp;quot;&#x27; data-placeholder=&#x27;&amp;quot;&amp;quot;&#x27; data-kind=&#x27;&amp;quot;text&amp;quot;&#x27; data-full-width=&#x27;false&#x27; data-disabled=&#x27;true&#x27; data-debounce=&#x27;true&#x27;&#92;u003e&#92;u003c/marimo-text&#92;u003e&#92;u003c/marimo-ui-element&#92;u003e&quot;}' data-value-types='&quot;python&quot;' data-name='&quot;dictionary&quot;'></marimo-json-output></marimo-dict></marimo-ui-element></marimo-form></marimo-ui-element><marimo-ui-element object-id='SFPL-23' random-id='4110859f-57e3-cc5f-6276-195d7affc462'><marimo-form data-initial-value='null' data-label='null' data-element-id='&quot;SFPL-22&quot;' data-loading='false' data-bordered='true' data-submit-button-label='&quot;4 \u00b7 activate&quot;' data-submit-button-disabled='false' data-clear-on-submit='false' data-show-clear-button='false' data-clear-button-label='&quot;Clear&quot;' data-should-validate='false'><marimo-ui-element object-id='SFPL-22' random-id='2326a909-9f35-478e-21fa-2ca371f96f78'><marimo-dict data-initial-value='{&quot;eligible&quot;:&quot;\u2014&quot;}' data-label='null' data-element-ids='{&quot;SFPL-21&quot;:&quot;eligible&quot;}'><marimo-json-output data-json-data='{&quot;eligible&quot;:&quot;text/html:&#92;u003cmarimo-ui-element object-id=&#x27;SFPL-21&#x27; random-id=&#x27;31d2e8cb-fd5b-2f98-ebbf-ee941b4421c8&#x27;&#92;u003e&#92;u003cmarimo-text data-initial-value=&#x27;&amp;quot;\u2014&amp;quot;&#x27; data-label=&#x27;&amp;quot;&amp;#92;u003cspan class=&amp;#92;&amp;quot;markdown prose dark:prose-invert contents&amp;#92;&amp;quot;&amp;#92;u003e&amp;#92;u003cspan class=&amp;#92;&amp;quot;paragraph&amp;#92;&amp;quot;&amp;#92;u003egate&amp;#92;u003c/span&amp;#92;u003e&amp;#92;u003c/span&amp;#92;u003e&amp;quot;&#x27; data-placeholder=&#x27;&amp;quot;&amp;quot;&#x27; data-kind=&#x27;&amp;quot;text&amp;quot;&#x27; data-full-width=&#x27;false&#x27; data-disabled=&#x27;true&#x27; data-debounce=&#x27;true&#x27;&#92;u003e&#92;u003c/marimo-text&#92;u003e&#92;u003c/marimo-ui-element&#92;u003e&quot;}' data-value-types='&quot;python&quot;' data-name='&quot;dictionary&quot;'></marimo-json-output></marimo-dict></marimo-ui-element></marimo-form></marimo-ui-element><marimo-ui-element object-id='SFPL-29' random-id='6f524c4f-13ae-4dfb-5dd1-22ecbe021fa9'><marimo-form data-initial-value='null' data-label='null' data-element-id='&quot;SFPL-28&quot;' data-loading='false' data-bordered='true' data-submit-button-label='&quot;revoke&quot;' data-submit-button-disabled='false' data-clear-on-submit='false' data-show-clear-button='false' data-clear-button-label='&quot;Clear&quot;' data-should-validate='false'><marimo-ui-element object-id='SFPL-28' random-id='19a768aa-201c-8f0b-3f83-41ceb1ffb97c'><marimo-dict data-initial-value='{&quot;reason&quot;:&quot;&quot;}' data-label='null' data-element-ids='{&quot;SFPL-27&quot;:&quot;reason&quot;}'><marimo-json-output data-json-data='{&quot;reason&quot;:&quot;text/html:&#92;u003cmarimo-ui-element object-id=&#x27;SFPL-27&#x27; random-id=&#x27;a31ddf0f-28db-9e9e-b43f-d1e605565894&#x27;&#92;u003e&#92;u003cmarimo-text data-initial-value=&#x27;&amp;quot;&amp;quot;&#x27; data-label=&#x27;&amp;quot;&amp;#92;u003cspan class=&amp;#92;&amp;quot;markdown prose dark:prose-invert contents&amp;#92;&amp;quot;&amp;#92;u003e&amp;#92;u003cspan class=&amp;#92;&amp;quot;paragraph&amp;#92;&amp;quot;&amp;#92;u003ereason&amp;#92;u003c/span&amp;#92;u003e&amp;#92;u003c/span&amp;#92;u003e&amp;quot;&#x27; data-placeholder=&#x27;&amp;quot;&amp;quot;&#x27; data-kind=&#x27;&amp;quot;text&amp;quot;&#x27; data-full-width=&#x27;false&#x27; data-disabled=&#x27;false&#x27; data-debounce=&#x27;true&#x27;&#92;u003e&#92;u003c/marimo-text&#92;u003e&#92;u003c/marimo-ui-element&#92;u003e&quot;}' data-value-types='&quot;python&quot;' data-name='&quot;dictionary&quot;'></marimo-json-output></marimo-dict></marimo-ui-element></marimo-form></marimo-ui-element></div></div></div>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "RGSE",
+      "code_hash": "52628371d5f9a5b4cbcee21296c62a90",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><hr />\n<h2 id=\"the-architecture-in-one-picture\">The architecture in one picture</h2>\n<span class=\"paragraph\">The agent loop is the thin part. Everything enforcement-shaped lives in the tools: <code>apply_review_decisions</code> is the only way to write a workbook, and <code>memory_store</code> is the only way a rule becomes active.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Kclp",
+      "code_hash": "ca69b35dccc468fbee7bae6926c86596",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<marimo-mermaid data-diagram='&quot;&#92;n    flowchart LR&#92;n        H[&#92;&quot;finance professional&#92;&quot;] &#92;u003c--&#92;u003e|&#92;&quot;only real decisions&#92;&quot;| A[&#92;&quot;close-keeper&#92;u003cbr/&#92;u003eStrands agent loop&#92;&quot;]&#92;n        A --&#92;u003e T1[&#92;&quot;tie_out_workbook&#92;&quot;]&#92;n        A --&#92;u003e T2[&#92;&quot;list_exceptions&#92;&quot;]&#92;n        A --&#92;u003e T3[&#92;&quot;apply_review_decisions&#92;u003cbr/&#92;u003eTHE write path&#92;&quot;]&#92;n        A --&#92;u003e T4[&#92;&quot;memory governance&#92;u003cbr/&#92;u003erecord \u2192 propose&#92;u003cbr/&#92;u003e\u2192 validate \u2192 activate&#92;&quot;]&#92;n        T3 --&#92;u003e W[(&#92;&quot;workbook&#92;&quot;)]&#92;n        T4 --&#92;u003e M[(&#92;&quot;governed memory&#92;u003cbr/&#92;u003eSQLite&#92;&quot;)]&#92;n    &quot;'></marimo-mermaid>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "emfo",
+      "code_hash": "bb7cba4494a7cde752c156f7c3168f9e",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><hr />\n<span class=\"paragraph\"><strong>Repo + agent:</strong> <a href=\"https://github.com/udirobert/tieout\" rel=\"noopener noreferrer\" target=\"_blank\">github.com/udirobert/tieout</a> \u2014 <code>close_keeper/</code> has the Strands agent (11 tools), the README, and the architecture. Run the full agent loop locally with your own keys:</span>\n<div class=\"language-bash codehilite\"><pre><span></span><code>uv<span class=\"w\"> </span>sync<span class=\"w\"> </span>--directory<span class=\"w\"> </span>research<span class=\"w\"> </span>--extra<span class=\"w\"> </span>agent\nresearch/.venv/bin/python<span class=\"w\"> </span>-m<span class=\"w\"> </span>close_keeper<span class=\"w\"> </span><span class=\"se\">\\</span>\n<span class=\"w\">  </span><span class=\"s2\">\"Tie out the close package, then tell me which cells need my decision and why.\"</span>\n</code></pre></div>\n<span class=\"paragraph\"><em>Built for the Agents for Humans hackathon \u00b7 Professional Agents track \u00b7 MIT</em></span></span>"
+          }
+        }
+      ],
+      "console": []
+    }
+  ]
+}

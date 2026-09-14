@@ -1,5 +1,7 @@
 # close-keeper — a Strands agent for the financial close
 
+[![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/udirobert/tieout/blob/main/close_keeper/demo_app.py)
+
 **Professional Agents track.** Finance professionals lose hours every close to the
 same judgment-heavy busywork: tie out the workbook, map the narratives, chase the
 exceptions. close-keeper does that work in the background and **only surfaces when

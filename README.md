@@ -23,6 +23,10 @@ there's a real decision to make**. New build on tieout's verified tools —
 one recorded write path, governance-gated memory. See
 [close_keeper/README.md](close_keeper/README.md).
 
+Try it without an account:
+
+[![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/udirobert/tieout/blob/main/close_keeper/demo_app.py)
+
 ```bash
 uv sync --directory research --extra agent
 research/.venv/bin/python -m close_keeper \
