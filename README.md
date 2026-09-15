@@ -90,6 +90,15 @@ uv run python loop.py --dataset-dir data/spreadsheetbench_verified_400 \
 uv run marimo run ../demo/console.py
 ```
 
+## Qwen3-8B on SpreadsheetBench-400 (molab, free RTX Pro 6000)
+
+Two eval passes against `Qwen/Qwen3-8B` via vLLM 0.29 — no API keys, served
+locally on molab's free GPU. Headline finding: thinking-on is within a fraction
+of a point of thinking-off on the sheet-level pass rate (13.48% partial vs
+12.80% full), at ~10× the wall-clock cost and with several tasks blocked by
+the model's 40k context ceiling. Both runs, predictions, results and a
+side-by-side comparison live in `research/data/eval/qwen3-8b-molab/`.
+
 ## Knowledge graph (Neo4j)
 
 Set `NEO4J_URI`/`NEO4J_USER`/`NEO4J_PASSWORD` in `.env` (Aura) — every answer cell becomes a

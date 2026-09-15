@@ -1,0 +1,22 @@
+{
+  "run_a_thinking_on_partial": {
+    "coverage": "89/400",
+    "sheet_pass_rate": 0.1348,
+    "cell_accuracy": 0.36,
+    "wall_clock_estimate_min": 75,
+    "context_ceiling_blockers": 7,
+    "timeouts": 4,
+    "ok": 77
+  },
+  "run_b_thinking_off_full": {
+    "coverage": "400/400",
+    "sheet_pass_rate": 0.128,
+    "cell_level_pass_rate": 0.1636,
+    "cell_accuracy": 0.3533,
+    "wall_clock_min": 30,
+    "errors": 0
+  },
+  "model": "Qwen/Qwen3-8B",
+  "eval": "SpreadsheetBench Verified-400, no-recalc",
+  "gpu": "RTX Pro 6000 Blackwell (molab free tier)"
+}
