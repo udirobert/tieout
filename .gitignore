@@ -24,6 +24,9 @@ videos/
 run.log
 results.json
 *.xlsx
+
+# Hackathon submission artifacts (Devpost link in repo, not the file)
+docs/submission/
 !research/data/download.py
 # Archived eval evidence for judges (force-add under research/data/eval/)
 !research/data/eval/**/results.json
