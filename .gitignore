@@ -45,3 +45,9 @@ research/data/sft/tmp_outputs/
 *.sqlite3-journal
 *.sqlite3-wal
 *.sqlite3-shm
+
+# Assistant / agent tooling artifacts (not repo content)
+.agents/
+.claude/
+agent/
+skills-lock.json
