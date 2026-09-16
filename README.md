@@ -93,10 +93,10 @@ uv run marimo run ../demo/console.py
 ## Qwen3-8B on SpreadsheetBench-400 (molab, free RTX Pro 6000)
 
 Two eval passes against `Qwen/Qwen3-8B` via vLLM 0.29 — no API keys, served
-locally on molab's free GPU. Headline finding: thinking-on is within a fraction
-of a point of thinking-off on the sheet-level pass rate (13.48% partial vs
-12.80% full), at ~10× the wall-clock cost and with several tasks blocked by
-the model's 40k context ceiling. Both runs, predictions, results and a
+locally on molab's free GPU. Headline: **thinking-on outperforms thinking-off
+by ~5 points on sheet-level pass rate (17.60% vs 12.80%) and ~18 points on
+cell-level pass rate (34.55% vs 16.36%)**, at 4× the wall-clock cost. Cell
+accuracy is essentially flat (~36%). Both runs, predictions, results, and a
 side-by-side comparison live in `research/data/eval/qwen3-8b-molab/`.
 
 ## Knowledge graph (Neo4j)
