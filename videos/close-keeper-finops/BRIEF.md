@@ -53,6 +53,15 @@ after regenerating audio).
 
 ## Notes
 
+- **Outcome: did not place** (FinOps Hackathon, 20 Oct 2026). The judges' stated reason was that
+  the entry didn't clearly show **a workflow people already do**, and how the agentic solution
+  fixes or improves on it. That is a structural hit on the argument, not on the craft: beat 2 is
+  a *query* ("what did we spend last month by category"), and a query is not a process — so the
+  refusal in beat 3 never gets a baseline to be better than. The fix is ~12 seconds before beat 3:
+  six rows (pull the data → match invoice to bank → **work the unmatched list** → post recurring
+  journals → tie out the balances → package and approve), row 3 highlighted, "this is the one we
+  took". Written out now in `close_keeper/README.md` → *The workflow this sits inside*, and on the
+  site at `#workflow`.
 - Honesty rules that survived to the final cut: no invented customer (the founder is a frame,
   not a case study); no number spoken that is not on screen; every capture labelled with its
   provenance, including the Seapoint clip's "styled replay of the live pull".

@@ -1,10 +1,11 @@
 # close-keeper — 2:00 demo video script (FinOps Hackathon, 20 Oct 2026)
 
-> **Superseded as a shoot plan.** The delivered film is `videos/close-keeper-finops/`
-> (`index.html` for what is on screen, `audio_request.json` for the words actually
-> spoken, `BRIEF.md` for provenance). This file is kept for the live-slot contingency
-> and the landmines list at the end — read those before the 21:25 slot, and treat
-> `audio_request.json` as the source of truth for every number.
+> **Superseded as a shoot plan, and the slot has passed.** The delivered film is
+> `videos/close-keeper-finops/` (`index.html` for what is on screen, `audio_request.json`
+> for the words actually spoken, `BRIEF.md` for provenance). The entry **did not place** —
+> see `close_keeper/README.md` → *Outcome*. What the judges said is recorded at the bottom of
+> this file, because it is a note about the *argument*, not the craft, and this document is
+> where the argument lives.
 
 Hard limit: **two minutes**. Code freeze **20:20**. Start recording **20:05**.
 Narration is ~292 words ≈ 1:57 at 2.5 words/sec, plus a 3-second silence.
@@ -224,14 +225,32 @@ and never cut "None of them guesses."
       local fixture, 15 is the key-free simulated queue — never blend them)
 - [ ] 2:00 file length, exported and uploading by 20:15
 
-## 21:25 live slot (top five) — contingency
+## 21:25 live slot — outcome, and the hit
 
-Rehearse the same 120 seconds standing, no typing, same four beats. Lead the live version with
-the refusal, not the tie-out: if the network dies you still have the best 30 seconds of the
-entry. Fallback order: (1) the Claude Code capture, (2) `close_keeper/demo_app.py` molab static
-preview session (`73982b7`) — no keys, no network, (3) the exception-list screenshot.
+**Did not place.** The reason given: the entry didn't clearly show **a workflow that people
+already do**, and how the agentic solution fixes or improves on it. That maps to the
+*Real-world applicability* criterion, not to *Safety and oversight* or *Technical execution* —
+worth being precise about, because the instinct after this kind of feedback is to go add more
+governance, and governance was never the problem.
 
-If a judge asks the one question this story invites — *"isn't leaving it blank just the agent
-giving up?"* — the answer is the fourth beat: it blanks, and it asks once, and the next month it
-doesn't have to, because a human approved the reasoning. Blank is not the end of the workflow.
-It is where the workflow becomes auditable.
+**Diagnosis, in terms of this script.** The four beats are problem → plumbing → works alone →
+turn. Beat 2 is a *query* ("what did we spend last month by category?"), and a query is not a
+process. So the film never establishes the month-end as a sequence of steps somebody performs,
+which means the refusal in beat 3 has no baseline to be better than. The turn lands as a
+striking *object* rather than as a fix to something the viewer recognises as their Tuesday.
+Every number in the film is defensible and labelled; the missing thing was the workflow diagram
+in front of them.
+
+**The 12-second fix, if this is ever re-cut.** One card, placed before beat 3, six rows:
+pull the data → match invoice to bank → **work the unmatched list** → post the recurring
+journals → tie out the balances → package and approve. Highlight row 3. Say: *"this is the one
+we took."* Then the refusal has something to refuse inside. That section now exists in prose in
+`close_keeper/README.md` (→ *The workflow this sits inside*) and on the site at `#workflow`, so
+the argument is no longer only implicit.
+
+**What still holds.** The fallback order was rehearsed and correct: (1) the Claude Code capture,
+(2) `close_keeper/demo_app.py` in molab — no keys, no network, (3) the exception-list screenshot.
+And the question this story invites is still the one to be ready for — *"isn't leaving it blank
+just the agent giving up?"* — answered by the fourth beat: it blanks, it asks once, and next
+month it doesn't have to, because a human approved the reasoning. Blank is not the end of the
+workflow. It is where the workflow becomes auditable.

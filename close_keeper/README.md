@@ -1,6 +1,7 @@
 # close-keeper — a Strands agent for the financial close
 
 [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/udirobert/tieout/blob/main/close_keeper/demo_app.py)
+[![Live site](https://img.shields.io/badge/site-close--keeper-9ec78a)](https://udirobert.github.io/tieout/)
 
 **FinOps Hackathon · Seapoint × 13books Capital × Claude · October 2026**
 
@@ -27,6 +28,39 @@ the governance rules below are enforced by the tools, not by the prompt.
 
 > **Also the Professional Agents track submission** for a prior Agents for Humans hackathon.
 > The Seapoint MCP integration is a live addition for the October 2026 FinOps Hackathon.
+
+## Outcome — FinOps Hackathon, 20 Oct 2026
+
+**Did not place.** The stated reason: the entry *didn't clearly show a workflow that people
+already do, and how the agentic solution fixes or improves on it.* That is a fair hit — the
+2:00 film leads with the refusal, which is the differentiator, and never stops to walk the
+month-end process it interrupts. The section below is that missing part, written after the
+fact. It does not change the technical claims, all of which still stand and are itemised
+under [Verified](#verified).
+
+## The workflow this sits inside
+
+Month end at a twelve-person company or a small fund admin with no controller. Same six
+steps that run tonight, in this order:
+
+| # | Step | How it's done today | Where it breaks |
+|---|---|---|---|
+| 1 | Pull the data | Bank statement + invoice list land in the ledger tool | Doesn't break. Solved. |
+| 2 | Match invoice to bank | Rules/ML match the clean majority and sync to Xero — **Seapoint does this** | Doesn't break either, which is why this repo is not selling reconciliation. |
+| 3 | **Work the unmatched list** | A person picks a GL code per row, decides the VAT treatment, attaches the receipt. Usual heuristic: *"what did we code it as last month?"* | **This is where the guess enters, and nothing records that it was a guess.** The code becomes the pattern; VAT rides on the same assumption (£248 on one £1,240 invoice); the reason lives in someone's head. |
+| 4 | Post recurring journals | Accruals, prepayments, DEP, insurance spread over the year | Breaks often — **and we do not touch it.** No opinion on accruals here. |
+| 5 | Tie out the balances | Each balance-sheet account agreed to a supporting schedule; flux explained | Evidence is a folder of PDFs plus one person's memory. Enterprise tools do this well and cost a controller's salary. |
+| 6 | Package and approve | Burn/runway/cash rebuilt by hand for the board pack; someone senior signs | Waits on a busy human. APQC's Aug 2026 survey of 10,198 orgs puts the **median close at 6.0 days** — mostly waiting on 3 and 6. |
+
+**What changes here, step by step:** step 3 codes what the evidence supports and leaves the
+rest blank with the reason and the source rows — a human reviews **14 rows, not 2,664**. The
+reason for a code is stored as data (`record_correction → propose_rule`), gated by a 7-case
+replay before it can fire again, revocable. The write is confirmed and evidenced and returns
+Seapoint's `change_id`. Next month the same narrative resolves without asking.
+
+**What is not claimed:** steps 1–2 are not ours; steps 4 and 5 are not implemented; no
+days-saved number exists because there is no customer; multi-entity, FX and payroll are out
+of scope. The improvement is not speed — it is that a guess stops being invisible.
 
 ## The working agreement
 

@@ -27,9 +27,16 @@ Built with Claude (Anthropic API) and the
 tieout's verified machinery. Seapoint's mutating tools are held behind one governed,
 evidenced, logged write path (see [close_keeper/README.md](close_keeper/README.md)).
 
+**Outcome: did not place.** The judges' reason was that the entry didn't show a workflow people
+already do and how the agent improves on it — fair, and now written out under
+[The workflow this sits inside](close_keeper/README.md#the-workflow-this-sits-inside). The
+technical claims are unchanged and itemised under
+[Verified](close_keeper/README.md#verified).
+
 Try it without an account (local close package, no keys, no Seapoint):
 
 [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/udirobert/tieout/blob/main/close_keeper/demo_app.py)
+[![Live site](https://img.shields.io/badge/site-close--keeper-9ec78a)](https://udirobert.github.io/tieout/)
 
 ```bash
 uv sync --directory research --extra agent
@@ -46,6 +53,8 @@ connector) and drive the beats in that session — see [close_keeper/README.md](
 
 | Read | Purpose |
 |------|---------|
+| [udirobert.github.io/tieout](https://udirobert.github.io/tieout/) | Public frontend: the workflow, the counted numbers, the film |
+| [videos/close-keeper-finops/](videos/close-keeper-finops/) | The 2:00 entry film, its frame-by-frame source, and `BRIEF.md` |
 | [docs/NEO4J.md](docs/NEO4J.md) | Neo4j Aura: cell-lineage graph + lexical GraphRAG |
 | [docs/COREWEAVE.md](docs/COREWEAVE.md) | CoreWeave Hacks: the self-improvement loop |
 | [docs/SYNDICATE.md](docs/SYNDICATE.md) | Submission summary |

@@ -148,6 +148,20 @@
   /* the film */
   .film { display: block; width: 100%; background: #000; border: 1px solid var(--line); box-shadow: 14px 16px 0 rgba(224, 122, 58, 0.13); }
 
+  /* workflow table */
+  .wf { width: 100%; border-collapse: collapse; border: 1px solid var(--line); font-size: 16.5px; }
+  .wf th {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--paper-dim); font-weight: 400; text-align: left; padding: 14px 18px; border-bottom: 1px solid var(--line);
+  }
+  .wf td { padding: 16px 18px; border-bottom: 1px solid rgba(245, 240, 232, 0.07); vertical-align: top; background: var(--ink-2); }
+  .wf tr:last-child td { border-bottom: 0; }
+  .wf td.step { font-family: var(--mono); font-size: 13px; color: var(--paper); white-space: nowrap; }
+  .wf td.step i { color: var(--orange); font-style: normal; }
+  .wf td.break { color: #e8a583; }
+  .wf .who { display: block; font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--paper-dim); margin-top: 6px; }
+  @media (max-width: 860px) { .wf, .wf tbody, .wf tr, .wf td, .wf th { display: block; width: auto; } .wf th { display: none; } .wf tr { border-bottom: 1px solid var(--line); } }
+
   /* reveal list */
   .q { border: 1px solid var(--line); background: var(--ink-2); }
   .q button {
@@ -182,6 +196,7 @@
       <div class="mark">close<b>-</b>keeper</div>
       <nav>
         <a href="#film">Film</a>
+        <a href="#workflow">Workflow</a>
         <a href="#proof">Proof</a>
         <a href="#queue">Queue</a>
         <a href="#governance">Governance</a>
@@ -221,6 +236,84 @@
       and nothing on its screen is unlabelled about where it came from. The frame-by-frame source is
       <a class="quiet" href="https://github.com/udirobert/tieout/blob/main/videos/close-keeper-finops/index.html">videos/close-keeper-finops/index.html</a>,
       so the cut is re-derivable from the repo.</p>
+  </section>
+
+  <section id="workflow">
+    <p class="kicker">The workflow this sits inside</p>
+    <h2>Month end, the way it is actually done.</h2>
+    <span class="chip grey">a twelve-person company or a small fund admin, no controller, accounting stack already in place</span>
+    <p class="lede">Not a new process. The same six steps, run tonight by someone whose day job is not
+      bookkeeping — and the only thing that changes is step three.</p>
+    <table class="wf">
+      <thead>
+        <tr><th style="width:19%">Step</th><th style="width:40%">How it is done today</th><th>Where it breaks</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="step"><i>1</i> Pull the data</td>
+          <td>Bank statement and invoice list out of the accounting system; the feed lands in the ledger tool.<span class="who">office manager, or nobody — it is scheduled</span></td>
+          <td>Doesn't break. This is solved.</td>
+        </tr>
+        <tr>
+          <td class="step"><i>2</i> Match invoice to bank</td>
+          <td>Rules and ML in the ledger tool match the clean majority and sync to Xero.<span class="who">the software — Seapoint does this today</span></td>
+          <td>Doesn't break either, and it is why we are not selling reconciliation. Say that out loud: the sponsor of this hackathon already does steps 1–2 better than we could.</td>
+        </tr>
+        <tr>
+          <td class="step"><i>3</i> Work the unmatched list</td>
+          <td>A person goes down a list of rows: pick a GL code from the chart of accounts, decide the VAT treatment, attach the receipt. The usual heuristic is <em>"what did we code it as last month?"</em><span class="who">founder at 11pm, or a fractional CFO billed by the hour</span></td>
+          <td class="break"><b>This is where the guess enters and nothing records that it was a guess.</b> A plausible code becomes the pattern. VAT gets reclaimed or excluded on the same assumption — £248 rides on one £1,240 invoice. And the reason lives in someone's head, so next year nobody can reconstruct it.</td>
+        </tr>
+        <tr>
+          <td class="step"><i>4</i> Post the recurring journals</td>
+          <td>Accruals, prepayments, depreciation, insurance spread across the year.<span class="who">controller or the CFO's contractor</span></td>
+          <td>Breaks constantly — <b>and we do not touch it.</b> close-keeper has no opinion about accruals. Listed here so the boundary is visible.</td>
+        </tr>
+        <tr>
+          <td class="step"><i>5</i> Tie out the balances</td>
+          <td>Each balance-sheet account is agreed to a supporting schedule; movements over a threshold get explained versus last month.<span class="who">controller, then a reviewer</span></td>
+          <td>The evidence is a folder of PDFs and one person's memory. Enterprise tools automate this well and cost a controller's salary to run.</td>
+        </tr>
+        <tr>
+          <td class="step"><i>6</i> Package and approve</td>
+          <td>Burn, runway, cash by category rebuilt by hand in a spreadsheet for the board pack; someone senior signs the close.<span class="who">whoever owns the number</span></td>
+          <td>It waits for a busy human, so the queue ages. APQC's August 2026 survey of 10,198 organisations puts the <b>median close at 6.0 days</b> — most of that is waiting on steps 3 and 6.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="cols" style="margin-top:44px">
+      <div>
+        <h3>What actually changes</h3>
+        <div class="stack">
+          <div class="card"><div class="rows">
+            <div class="row"><span class="k">step 3, the coding</span><span class="v">coded where evidence supports it; blank where it doesn't</span></div>
+            <div class="row"><span class="k">what a human reviews</span><span class="v">14 rows, not 2,664</span></div>
+            <div class="row"><span class="k">the reason for a code</span><span class="v">stored as data, not memory</span></div>
+            <div class="row"><span class="k">learning</span><span class="v">correction → rule, gated by a 7-case replay</span></div>
+            <div class="row"><span class="k">the write</span><span class="v">confirmed + evidenced, returns change_id</span></div>
+            <div class="row"><span class="k">next month</span><span class="v">same narrative resolves without asking</span></div>
+          </div></div>
+        </div>
+        <p style="margin-top:24px">The improvement is not speed, and we have deliberately not claimed
+          speed. It is that a guess stops being invisible. A founder still makes every real decision —
+          they just make fourteen of them instead of reviewing a ledger, and each one leaves a record
+          an outsider can read.</p>
+      </div>
+      <div>
+        <h3>What we are not claiming</h3>
+        <div class="card"><div class="rows">
+          <div class="row"><span class="k">steps 1–2</span><span class="v">not us — Seapoint already does them</span></div>
+          <div class="row"><span class="k">step 4 (accruals, DEP)</span><span class="v">not implemented</span></div>
+          <div class="row"><span class="k">step 5 (substantiation)</span><span class="v">not implemented</span></div>
+          <div class="row"><span class="k">days saved per close</span><span class="v">not measured — no customer</span></div>
+          <div class="row"><span class="k">multi-entity, FX, payroll</span><span class="v">out of scope</span></div>
+        </div></div>
+        <p class="quiet" style="margin-top:24px">This list exists because the entry was judged partly on
+          whether it showed the workflow it improves on. It does show it — including the parts of the
+          workflow we leave alone.</p>
+      </div>
+    </div>
   </section>
 
   <section id="proof">
