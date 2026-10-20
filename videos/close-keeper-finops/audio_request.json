@@ -7,14 +7,15 @@
     "settings": { "stability": 0.45, "similarity_boost": 0.75, "style": 0.18, "speaker_boost": true }
   },
   "output_format": "mp3_44100_128",
-  "note": "v2 narration — real Seapoint sandbox figures from the live 20 Oct session. No number is spoken that is not on screen.",
+  "note": "v3 narration — re-cut after the judges' feedback that the film never showed an existing workflow. Beat 01 is the six-step close; the refusal now lands against that baseline. Every spoken number is on screen; the Seapoint sandbox is labelled where its data is shown.",
   "lines": [
     { "id": "00", "beat": "problem", "text": "Every month, a founder proves their own numbers at eleven o'clock. No controller. No finance team. This is the close when nobody is left to do it." },
-    { "id": "01", "beat": "plumbing", "text": "So we handed it the books. Seapoint MCP, live — accounts, transactions, invoices, read with my own permissions. One question: a hundred and sixty-two thousand pounds of September spend, twelve categories. But asking isn't the point. Watch what happens when nobody asks." },
-    { "id": "02", "beat": "works alone", "text": "Of two thousand six hundred and sixty-four transactions, two thousand six hundred and twenty-nine reconcile themselves. Fourteen need a human. Point five per cent. Everything else it files quietly: classify, generate, verify, repair. What the human gets isn't a wall of output — fourteen lines, each with a reason and its evidence." },
-    { "id": "03", "beat": "one way in", "text": "Then I confirm. Connolly Accountants, eighteen hundred pounds, receipt attached, vendor unambiguous. The decision is recorded before anything is written; needs-review becomes awaiting-approval. Nothing on the ledger moves without me." },
-    { "id": "04", "beat": "the turn", "text": "And this is the one I'd show a partner. Meridian Insurance, twelve hundred and forty. Filed as legal fees, coded as insurance, no receipt. Two hundred and forty-eight pounds of VAT rides on which one is right. A tired founder rubber-stamps it. close-keeper won't fill the cell. It shows me the contradiction instead." },
-    { "id": "05", "beat": "the stakes", "text": "Everyone in AI accounting sells you accuracy. Ninety-seven point eight per cent, taken on faith. We sell the point five per cent it won't take on faith. Enterprise close software needs a controller and a hundred and fifty thousand a year. A twelve-person startup has neither. close-keeper." }
+    { "id": "01", "beat": "the workflow", "text": "The close is six steps. Pull the data. Match the invoices. Work the unmatched list. Post the journals. Tie out the balances. Get it approved. The first two are solved — Seapoint does them. The third is a person at eleven o'clock, choosing account codes from memory." },
+    { "id": "02", "beat": "plumbing", "text": "So we handed it the books. Seapoint MCP, read with my own permissions. One question: a hundred and sixty-two thousand pounds of September spend, twelve categories." },
+    { "id": "03", "beat": "works alone", "text": "Then nobody asks. Of two thousand six hundred and sixty-four transactions, two thousand six hundred and twenty-nine clear themselves. Fourteen need a human. Point five per cent. And what that human gets isn't a wall of output — fourteen lines, each with a reason." },
+    { "id": "04", "beat": "earn the answer", "text": "Then it has to earn the answer. Activate a rule before validating it: refused. One happy case: still refused. Seven labeled replays, zero regressions — only then. And nothing gets written until I say so." },
+    { "id": "05", "beat": "the turn", "text": "And this is the one I'd show a partner. Meridian Insurance, twelve hundred and forty. Filed as legal fees, coded as insurance, no receipt. Two hundred and forty-eight pounds of VAT rides on which one is right. It won't write it. It shows me the contradiction instead." },
+    { "id": "06", "beat": "the stakes", "text": "Everyone in AI accounting sells you accuracy. Ninety-seven point eight per cent, taken on faith. We sell the point five per cent it won't take on faith. Enterprise software needs a controller and a hundred and fifty thousand a year. A twelve-person startup has neither. close-keeper." }
   ],
   "bgm": {
     "provider": "elevenlabs-music",
