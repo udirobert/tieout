@@ -145,6 +145,9 @@
   .still { border: 1px solid var(--line); box-shadow: 12px 14px 0 rgba(224, 122, 58, 0.13); display: block; width: 100%; height: auto; }
   figcaption { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--paper-dim); margin-top: 14px; }
 
+  /* the film */
+  .film { display: block; width: 100%; background: #000; border: 1px solid var(--line); box-shadow: 14px 16px 0 rgba(224, 122, 58, 0.13); }
+
   /* reveal list */
   .q { border: 1px solid var(--line); background: var(--ink-2); }
   .q button {
@@ -178,6 +181,7 @@
     <div class="bar">
       <div class="mark">close<b>-</b>keeper</div>
       <nav>
+        <a href="#film">Film</a>
         <a href="#proof">Proof</a>
         <a href="#queue">Queue</a>
         <a href="#governance">Governance</a>
@@ -201,10 +205,28 @@
     </p>
   </section>
 
+  <section id="film">
+    <p class="kicker">Two minutes · the entry film</p>
+    <h2>Watch it, then read the receipts.</h2>
+    <video class="film" controls playsinline preload="metadata"
+           poster="assets/cap-queue.png"
+           src="https://github.com/udirobert/tieout/releases/download/demo-film-2026-10-20/close-keeper-demo-v5.mp4"></video>
+    <p class="quiet mono" style="font-size: 12.5px; margin-top: 16px;">
+      120s · 1920×1080 · 12.7&nbsp;MB · hosted as a release asset, so no video lives in the repo tree.
+      If your browser won't inline it,
+      <a href="https://github.com/udirobert/tieout/releases/tag/demo-film-2026-10-20">open the release</a>
+      and it will play.
+    </p>
+    <p class="quiet" style="margin-top:22px">Nothing in the film is quoted here that isn't on its screen,
+      and nothing on its screen is unlabelled about where it came from. The frame-by-frame source is
+      <a class="quiet" href="https://github.com/udirobert/tieout/blob/main/videos/close-keeper-finops/index.html">videos/close-keeper-finops/index.html</a>,
+      so the cut is re-derivable from the repo.</p>
+  </section>
+
   <section id="proof">
     <p class="kicker">The counted claim</p>
     <h2>These are not benchmarks. They are a query.</h2>
-    <span class="chip">live session · 20 Oct · read with the author's own permissions</span>
+    <span class="chip">Seapoint hackathon sandbox · 20 Oct · read with the author's own permissions</span>
     <p class="lede">Two thousand six hundred and sixty-four transactions read through Seapoint's MCP.
       Two thousand six hundred and twenty-nine tie on their own. Fourteen cannot be tied without a
       person. Ten of those fourteen are refused outright, because the evidence contradicts itself.</p>
@@ -216,8 +238,15 @@
     </div>
     <p class="quiet mono" style="font-size: 12.5px; margin-top: 22px;">
       14 ÷ 2,664 = 0.5%. Ask for the number and it also returns £162,333.84 of September spend
-      across 203 line items and 12 categories — which is the part that proves it is reading real books.
+      across 203 line items and 12 categories — which is the part that proves it is querying a live
+      account rather than reading a fixture off disk.
     </p>
+    <p><b>Where this data comes from, stated plainly.</b> The ledger is <b>Seapoint's seeded hackathon
+      dataset</b> — the sandbox org <span class="mono">Hackathon — tieout</span>. No real company's books
+      appear anywhere in this project, and we never claim a customer. What was live is the connection:
+      every read, the one confirmed write, and every refusal quoted on this page ran against that
+      sandbox over Seapoint's MCP on 20 Oct 2026, with the author's own permissions. The terminal
+      header in the demo film says the same thing on its own line.</p>
     <p>A close is not a data-entry problem. It is a decision problem that happens to involve a lot of
       data entry — and the decisions are exactly the part every competitor automates by guessing.</p>
   </section>
@@ -305,11 +334,11 @@
       <div>
         <figure style="margin:0">
           <img class="still" src="assets/cap-queue.png" alt="Terminal screenshot of the needs-review queue as close-keeper reported it" />
-          <figcaption>real session — the needs-review queue, in its own words</figcaption>
+          <figcaption>live against the sandbox — the needs-review queue, in its own words</figcaption>
         </figure>
         <figure style="margin:34px 0 0">
           <img class="still" src="assets/cap-writeback.png" alt="Terminal screenshot of the confirmed, evidenced write-back returning Seapoint's change id" />
-          <figcaption>real session — confirmed write-back, evidence attached, change_id returned</figcaption>
+          <figcaption>live against the sandbox — confirmed write-back, evidence attached, change_id returned</figcaption>
         </figure>
       </div>
     </div>
@@ -360,7 +389,7 @@
   <section id="governance">
     <p class="kicker">Safety and oversight, in the tools</p>
     <h2>It refuses twice, then it earns it.</h2>
-    <span class="chip grey">governed memory · direct tool calls · no model, no key</span>
+    <span class="chip grey">governed memory · synthetic example vendors · direct tool calls · no model, no key</span>
     <div class="cols">
       <div>
         <pre class="term"><span class="dim">record_correction(narrative="EXAMPLE SERVICES", …)</span>
@@ -486,8 +515,10 @@ python /tmp/close-keeper-video/refusal_take.py   # or the
           <li><a href="https://molab.marimo.io/github/udirobert/tieout/blob/main/close_keeper/demo_app.py">molab walkthrough</a></li>
           <li><a href="https://github.com/strands-agents/sdk-python">Strands Agents SDK</a></li>
         </ul>
-        <p class="quiet" style="font-size:14.5px; margin-top:14px;">The 2:00 demo film was submitted with
-          the entry; its frame-by-frame source is <span class="mono">videos/close-keeper-finops/index.html</span>,
+        <p class="quiet" style="font-size:14.5px; margin-top:14px;">The 2:00 demo film is
+          <a href="#film">on this page</a> and
+          <a href="https://github.com/udirobert/tieout/releases/tag/demo-film-2026-10-20">as a release asset</a>;
+          its frame-by-frame source is <span class="mono">videos/close-keeper-finops/index.html</span>,
           so every number spoken on screen is re-derivable from the repo.</p>
       </div>
     </div>
