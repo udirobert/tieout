@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>close-keeper — FinOps Hackathon demo</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=IBM+Plex+Sans:wght@400;600;700;800&display=swap");
+
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #0e1013; }
+
+      #root {
+        position: relative; width: 100%; height: 100%; overflow: hidden;
+        background: #0e1013; color: #f5f0e8;
+        font-family: "IBM Plex Sans", system-ui, sans-serif;
+      }
+      .clip { position: absolute; inset: 0; overflow: hidden; }
+
+      /* real captured footage — asciinema → agg → ffmpeg, terminal only */
+      .shot {
+        position: absolute; inset: auto; display: block; object-fit: cover;
+        border: 3px solid rgba(245,240,232,0.2); border-radius: 10px;
+        background: #0a0c0f; box-shadow: 14px 16px 0 rgba(224,122,58,0.16);
+      }
+      #v-live { left: 96px; top: 268px; width: 720px; height: 627px; }
+      #v-gov  { left: 96px; top: 292px; width: 660px; height: 600px; }
+      #v-gov-tag  { left: 96px; top: 248px; }
+      .shot { opacity: 0; }
+
+      /* ---- character layer (fondof idiom: graded cutout, hard offset shadow) ---- */
+      .cut {
+        position: absolute; display: block; pointer-events: none;
+        filter: grayscale(1) contrast(1.14) brightness(1.02)
+                drop-shadow(12px 14px 0 rgba(224,122,58,0.34));
+      }
+      .cut.tint { filter: grayscale(1) contrast(1.2) drop-shadow(10px 12px 0 rgba(78,201,127,0.3)); }
+
+      /* ---- shared scaffolding ---- */
+      .grain {
+        position: absolute; inset: 0; opacity: 0.5; pointer-events: none;
+        background-image:
+          repeating-linear-gradient(90deg, rgba(245,240,232,0.035) 0 1px, transparent 1px 48px),
+          repeating-linear-gradient(0deg, rgba(245,240,232,0.035) 0 1px, transparent 1px 32px);
+      }
+      .vignette {
+        position: absolute; inset: 0; pointer-events: none;
+        background: radial-gradient(ellipse 90% 70% at 50% 45%, transparent 40%, rgba(6,7,9,0.85) 100%);
+      }
+      .kicker {
+        position: absolute; top: 56px; left: 96px;
+        font-family: "IBM Plex Mono", monospace; font-size: 22px; font-weight: 700;
+        letter-spacing: 0.22em; text-transform: uppercase; color: #4ec97f;
+      }
+      .kicker::after { content: ""; display: block; width: 96px; height: 4px; background: #4ec97f; margin-top: 14px; }
+      .status {
+        position: absolute; top: 52px; right: 96px; display: block; width: 470px; text-align: right;
+        font-family: "IBM Plex Mono", monospace; font-size: 18px; font-weight: 700;
+        letter-spacing: 0.04em; color: #0e1013; background: #e07a3a;
+        padding: 12px 18px; border-radius: 4px;
+      }
+      .status.real { background: #4ec97f; }
+      h2 {
+        position: absolute; top: 150px; left: 96px; right: 620px;
+        font-size: 62px; font-weight: 800; line-height: 1.1; letter-spacing: -0.025em;
+      }
+      h2 em { font-style: normal; color: #8c8878; }
+
+      /* caption band — one visible chunk at a time, synced to narration */
+      .caption {
+        position: absolute; left: 96px; right: 96px; bottom: 60px;
+        border-left: 6px solid #4ec97f; padding: 20px 32px;
+        background: rgba(21,24,29,0.95);
+        font-size: 33px; font-weight: 600; line-height: 1.32; letter-spacing: -0.01em; color: #f5f0e8;
+      }
+      .caption .quiet { color: #9c958a; font-weight: 400; }
+      .caption.hot { border-left-color: #e07a3a; }
+      .mono { font-family: "IBM Plex Mono", monospace; }
+
+      /* Deterministic pre-reveal: seeking before a tween must show nothing. */
+      .kicker, .status, h2, .clock, .cut, .caption,
+      .term .ask, .term .row, .met, .pill, .bigstat .n, .bigstat .l,
+      .box, .arrow, .sealed, .them, .split, .wedge, .wordmark .wm, .wordmark .ln,
+      .endnum, .stampwrap, .refuserule { opacity: 0; }
+
+      /* ---- 1 · the problem ---- */
+      .clock {
+        position: absolute; top: 286px; left: 96px;
+        font-family: "IBM Plex Mono", monospace; font-size: 196px; font-weight: 700;
+        letter-spacing: -0.06em; color: #f5f0e8; line-height: 1;
+      }
+      .clock span { color: #e07a3a; font-size: 88px; letter-spacing: -0.02em; }
+      .clock small {
+        display: block; font-size: 26px; font-weight: 500; letter-spacing: 0.12em;
+        text-transform: uppercase; color: #8c8878; margin-top: 20px;
+      }
+      #s1-cut { right: 90px; top: 150px; width: 640px; }
+
+      /* ---- 2 · the plumbing ---- */
+      .term {
+        position: absolute; top: 250px; left: 96px; width: 900px;
+        background: #0a0c0f; border: 2px solid rgba(245,240,232,0.16); border-radius: 10px; overflow: hidden;
+      }
+      .term .bar { height: 44px; background: #15181d; border-bottom: 2px solid rgba(245,240,232,0.1);
+        font-family: "IBM Plex Mono", monospace; font-size: 17px; color: #9c958a;
+        display: flex; align-items: center; padding: 0 20px; letter-spacing: 0.08em; }
+      .term .body { padding: 24px 30px; font-family: "IBM Plex Mono", monospace; font-size: 23px; line-height: 1.78; }
+      .term .ask { color: #f5f0e8; }
+      .term .ask b { color: #4ec97f; }
+      .term .row { color: #b8b0a4; white-space: nowrap; }
+      .term .row i { font-style: normal; float: right; color: #f5f0e8; }
+      .term .row u { text-decoration: none; color: #6b6560; }
+      .cards { position: absolute; top: 250px; right: 96px; width: 470px; }
+      .met {
+        display: block; width: 470px; margin-bottom: 22px; padding: 22px 26px;
+        background: #15181d; border: 2px solid rgba(245,240,232,0.14); border-radius: 10px;
+      }
+      .met .lab { font-family: "IBM Plex Mono", monospace; font-size: 17px; letter-spacing: 0.14em;
+        text-transform: uppercase; color: #9c958a; }
+      .met .val { font-family: "IBM Plex Mono", monospace; font-size: 46px; font-weight: 700;
+        letter-spacing: -0.04em; color: #f5f0e8; margin-top: 6px; }
+      .met.hero { border-color: #4ec97f; }
+      .met.hero .val { color: #4ec97f; }
+      #s2-cut { right: 596px; top: 726px; width: 230px; }
+      .capshot { position: absolute; display: block; border: 2px solid rgba(245,240,232,0.22);
+        border-radius: 6px; background: #0a0c0f; }
+      #s3-cap { left: 96px; top: 752px; width: 1000px; }
+      #s4-cap { left: 810px; top: 734px; width: 820px; }
+      .capnote { position: absolute; font-family: "IBM Plex Mono", monospace; font-size: 17px;
+        letter-spacing: 0.1em; text-transform: uppercase; color: #9c958a; }
+      #s3-cap-note { left: 96px; top: 724px; width: 1000px; }
+      #s4-cap-note { left: 810px; top: 706px; width: 900px; }
+      .capshot, .capnote, .verbatim { opacity: 0; }
+      .verbatim { position: absolute; left: 96px; top: 712px; width: 1010px; padding: 18px 22px;
+        background: #15181d; border-left: 5px solid #4ec97f; font-family: "IBM Plex Mono", monospace;
+        font-size: 21px; line-height: 1.5; color: #b8b0a4; }
+      .verbatim b { color: #f5f0e8; }
+      .verbatim u { text-decoration: none; color: #e07a3a; font-weight: 700; }
+
+      /* ---- 3 · it works alone ---- */
+      .flow { position: absolute; top: 322px; left: 96px; right: 700px; display: flex; flex-wrap: wrap; gap: 16px; }
+      .pill {
+        display: block; width: 202px; padding: 22px 18px; text-align: center;
+        border: 2px solid rgba(245,240,232,0.2); border-radius: 8px;
+        font-family: "IBM Plex Mono", monospace; font-size: 21px; font-weight: 700; letter-spacing: 0.04em;
+      }
+      .pill small { display: block; margin-top: 8px; font-size: 15px; font-weight: 500; color: #9c958a; letter-spacing: 0.02em; }
+      .pill.stop { border-color: #e07a3a; color: #e07a3a; background: rgba(224,122,58,0.08); }
+      .bigstat { position: absolute; top: 452px; left: 96px; display: flex; align-items: baseline; gap: 40px; }
+      .bigstat .n { font-family: "IBM Plex Mono", monospace; font-size: 244px; font-weight: 700;
+        letter-spacing: -0.07em; line-height: 1; color: #e07a3a; }
+      .bigstat .l { display: block; width: 540px; font-size: 40px; font-weight: 800; line-height: 1.24; letter-spacing: -0.02em; }
+      .bigstat .l b { color: #4ec97f; }
+      .split { position: absolute; right: 96px; top: 250px; width: 520px;
+        background: #15181d; border: 2px solid rgba(245,240,232,0.14); border-radius: 10px; padding: 26px 30px; }
+      .split .sh { font-family: "IBM Plex Mono", monospace; font-size: 17px; letter-spacing: 0.14em;
+        text-transform: uppercase; color: #9c958a; margin-bottom: 16px; }
+      .split .sr { font-family: "IBM Plex Mono", monospace; font-size: 25px; line-height: 2.02; color: #b8b0a4; }
+      .split .sr i { font-style: normal; float: right; color: #f5f0e8; font-weight: 700; }
+      .split .sr.hot i { color: #e07a3a; }
+      .split .sr.total { border-top: 2px solid rgba(245,240,232,0.14); margin-top: 10px; padding-top: 8px; }
+      #s3-cut { right: 700px; top: 620px; width: 250px; }
+
+      /* ---- 4 · confirm before write ---- */
+      .gate { position: absolute; top: 292px; left: 810px; right: 96px; display: flex;
+        flex-direction: column; gap: 18px; }
+      .box { display: block; width: 100%; padding: 24px 28px; background: #15181d;
+        border: 3px solid rgba(245,240,232,0.18); border-radius: 12px; }
+      .box .t { font-family: "IBM Plex Mono", monospace; font-size: 18px; letter-spacing: 0.14em;
+        text-transform: uppercase; color: #9c958a; margin-bottom: 14px; }
+      .box .b { font-size: 29px; font-weight: 700; line-height: 1.34; }
+      .box .b .ok { color: #4ec97f; }
+      .box .b .no { color: #e07a3a; }
+      .box .k { font-family: "IBM Plex Mono", monospace; font-size: 22px; font-weight: 400;
+        color: #b8b0a4; line-height: 1.7; margin-top: 10px; }
+      .arrow { display: block; width: 90px; height: 6px; background: #4ec97f; align-self: center; }
+      .sealed { display: block; width: 100%; padding: 24px 28px; border: 3px dashed rgba(224,122,58,0.6);
+        border-radius: 12px; color: #e07a3a; }
+      .sealed .t { font-family: "IBM Plex Mono", monospace; font-size: 18px; letter-spacing: 0.14em;
+        text-transform: uppercase; margin-bottom: 14px; }
+      .sealed .b { font-size: 29px; font-weight: 700; line-height: 1.34; color: #f5f0e8; }
+
+      /* ---- 5 · the turn ---- */
+      .contra { position: absolute; top: 232px; left: 96px; width: 1010px; }
+      .crow { display: flex; align-items: baseline; gap: 20px; margin-bottom: 18px; }
+      .crow .lab { width: 250px; font-family: "IBM Plex Mono", monospace; font-size: 18px;
+        letter-spacing: 0.12em; text-transform: uppercase; color: #9c958a; }
+      .crow .v { font-family: "IBM Plex Mono", monospace; font-size: 34px; font-weight: 700; color: #f5f0e8; }
+      .crow.bad .v { color: #e07a3a; }
+      .crow.money .v { font-size: 56px; letter-spacing: -0.04em; }
+      .refuserule { display: block; width: 1010px; margin-top: 16px; padding: 20px 26px;
+        border: 3px solid #e07a3a; border-radius: 10px; color: #e07a3a;
+        font-family: "IBM Plex Mono", monospace; font-size: 30px; font-weight: 700; }
+      .stampwrap { position: absolute; right: 130px; top: 300px; width: 500px; text-align: center; }
+
+      .stamptext {
+        display: block; margin-top: -34px; padding: 16px 10px; border: 6px solid #e07a3a; border-radius: 8px;
+        transform: rotate(-9deg);
+        font-family: "IBM Plex Mono", monospace; font-size: 52px; font-weight: 700;
+        letter-spacing: 0.06em; color: #e07a3a; background: rgba(14,16,19,0.72);
+      }
+
+      /* ---- 6 · the stakes ---- */
+      .them { display: block; width: 560px; padding: 24px 28px; border: 2px solid rgba(245,240,232,0.18);
+        border-radius: 12px; margin-bottom: 24px; }
+      .them .h { font-family: "IBM Plex Mono", monospace; font-size: 18px; letter-spacing: 0.12em;
+        text-transform: uppercase; color: #9c958a; }
+      .them .v { font-family: "IBM Plex Mono", monospace; font-size: 84px; font-weight: 700;
+        letter-spacing: -0.05em; color: #6b6560; margin-top: 6px; line-height: 1; }
+      .them .s { font-size: 25px; color: #9c958a; margin-top: 10px; }
+      .them.ours { border-color: #4ec97f; background: rgba(45,138,78,0.1); }
+      .them.ours .v { color: #4ec97f; }
+      .them.ours .s { color: #f5f0e8; font-weight: 700; }
+      .themstack { position: absolute; top: 218px; left: 96px; }
+      .wedge { position: absolute; top: 250px; left: 720px; right: 96px; font-size: 46px;
+        font-weight: 800; line-height: 1.22; letter-spacing: -0.025em; }
+      .wedge em { font-style: normal; color: #9c958a; }
+      .wordmark { position: absolute; top: 560px; left: 720px; right: 96px; }
+      .wordmark .wm { font-family: "IBM Plex Mono", monospace; font-size: 74px; font-weight: 700;
+        letter-spacing: -0.04em; color: #4ec97f; }
+      .wordmark .ln { font-family: "IBM Plex Mono", monospace; font-size: 24px; color: #b8b0a4;
+        margin-top: 18px; line-height: 1.7; }
+      .endnum { position: absolute; top: 664px; left: 96px; font-family: "IBM Plex Mono", monospace;
+        font-size: 40px; font-weight: 700; color: #e07a3a; letter-spacing: -0.02em; }
+      #s6-cut { right: 120px; bottom: 210px; width: 300px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-width="1920" data-height="1080" data-duration="120">
+
+      <!-- ============ 1 · SOMEONE HAS A PROBLEM  (0–12) ============ -->
+      <section id="s1" class="clip" data-start="0" data-duration="11" data-track-index="1">
+        <div class="grain"></div><div class="vignette"></div>
+        <img class="cut" id="s1-cut" src="assets/img/night-close.png" alt="" />
+        <div class="kicker" id="s1-k">Every month</div>
+        <div class="status real" id="s1-tag">live-session readout · Seapoint sandbox · 20 Oct</div>
+        <div class="clock" id="s1-clock">11:40<span>pm</span><small>the close, with nobody left to do it</small></div>
+        <div class="caption" id="s1-c1">Every month, a founder proves their own numbers at eleven o'clock.</div>
+        <div class="caption" id="s1-c2"><span class="quiet">No controller. No finance team.</span></div>
+        <div class="caption hot" id="s1-c3">This is the close when nobody is left to do it.</div>
+      </section>
+
+      <!-- ============ 2 · THE PLUMBING  (12–32) ============ -->
+      <section id="s2" class="clip" data-start="11" data-duration="19.5" data-track-index="1">
+        <div class="grain"></div><div class="vignette"></div>
+        <img class="cut" id="s2-cut" src="assets/img/mcp-plug.png" alt="" />
+        <div class="kicker" id="s2-k">Seapoint MCP · read with my own permissions</div>
+        <div class="status real" id="s2-tag">real data · styled replay of the live pull</div>
+        <div class="cards">
+          <div class="met hero" id="s2-m1"><span class="lab">September spend</span><span class="val">£162,333.84</span></div>
+          <div class="met" id="s2-m2"><span class="lab">Debit transactions</span><span class="val">203</span></div>
+          <div class="met" id="s2-m3"><span class="lab">Categories</span><span class="val">12</span></div>
+          <div class="met" id="s2-m4"><span class="lab">Judgment queue</span><span class="val">7 open</span></div>
+        </div>
+        <div class="caption" id="s2-c1">So we handed it the books — <span class="quiet">accounts, transactions, invoices.</span></div>
+        <div class="caption" id="s2-c2">One question, twelve categories, £162,333.84 answered.</div>
+        <div class="caption hot" id="s2-c3">But asking isn't the point. <span class="quiet">Watch what happens when nobody asks.</span></div>
+      </section>
+
+      <!-- ============ 3 · IT WORKS ALONE  (32–58) ============ -->
+      <section id="s3" class="clip" data-start="30.5" data-duration="24.5" data-track-index="1">
+        <div class="grain"></div><div class="vignette"></div>
+        <div class="kicker" id="s3-k">Nobody asks</div>
+        <div class="status real" id="s3-tag">live-session counts · 2,664 transactions</div>
+        <h2 id="s3-h">Everything clears the gate quietly. <em>Anything that doesn't, it does not fill.</em></h2>
+        <div class="flow">
+          <div class="pill" id="s3-p1">classify<small>range &amp; intent</small></div>
+          <div class="pill" id="s3-p2">generate<small>values / code</small></div>
+          <div class="pill" id="s3-p3">verify<small>against source</small></div>
+          <div class="pill" id="s3-p4">repair<small>up to 3×</small></div>
+          <div class="pill stop" id="s3-p5">blank<small>route to human</small></div>
+        </div>
+        <div class="split" id="s3-split">
+          <div class="sh">exception queue · distribution</div>
+          <div class="sr">reconciled <i>2,629</i></div>
+          <div class="sr">awaiting approval <i>21</i></div>
+          <div class="sr hot">needs review <i>7</i></div>
+          <div class="sr hot">unreconciled <i>7</i></div>
+          <div class="sr total">needs a human <i>14</i></div>
+          <div class="sr hot">it refuses to code <i>10</i></div>
+        </div>
+        <div class="bigstat">
+          <div class="n" id="s3-n">0</div>
+          <div class="l" id="s3-l">of 2,664.<br><b>Point five per cent.</b></div>
+        </div>
+        <div class="caption" id="s3-c1">Of 2,664 transactions, 2,629 reconcile themselves.</div>
+        <div class="caption hot" id="s3-c2">Fourteen need a human. <span class="quiet">Point five per cent.</span></div>
+        <div class="caption" id="s3-c3">Everything else it files quietly: <span class="quiet">classify, generate, verify, repair.</span></div>
+        <div class="capnote" id="s3-cap-note">real session · the needs-review queue, in its own words</div>
+        <img class="capshot" id="s3-cap" src="assets/img/cap-queue.png" alt="" />
+        <div class="caption" id="s3-c4">Not a wall of output — fourteen lines, each with a reason and its evidence.</div>
+      </section>
+
+      <!-- ============ 4 · ONE WAY IN  (58–75) ============ -->
+      <section id="s4" class="clip" data-start="55" data-duration="24" data-track-index="1">
+        <div class="grain"></div><div class="vignette"></div>
+        <div class="kicker" id="s4-k">Then I confirm</div>
+        <div class="status real" id="s4-tag">captured local run · key-free, no model</div>
+        <h2 id="s4-h">Nothing is written silently. <em>The gate refuses until it has earned the answer.</em></h2>
+        <div class="gate">
+          <div class="box" id="s4-b1"><div class="t">activate before validating</div><div class="b"><span class="no">REFUSED</span> — rule has no validation</div></div>
+          <div class="box" id="s4-b2"><div class="t">positive-only replay, 1 case</div><div class="b"><span class="no">REFUSED</span> — hard_negative / scope_boundary / conflict all False</div></div>
+          <div class="sealed" id="s4-b3"><div class="t">7 labeled replays · 0 regressions</div><div class="b"><span class="ok">eligible → status: active</span> — and even then, suggested, never silently posted.</div></div>
+        </div>
+        <div class="capnote" id="s4-cap-note">real session · ledger write-back, held for my go-ahead</div>
+        <img class="capshot" id="s4-cap" src="assets/img/cap-writeback.png" alt="" />
+        <div class="caption" id="s4-c1">Then it has to earn the answer.</div>
+        <div class="caption" id="s4-c2">Activate a rule before validating it — <span class="quiet">refused.</span></div>
+        <div class="caption" id="s4-c3">One happy case? <span class="quiet">Still refused. No hard negative, no scope boundary, no conflict.</span></div>
+        <div class="caption hot" id="s4-c4">Seven labeled replays, zero regressions. <span class="quiet">Only then is it active.</span></div>
+        <div class="caption hot" id="s4-c5">Even then, it suggests. <span class="quiet">It never posts silently.</span></div>
+      </section>
+
+      <!-- ============ 5 · THE TURN  (75–99) ============ -->
+      <section id="s5" class="clip" data-start="79" data-duration="21.5" data-track-index="1">
+        <div class="grain"></div><div class="vignette"></div>
+        <div class="kicker" id="s5-k">The one I'd show a partner</div>
+        <div class="status real" id="s5-tag">real session · surfaced, not written</div>
+        <div class="contra">
+          <div class="crow money" id="s5-r0"><span class="lab">Meridian Insurance</span><span class="v">£1,240.00</span></div>
+          <div class="crow" id="s5-r1"><span class="lab">filed as</span><span class="v">Legal &amp; Professional fees</span></div>
+          <div class="crow bad" id="s5-r2"><span class="lab">coded to</span><span class="v">433 Insurance · 0% — recategorised</span></div>
+          <div class="crow bad" id="s5-r3"><span class="lab">receipt</span><span class="v">none attached</span></div>
+          <div class="crow money" id="s5-r4"><span class="lab">VAT at stake</span><span class="v">£248.00</span></div>
+          <div class="refuserule" id="s5-rule">FLAGGED — the filing and the coding disagree. Nothing writes until you say so.</div>
+        </div>
+        <div class="verbatim" id="s5-note">the agent's note — <b>"Description unambiguous (professional-indemnity insurance); insurance premiums are VAT-exempt; suggestion agrees.</b> <u>also recategorises from Legal &amp; Professional Fees → Insurance"</u></div>
+        <div class="stampwrap" id="s5-stamp">
+          <img class="cut tint" id="s5-stampcut" src="assets/img/stamp.png" alt="" />
+          <span class="stamptext">NOT WRITTEN</span>
+        </div>
+        <div class="caption" id="s5-c1">Filed as legal fees. <span class="quiet">Coded as insurance. No receipt.</span></div>
+        <div class="caption hot" id="s5-c2">£248 of VAT rides on which one is right.</div>
+        <div class="caption" id="s5-c3">A tired founder rubber-stamps it.</div>
+        <div class="caption hot" id="s5-c4">close-keeper won't fill the cell. <span class="quiet">It shows me the contradiction instead.</span></div>
+      </section>
+
+      <!-- ============ 6 · THE STAKES  (99–120) ============ -->
+      <section id="s6" class="clip" data-start="100.5" data-duration="19.5" data-track-index="1">
+        <div class="grain"></div><div class="vignette"></div>
+        <img class="cut" id="s6-cut" src="assets/img/lantern.png" alt="" />
+        <div class="kicker" id="s6-k">FinOps Hackathon · Seapoint × 13books Capital × Claude</div>
+        <div class="status" id="s6-tag">MIT · repo · molab walkthrough</div>
+        <div class="themstack">
+          <div class="them" id="s6-t1"><span class="h">the pitch, in their words</span><div class="v">"97.8%"</div><div class="s">vendor accuracy claim · unaudited</div></div>
+          <div class="them ours" id="s6-t2"><span class="h">what we show</span><div class="v">0.5%</div><div class="s">counted — 14 of 2,664</div></div>
+        </div>
+        <div class="endnum" id="s6-en">14 blanks. 0 guesses.</div>
+        <div class="wedge" id="s6-w">Enterprise close software needs a controller and £150K a year. <em>A twelve-person startup has neither.</em></div>
+        <div class="wordmark">
+          <div class="wm" id="s6-wm">close-keeper</div>
+          <div class="ln" id="s6-ln">it only interrupts the close<br>when the close needs you</div>
+        </div>
+        <div class="caption" id="s6-c1">Everyone in AI accounting sells you accuracy.</div>
+        <div class="caption" id="s6-c2"><span class="quiet">Ninety-seven point eight per cent, taken on faith.</span></div>
+        <div class="caption hot" id="s6-c3">We sell the point five per cent it won't take on faith.</div>
+        <div class="caption" id="s6-c4">close-keeper — <span class="quiet">github.com/udirobert/tieout</span></div>
+      </section>
+
+      <!-- ============ narration (measured durations) ============ -->
+      <audio class="clip" id="vo00" src="assets/voice/00.mp3" data-start="0"    data-duration="9.01"  data-volume="1" data-track-index="6"></audio>
+      <audio class="clip" id="vo01" src="assets/voice/01.mp3" data-start="11.2" data-duration="18.53" data-volume="1" data-track-index="6"></audio>
+      <audio class="clip" id="vo02" src="assets/voice/02.mp3" data-start="30.7" data-duration="23.22" data-volume="1" data-track-index="6"></audio>
+      <audio class="clip" id="vo03" src="assets/voice/03.mp3" data-start="55.3" data-duration="22.48" data-volume="1" data-track-index="6"></audio>
+      <audio class="clip" id="vo04" src="assets/voice/04.mp3" data-start="79.3" data-duration="19.64" data-volume="1" data-track-index="6"></audio>
+      <audio class="clip" id="vo05" src="assets/voice/05.mp3" data-start="100.7" data-duration="18.16" data-volume="1" data-track-index="6"></audio>
+
+      <!-- ============ real captured footage ============ -->
+      <video class="shot" id="v-live" src="assets/footage/close-keeper-live-seapoint.mp4" muted playsinline
+             data-start="12" data-duration="13.37" data-track-index="7"></video>
+      <video class="shot" id="v-gov" src="assets/footage/close-keeper-governed-refusal.mp4" muted playsinline
+             data-start="56" data-duration="17.03" data-track-index="7"></video>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      const land = (sel, t, opts) =>
+        tl.fromTo(sel, { y: 30, opacity: 0, ...opts }, { y: 0, opacity: 1, duration: 0.26, ease: "power4.out" }, t);
+      const say = (sel, tIn, tOut) => {
+        tl.fromTo(sel, { y: 14, opacity: 0 }, { y: 0, opacity: 1, duration: 0.16, ease: "power3.out" }, tIn);
+        if (tOut) tl.to(sel, { opacity: 0, duration: 0.2 }, tOut);
+      };
+      const life = (sel, t, dy) => tl.to(sel, { y: dy, duration: 2.6, ease: "sine.inOut", yoyo: true, repeat: 1 }, t);
+
+      // ---- 1 · 0–11 ----
+      land("#s1-k", 0.2); land("#s1-tag", 0.45);
+      tl.fromTo("#s1-cut", { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power2.out" }, 0.4);
+      life("#s1-cut", 1.2, -7);
+      tl.fromTo("#s1-clock", { scale: 0.95, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.42, ease: "power3.out" }, 0.9);
+      say("#s1-c1", 0.4, 3.3); say("#s1-c2", 3.6, 5.8); say("#s1-c3", 6.1);
+
+      // ---- 2 · 11–30.5 ----
+      land("#s2-k", 11.25); land("#s2-tag", 11.5);
+      tl.fromTo("#v-live", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power3.out" }, 12.0);
+      tl.fromTo("#s2-cut", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.4 }, 13.4);
+      land("#s2-m1", 15.2); land("#s2-m2", 16.1); land("#s2-m3", 16.9); land("#s2-m4", 17.7);
+      say("#s2-c1", 11.5, 15.7); say("#s2-c2", 16.0, 21.6); say("#s2-c3", 21.9);
+
+      // ---- 3 · 30.5–55 ----
+      land("#s3-k", 30.75); land("#s3-tag", 31.0); land("#s3-h", 31.6);
+      land("#s3-p1", 33.0); land("#s3-p2", 33.8); land("#s3-p3", 34.6);
+      land("#s3-p4", 35.4); land("#s3-p5", 36.3);
+      land("#s3-split", 38.2);
+      tl.fromTo("#s3-n", { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.3, ease: "power4.out" }, 40.4);
+      tl.to("#s3-n", { innerText: 14, duration: 1.2, snap: { innerText: 1 }, ease: "power2.out" }, 40.5);
+      land("#s3-l", 41.2);
+      land("#s3-cap-note", 47.9); land("#s3-cap", 48.1);
+      say("#s3-c1", 31.0, 36.6); say("#s3-c2", 36.9, 41.5); say("#s3-c3", 41.8, 47.4); say("#s3-c4", 47.7);
+
+      // ---- 4 · 55–79 : real governed-memory run on camera ----
+      land("#s4-k", 55.25); land("#s4-tag", 55.5); land("#s4-h", 56.2);
+      tl.fromTo("#v-gov", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power3.out" }, 56.0);
+      land("#s4-b1", 59.2); land("#s4-b2", 63.0); land("#s4-b3", 70.4);
+      land("#s4-cap-note", 73.9); land("#s4-cap", 74.1);
+      say("#s4-c1", 55.6, 58.7); say("#s4-c2", 59.0, 62.4); say("#s4-c3", 62.7, 66.1);
+      say("#s4-c4", 66.4, 73.5); say("#s4-c5", 73.8);
+
+      // ---- 5 · 79–100.5 : the turn ----
+      land("#s5-k", 79.25); land("#s5-tag", 79.5);
+      land("#s5-r0", 82.1); land("#s5-r1", 84.9); land("#s5-r2", 85.7);
+      land("#s5-r3", 86.5); land("#s5-r4", 87.7);
+      // rubber-stamp land: scale 3.5 -> 1, power4.in, frame shakes
+      tl.fromTo("#s5-stamp", { opacity: 0 }, { opacity: 1, duration: 0.06 }, 90.5);
+      tl.fromTo("#s5-stampcut", { scale: 3.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.16, ease: "power4.in" }, 90.5);
+      tl.fromTo(".stamptext", { scale: 2.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.14, ease: "power4.in" }, 90.54);
+      tl.to("#s5", { y: 5, duration: 0.07, yoyo: true, repeat: 5, ease: "power1.inOut" }, 90.7);
+      tl.to("#s5", { y: 0, duration: 0.01 }, 91.15);
+      land("#s5-rule", 93.3); land("#s5-note", 88.6);
+      say("#s5-c1", 84.9, 87.4); say("#s5-c2", 87.7, 90.2); say("#s5-c3", 90.5, 93.0); say("#s5-c4", 93.3);
+
+      // ---- 6 · 100.5–120 : the stakes ----
+      land("#s6-k", 100.75); land("#s6-tag", 101.0);
+      tl.fromTo("#s6-cut", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5 }, 101.4);
+      life("#s6-cut", 102.2, -8);
+      land("#s6-t1", 105.3);
+      tl.to("#s6-t1", { opacity: 0.4, duration: 0.5 }, 108.4);
+      land("#s6-t2", 108.9);
+      land("#s6-w", 111.5); land("#s6-en", 113.0);
+      tl.fromTo("#s6-wm", { opacity: 0, x: 22 }, { opacity: 1, x: 0, duration: 0.3, ease: "power4.out" }, 115.9);
+      land("#s6-ln", 116.8);
+      say("#s6-c1", 101.0, 105.0); say("#s6-c2", 105.3, 108.6); say("#s6-c3", 108.9, 115.6); say("#s6-c4", 115.9);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

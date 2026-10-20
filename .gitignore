@@ -20,7 +20,25 @@ research/data/*.tar.gz
 submissions/
 outputs/
 traces/
-videos/
+videos/*
+# ...except the close-keeper demo's reproducible spec and its source evidence.
+# Renders, TTS audio and generated cutouts stay out: re-derive them with
+# scripts/build_audio.py and scripts/gen_images.sh.
+!videos/close-keeper-finops/
+videos/close-keeper-finops/*
+!videos/close-keeper-finops/index.html
+!videos/close-keeper-finops/BRIEF.md
+!videos/close-keeper-finops/hyperframes.json
+!videos/close-keeper-finops/meta.json
+!videos/close-keeper-finops/package.json
+!videos/close-keeper-finops/audio_request.json
+!videos/close-keeper-finops/scripts/
+!videos/close-keeper-finops/assets/
+videos/close-keeper-finops/assets/*
+!videos/close-keeper-finops/assets/footage/
+!videos/close-keeper-finops/assets/img/
+videos/close-keeper-finops/assets/img/*
+!videos/close-keeper-finops/assets/img/cap-*.png
 run.log
 results.json
 *.xlsx
