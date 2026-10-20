@@ -15,23 +15,30 @@ production multi-tenant service. See [the product, demo, and pilot plan](docs/CO
 
 ---
 
-## close-keeper — Strands agent (Agents for Humans)
+## close-keeper — Seapoint MCP + Claude (FinOps Hackathon 2026)
 
-A [Strands Agents SDK](https://github.com/strands-agents/sdk-python) agent for the
-financial close: it ties out workbooks in the background and **only surfaces when
-there's a real decision to make**. New build on tieout's verified tools —
-one recorded write path, governance-gated memory. See
-[close_keeper/README.md](close_keeper/README.md).
+**FinOps Hackathon · Seapoint × 13books Capital × Claude · October 2026.**
+close-keeper connects to Seapoint's MCP — reading live transactions, invoices and
+burn/cash/runway — runs the tie-out in the background, and **only surfaces the
+judgment queue: the fraction it won't code without a human, each with its evidence.**
 
-Try it without an account:
+Built with Claude (Anthropic API) and the
+[Strands Agents SDK](https://github.com/strands-agents/sdk-python) on top of
+tieout's verified machinery. Seapoint's mutating tools are held behind one governed,
+evidenced, logged write path (see [close_keeper/README.md](close_keeper/README.md)).
+
+Try it without an account (local close package, no keys, no Seapoint):
 
 [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/udirobert/tieout/blob/main/close_keeper/demo_app.py)
 
 ```bash
 uv sync --directory research --extra agent
-research/.venv/bin/python -m close_keeper \
+research/.venv/bin/python -m close_keeper --no-seapoint \
   "Tie out the close package (all tasks), then tell me which cells need my decision and why."
 ```
+
+For live Seapoint: connect the MCP through Claude (the sandbox admits only Claude's
+connector) and drive the beats in that session — see [close_keeper/README.md](close_keeper/README.md).
 
 ---
 

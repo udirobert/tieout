@@ -15,6 +15,7 @@ dependencies = [
 [project.optional-dependencies]
 agent = [
     "strands-agents>=1.55",
+    "anthropic>=0.40",
 ]
 tinker = [
     "tinker>=0.27.1",
