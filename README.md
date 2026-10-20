@@ -60,6 +60,7 @@ connector) and drive the beats in that session — see [close_keeper/README.md](
 | [docs/SYNDICATE.md](docs/SYNDICATE.md) | Submission summary |
 | [docs/demo.md](docs/demo.md) | Demo video script |
 | [docs/submit.md](docs/submit.md) | Checklist + Devpost + AO |
+| [docs/HACKATHONS.md](docs/HACKATHONS.md) | close-keeper's next entries: which events admit an existing project, and what each needs |
 
 ---
 

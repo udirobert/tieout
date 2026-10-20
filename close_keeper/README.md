@@ -38,6 +38,10 @@ month-end process it interrupts. The section below is that missing part, written
 fact. It does not change the technical claims, all of which still stand and are itemised
 under [Verified](#verified).
 
+The fix is on screen in the re-cut film (`videos/close-keeper-finops/`, v6). Where the entry
+goes next — the two events whose rules admit a project that already exists, and what each one
+would require of us — is in [docs/HACKATHONS.md](../docs/HACKATHONS.md).
+
 ## The workflow this sits inside
 
 Month end at a twelve-person company or a small fund admin with no controller. Same six
