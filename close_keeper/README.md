@@ -7,15 +7,16 @@
 The 12-person startup with no finance hire — paying a fractional CFO by the
 hour — does the close at 11pm. Seapoint already resolves the clean majority:
 burn, cash, runway, and most invoice-to-bank matching. What's left is the
-**judgment queue** — the handful of transactions where a human actually has to
-decide. close-keeper connects to **Seapoint's MCP**, reads burn/cash/runway and
-the live transactions, and **surfaces only that queue — with the evidence
-attached.**
+**judgment queue** — the transactions where a human actually has to decide.
+close-keeper connects to **Seapoint's MCP**, reads burn/cash/runway and the live
+transactions, and **surfaces only that queue — with the evidence attached.**
 
 Everyone in AI accounting sells you *accuracy* — a number you have to trust.
-close-keeper sells you the **2.2% it refuses to touch**: the cells it won't fill,
-with the source rows that say why, and a ledger write-path where every change
-carries its own audit record. That's not a model benchmark — it's an audit
+close-keeper sells you the **0.5% it refuses to touch**: on the 20 Oct live Seapoint
+pull, **14 of 2,664 transactions** could not be tied, and 10 of those were refused
+outright because the evidence contradicted itself. Those are the cells it won't fill,
+with the source rows that say why, and a ledger write-path where every change carries
+its own audit record. That's not a model benchmark — it's an audit
 trail, and it's the difference between an agent a fund will let near a ledger and
 one it won't.
 
@@ -182,9 +183,11 @@ is ever echoed to the model.
 
 ## Verified
 
-End-to-end against `demo/close-tieout` (3 tasks, Tinker Qwen3.8-27B pipeline,
-Llama-3.3-70B agent loop on W&B Inference): the agent tied out all tasks, surfaced
-24 pending exceptions with evidence, applied a mixed approve/reject decision set
-through the recorded write path (approved kept, rejected reverted to init), and
-was refused by the governance gate on an ineligible activation and a double
-revoke. See `docs/COREWEAVE.md` for the underlying harness verification record.
+End-to-end against `demo/close-tieout` — a local fixture, not the live Seapoint
+sandbox (the 20 Oct live pull surfaced 14 untied of 2,664) — 3 tasks, Tinker
+Qwen3.8-27B pipeline, Llama-3.3-70B agent loop on W&B Inference: the agent tied
+out all tasks, surfaced 24 pending exceptions with evidence, applied a mixed
+approve/reject decision set through the recorded write path (approved kept,
+rejected reverted to init), and was refused by the governance gate on an
+ineligible activation and a double revoke. See `docs/COREWEAVE.md` for the
+underlying harness verification record.
