@@ -190,7 +190,7 @@ def _(mo):
 
 
 @app.cell
-def _(get_rev, json, run_dir):
+def _(exc_mod, get_rev, json, run_dir):
     """Reload the exception queue whenever a decision bumps the revision state."""
     _ = get_rev()
     review_payloads, review_as_array = [], True
@@ -200,16 +200,20 @@ def _(get_rev, json, run_dir):
         review_payloads, review_as_array = (
             (_data, True) if isinstance(_data, list) else ([_data], False)
         )
+    # Rows are built from the shared evidence model, so the walkthrough shows
+    # the same diff and the same source rows the CLI and the console show.
     review_rows = [
         {
             "task": p["task_id"],
-            "cell": e["cell"],
-            "reason": e["reason"],
-            "proposed": e["proposed_value"],
-            "status": e["status"],
+            "cell": d.cell,
+            "reason": d.reason,
+            "current": d.current_value,
+            "proposed": d.proposed_value,
+            "evidence": d.evidence_label,
+            "status": d.status,
         }
         for p in review_payloads
-        for e in p.get("exceptions", [])
+        for d in exc_mod.decisions_from_payload(p)
     ]
     return review_as_array, review_payloads, review_rows
 

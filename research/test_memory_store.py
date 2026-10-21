@@ -184,9 +184,19 @@ class StoreTests(unittest.TestCase):
                 call()
 
     def test_local_operations_only(self):
+        """The governed memory store never reaches the graph.
+
+        Asserted against the store's own namespace rather than `sys.modules`:
+        a sibling test file may legitimately import `exceptions` (which imports
+        `graph`) before this test runs, and that says nothing about whether the
+        memory store touched Neo4j. What must hold is that the store module
+        itself pulled in no graph code, and that the neo4j driver was never
+        loaded.
+        """
         self._activate()
+        self.assertNotIn("graph", vars(memory_store))
+        self.assertNotIn("neo4j", vars(memory_store))
         self.assertNotIn("neo4j", sys.modules)
-        self.assertNotIn("graph", sys.modules)
 
 
 class WorkbookTests(unittest.TestCase):

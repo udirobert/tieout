@@ -28,6 +28,7 @@ sys.path.insert(0, str(ROOT / "research"))
 sys.path.insert(0, str(HARNESS))
 
 import graph  # noqa: E402  (lazy neo4j — import-safe in the ship container)
+from evidence import Decision  # noqa: E402
 from parsing import cell_ref, normalize_cell_value  # noqa: E402
 from sb import answer_cells  # noqa: E402
 
@@ -61,7 +62,7 @@ def _row_keys(ws, coord: str) -> list[str]:
                 keys.append(s)
     if not keys:
         # Fallback: first non-empty value in the row.
-        for (r, c) in sorted(ws._cells):
+        for r, c in sorted(ws._cells):
             if r != row:
                 continue
             v = ws._cells[(r, c)].value
@@ -81,7 +82,7 @@ def _find_evidence(
     seen: set[tuple[str, int, str]] = set()
     key_set = set(keys)
     for ws in wb.worksheets:
-        for (r, c) in sorted(ws._cells):
+        for r, c in sorted(ws._cells):
             if ws.title == answer_sheet and r == answer_row:
                 continue
             v = ws._cells[(r, c)].value
@@ -151,6 +152,10 @@ def build_exceptions(
                 "reason": exc_reason,
                 "evidence_rows": evidence,
                 "proposed_value": "" if value is None else value,
+                # The value the cell holds *now*, read from the init workbook —
+                # what a reviewer diffs against before deciding.
+                "current_value": _init_value(init_wb, ref),
+                "raised_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
                 "status": "pending",
             }
         )
@@ -160,6 +165,60 @@ def build_exceptions(
     return exceptions
 
 
+def _init_value(init_wb, ref: str):
+    """The value a cell holds in the init workbook, or "" when it is unknown."""
+    if "!" in ref:
+        sheet, coord = ref.rsplit("!", 1)
+        ws = init_wb[sheet] if sheet in init_wb.sheetnames else init_wb.active
+    else:
+        ws = init_wb.active
+        coord = ref
+    try:
+        value = ws[coord].value
+    except (KeyError, ValueError):
+        return ""
+    return "" if value is None else value
+
+
+def decisions_from_payload(payload: dict, tenant: str = "") -> list[Decision]:
+    """The decisions a single exception payload describes.
+
+    One place builds the review unit from the stored exception, so every
+    surface — CLI, console, walkthrough, ledger — reviews the same thing.
+    """
+    task_id = str(payload.get("task_id", ""))
+    return [
+        Decision.from_exception(
+            exception,
+            current_value=exception.get("current_value", ""),
+            task_id=task_id,
+            tenant=tenant,
+        )
+        for exception in payload.get("exceptions", []) or []
+    ]
+
+
+def all_decisions(payloads: list[dict], tenant: str = "") -> list[Decision]:
+    """The decisions across every task in a run."""
+    return [d for payload in payloads for d in decisions_from_payload(payload, tenant)]
+
+
+def _workbook_version(init_xlsx: str | Path) -> str:
+    """A stable identity for the version of a workbook.
+
+    The init workbook's content hash, so the same file replays onto the same
+    cell keys and a revised workbook produces new ones. A short digest keeps
+    the graph key readable; the full digest is in the memory record's source.
+    """
+    import hashlib
+
+    try:
+        digest = hashlib.sha256(Path(init_xlsx).read_bytes()).hexdigest()
+    except OSError:
+        return "unknown"
+    return digest[:16]
+
+
 def graph_payload(
     task: dict,
     status: str,
@@ -167,6 +226,8 @@ def graph_payload(
     info: dict | None,
     exceptions: list[dict],
     run_id: str | None = None,
+    tenant: str = "",
+    workbook: str = "",
 ) -> dict:
     """Assemble the Neo4j lineage payload for one task's answer cells.
 
@@ -177,10 +238,16 @@ def graph_payload(
 
     Pass run_id to replay an existing run (demo/rebuild_graph.py); omit it to use
     the live run.
+
+    Cell references are *scoped* by tenant and workbook version, so two
+    customers with same-named workbooks cannot collide in a shared graph. The
+    readable reference is kept alongside as `cell_ref`.
     """
     written = (info or {}).get("written", {})
     exc_by_ref = {e["cell"]: e for e in exceptions}
     wb = openpyxl.load_workbook(task["init_xlsx"], data_only=True)
+    tenant = tenant or os.environ.get("TIEOUT_TENANT", "") or "local"
+    workbook = workbook or _workbook_version(task["init_xlsx"])
     cells: list[dict] = []
     try:
         for sheet, coord in answer_cells(task, wb):
@@ -192,12 +259,16 @@ def graph_payload(
                 v = ws.cell(row=row, column=c).value
                 if isinstance(v, str) and v.strip() and any(ch.isalpha() for ch in v):
                     src_coord = f"{get_column_letter(c)}{row}"
+                    src_ref = cell_ref(ws.title, src_coord)
                     derived.append(
                         {
-                            "ref": cell_ref(ws.title, src_coord),
+                            "ref": graph.scope_key(tenant, workbook, src_ref),
+                            "cell_ref": src_ref,
                             "sheet": ws.title,
                             "coord": src_coord,
                             "value": v.strip(),
+                            "tenant": tenant,
+                            "workbook": workbook,
                         }
                     )
                 if len(derived) >= 4:
@@ -207,7 +278,10 @@ def graph_payload(
             exc = exc_by_ref.get(ref)
             cells.append(
                 {
-                    "ref": ref,
+                    "ref": graph.scope_key(tenant, workbook, ref),
+                    "cell_ref": ref,
+                    "tenant": tenant,
+                    "workbook": workbook,
                     "sheet": ws.title,
                     "coord": coord,
                     "row": row,
@@ -216,7 +290,15 @@ def graph_payload(
                     "kind": "answer",
                     "value": value,
                     "derived": derived,
-                    "evidence": (exc or {}).get("evidence_rows", [])[:5],
+                    "evidence": [
+                        {
+                            **row_,
+                            "scope": graph.scope_key(
+                                tenant, workbook, str(row_.get("sheet", ""))
+                            ),
+                        }
+                        for row_ in ((exc or {}).get("evidence_rows", [])[:5])
+                    ],
                     "vendor_key": vk,
                     "match_method": "exact-value" if vk else None,
                     "score": 1.0 if vk else None,
@@ -339,6 +421,9 @@ def apply_decisions(
     path: Path | str | None = None,
     *,
     as_array: bool = True,
+    ledger=None,
+    reviewer: str = "",
+    tenant: str = "",
 ) -> None:
     """The one write path for review decisions — the CLI and any UI both call this.
 
@@ -347,12 +432,23 @@ def apply_decisions(
     workbooks are touched, so a human approval is never lost to a later failure
     and a value is never written without a recorded decision. The file is
     rewritten in the shape `load_exceptions` reported.
+
+    When a `ledger` is supplied, every decision is appended to it — also
+    *before* the workbooks are touched, so the record of what was decided
+    survives even if the write that follows fails. The ledger is append-only: it
+    is a history, not a mirror of the mutable queue.
     """
     if path is not None:
         body = payloads if as_array else payloads[0]
         Path(path).write_text(
             json.dumps(body, indent=2, default=str) + "\n", encoding="utf-8"
         )
+    if ledger is not None:
+        for payload in payloads:
+            for decision in decisions_from_payload(payload, tenant):
+                if decision.status == "pending":
+                    continue
+                ledger.record(decision, reviewer=reviewer)
     for payload in payloads:
         task_id = payload["task_id"]
         init = Path(payload["init_xlsx"])
@@ -392,9 +488,19 @@ def _prompt(msg: str) -> str:
 
 
 def review_exceptions(
-    path: Path | str, approve_all: bool = False, reject_all: bool = False
+    path: Path | str,
+    approve_all: bool = False,
+    reject_all: bool = False,
+    ledger=None,
+    reviewer: str = "",
+    tenant: str = "",
 ) -> None:
-    """Interactive CLI: review and approve/reject each exception, then rewrite output."""
+    """Interactive CLI: review and approve/reject each exception, then rewrite output.
+
+    Every row is rendered from the shared evidence model, so the CLI shows the
+    same cell, the same diff, and the same source rows the console and the
+    walkthrough show.
+    """
     path = Path(path)
     payloads, as_array = load_exceptions(path)
     decisions: dict[str, dict[str, str]] = {}
@@ -404,14 +510,10 @@ def review_exceptions(
             task_id = payload["task_id"]
             print(f"\nTask: {task_id}  ({len(payload['exceptions'])} exception(s))")
             task_decisions: dict[str, str] = {}
-            for exc in payload["exceptions"]:
-                print(
-                    f"  {exc['cell']} | {exc['reason']} | proposed: {exc['proposed_value']!r}"
-                )
-                for ev in exc["evidence_rows"]:
-                    print(
-                        f"    evidence: {ev['sheet']} row {ev['row']} (key={ev['key']})"
-                    )
+            for decision, exception in zip(
+                decisions_from_payload(payload, tenant), payload["exceptions"]
+            ):
+                print(decision.render_line())
 
                 if approve_all:
                     ans = "y"
@@ -425,18 +527,26 @@ def review_exceptions(
                 if ans == "q":
                     break
                 if ans == "y":
-                    exc["status"] = "approved"
-                    task_decisions[exc["cell"]] = "approved"
+                    exception["status"] = "approved"
+                    task_decisions[decision.cell] = "approved"
                 elif ans == "n":
-                    exc["status"] = "rejected"
-                    task_decisions[exc["cell"]] = "rejected"
+                    exception["status"] = "rejected"
+                    task_decisions[decision.cell] = "rejected"
                 else:
-                    exc["status"] = "pending"
+                    exception["status"] = "pending"
             decisions[task_id] = task_decisions
     except (EOFError, KeyboardInterrupt):
         pass
 
-    apply_decisions(payloads, decisions, path, as_array=as_array)
+    apply_decisions(
+        payloads,
+        decisions,
+        path,
+        as_array=as_array,
+        ledger=ledger,
+        reviewer=reviewer,
+        tenant=tenant,
+    )
     print(
         "\nReview complete. Output workbook(s) updated with approved exceptions only."
     )
@@ -454,10 +564,33 @@ def main() -> None:
     parser.add_argument(
         "--reject-all", action="store_true", help="reject every exception"
     )
-    args = parser.parse_args(raw)
-    review_exceptions(
-        args.path, approve_all=args.approve_all, reject_all=args.reject_all
+    parser.add_argument(
+        "--ledger",
+        default=None,
+        help="append every decision to this ledger file (append-only)",
     )
+    parser.add_argument(
+        "--reviewer", default="", help="who is reviewing (recorded in the ledger)"
+    )
+    parser.add_argument("--tenant", default="", help="tenant the review belongs to")
+    args = parser.parse_args(raw)
+    ledger = None
+    if args.ledger:
+        from ledger import DecisionLedger
+
+        ledger = DecisionLedger(Path(args.ledger), args.tenant or None)
+    try:
+        review_exceptions(
+            args.path,
+            approve_all=args.approve_all,
+            reject_all=args.reject_all,
+            ledger=ledger,
+            reviewer=args.reviewer,
+            tenant=args.tenant,
+        )
+    finally:
+        if ledger is not None:
+            ledger.close()
 
 
 if __name__ == "__main__":

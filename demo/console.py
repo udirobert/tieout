@@ -429,6 +429,7 @@ def _(
 ):
     if run_dir is None:
         review_block = mo.md("### Exception review\n\n*load a run dir*")
+        review_form = None
     elif exc_path is None:
         per_task = (run_dir / "exceptions").is_dir()
         review_block = mo.md(
@@ -440,6 +441,7 @@ def _(
                 else "."
             )
         )
+        review_form = None
     else:
         _payloads, _exc_path, _as_array = payloads, exc_path, as_array
 
@@ -475,17 +477,30 @@ def _(
             )
             set_rev({"at": time.time()})
 
-        _rows = [
-            {
-                "task": payload["task_id"],
-                "cell": entry["cell"],
-                "reason": entry["reason"],
-                "proposed": entry["proposed_value"],
-                "status": entry["status"],
-            }
+        # One decision per exception, built by the shared model, so the table
+        # shows the same diff and the same evidence rows the CLI prints.
+        _by_cell = {
+            (payload["task_id"], decision.cell): decision
             for payload in payloads
-            for entry in payload["exceptions"]
-        ]
+            for decision in exc_mod.decisions_from_payload(payload)
+        }
+        _rows = []
+        for payload in payloads:
+            for entry in payload["exceptions"]:
+                decision = _by_cell.get((payload["task_id"], entry["cell"]))
+                if decision is None:
+                    continue
+                _rows.append(
+                    {
+                        "task": payload["task_id"],
+                        "cell": entry["cell"],
+                        "reason": entry["reason"],
+                        "current": decision.current_value,
+                        "proposed": decision.proposed_value,
+                        "evidence": decision.evidence_label,
+                        "status": entry["status"],
+                    }
+                )
         if _rows:
             _form = mo.ui.dictionary(
                 {
@@ -510,15 +525,68 @@ def _(
                 _form,
             ]
         )
-    return review_block
+    return review_block, review_form
 
 
 @app.cell
-def _(curve_block, grading_block, mo, review_block, run_dir):
+def _(exc_mod, mo, payloads, review_form):
+    """The evidence behind whichever rows the reviewer has selected.
+
+    A table column has to truncate; evidence must not. So the source rows of
+    the selected cells are rendered in full here, below the queue — the same
+    rows the CLI prints, from the same model (`harness/evidence.py`).
+    """
+    _chosen: list[str] = []
+    if review_form is not None:
+        for _row in (review_form.value or {}).get("rows") or []:
+            _cell = _row.get("cell")
+            if _cell:
+                _chosen.append(f"{_row.get('task', '')}::{_cell}")
+
+    _details = []
+    for _payload in payloads:
+        for _decision in exc_mod.decisions_from_payload(_payload):
+            if f"{_payload['task_id']}::{_decision.cell}" not in _chosen:
+                continue
+            _details.append(
+                mo.vstack(
+                    [
+                        mo.md(
+                            f"**{_decision.cell}** — {_decision.reason} · "
+                            f"{_decision.diff_label}"
+                        ),
+                        mo.ui.table(
+                            [
+                                {"sheet": row.sheet, "row": row.row, "key": row.key}
+                                for row in _decision.evidence
+                            ],
+                            pagination=False,
+                        )
+                        if _decision.evidence
+                        else mo.md("*no source rows found for this cell*"),
+                    ]
+                )
+            )
+
+    evidence_block = (
+        mo.vstack(
+            [
+                mo.md("#### Evidence for the selected rows"),
+                *(_details or [mo.md("*select a row above to see its source rows*")]),
+            ]
+        )
+        if _chosen or _details
+        else mo.md("")
+    )
+    return evidence_block
+
+
+@app.cell
+def _(curve_block, evidence_block, grading_block, mo, review_block, run_dir):
     run_tab = (
         mo.md("## Run — what happened\n\n*load a run dir*")
         if run_dir is None
-        else mo.vstack([grading_block, review_block, curve_block])
+        else mo.vstack([grading_block, review_block, evidence_block, curve_block])
     )
     return run_tab
 

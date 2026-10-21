@@ -28,6 +28,21 @@ _DB = "neo4j"
 
 # Stable-identity nodes are MERGEd by natural key; run-specific facts live on
 # edges / via SET so repeated demo runs collapse instead of growing the graph.
+#
+# The natural key of a cell is *scoped*: tenant + workbook version + cell ref.
+# A bare "Staging Sheet!K5" is only unique within one workbook — two customers
+# with a workbook of the same name would collide in a shared Aura instance and
+# one customer's lineage would attach to the other's cell. `scope_key()` builds
+# the composite, and the uniqueness constraint stays on the single `ref`
+# property, which now holds that composite. The readable cell reference lives
+# on `cell_ref` beside it.
+#
+# Constraint *names* encode the shape they enforce. Where the shape changed
+# (EvidenceRow gained a scope) the constraint has a new name, because
+# `CREATE CONSTRAINT IF NOT EXISTS` will not replace an existing one under the
+# old name. Superseded constraints are dropped by `migrate_schema()`, which
+# runs only on an explicit command — never implicitly on connect, because
+# AGENTS.md forbids implicit graph schema changes.
 _SCHEMA = [
     "CREATE CONSTRAINT cell_ref_unique IF NOT EXISTS "
     "FOR (c:Cell) REQUIRE c.ref IS UNIQUE",
@@ -39,11 +54,26 @@ _SCHEMA = [
     "FOR (r:CloseRun) REQUIRE (r.run_id, r.task_id) IS UNIQUE",
     "CREATE CONSTRAINT exception_unique IF NOT EXISTS "
     "FOR (e:Exception) REQUIRE (e.run_id, e.cell_ref) IS UNIQUE",
-    "CREATE CONSTRAINT evidence_unique IF NOT EXISTS "
-    "FOR (e:EvidenceRow) REQUIRE (e.sheet, e.row, e.key) IS UNIQUE",
+    "CREATE CONSTRAINT evidence_scope_unique IF NOT EXISTS "
+    "FOR (e:EvidenceRow) REQUIRE (e.scope, e.sheet, e.row, e.key) IS UNIQUE",
     "CREATE FULLTEXT INDEX vendor_name_ft IF NOT EXISTS "
     "FOR (v:Vendor) ON EACH [v.clean_name, v.name]",
 ]
+
+# Constraints from an earlier shape, superseded by the scoped ones above.
+# Dropping them is destructive, so it happens only on an explicit command.
+_SUPERSEDED_CONSTRAINTS = ("evidence_unique",)
+
+
+def scope_key(tenant: str, workbook: str, ref: str) -> str:
+    """The natural key of a cell: tenant + workbook version + cell reference.
+
+    The separator is a character that cannot appear in a sheet name or a cell
+    reference, so two different (tenant, workbook, ref) triples can never
+    produce the same key.
+    """
+    return f"{tenant}\x1f{workbook}\x1f{ref}"
+
 
 # One managed (auto-retrying) write. UNWIND per answer cell; MERGE endpoints
 # only, then SET changing props. Vendors are resolved (OPTIONAL MATCH), never
@@ -59,6 +89,8 @@ UNWIND $cells AS c
 MERGE (cell:Cell {ref: c.ref})
   ON CREATE SET cell.sheet = c.sheet, cell.coord = c.coord, cell.row = c.row,
                 cell.col = c.col, cell.header = c.header, cell.kind = c.kind,
+                cell.cell_ref = c.cell_ref, cell.tenant = c.tenant,
+                cell.workbook = c.workbook,
                 cell.first_seen = datetime($created_at)
   ON MATCH  SET cell.kind = c.kind
 SET cell.value = c.value, cell.last_run_id = $run_id, cell.last_status = $status,
@@ -69,14 +101,16 @@ OPTIONAL MATCH (v:Vendor {vendor_key: c.vendor_key})
 FOREACH (d IN c.derived |
   MERGE (src:Cell {ref: d.ref})
     ON CREATE SET src.sheet = d.sheet, src.coord = d.coord, src.kind = 'source',
-                  src.value = d.value, src.first_seen = datetime($created_at)
+                  src.value = d.value, src.cell_ref = d.cell_ref,
+                  src.tenant = d.tenant, src.workbook = d.workbook,
+                  src.first_seen = datetime($created_at)
     ON MATCH  SET src.value = d.value
   MERGE (s2:Sheet {name: d.sheet})
   MERGE (src)-[:IN_SHEET]->(s2)
   MERGE (cell)-[df:DERIVED_FROM]->(src) SET df.key = d.value
 )
 FOREACH (e IN c.evidence |
-  MERGE (ev:EvidenceRow {sheet: e.sheet, row: e.row, key: e.key})
+  MERGE (ev:EvidenceRow {scope: e.scope, sheet: e.sheet, row: e.row, key: e.key})
   MERGE (cell)-[:EVIDENCED_BY]->(ev)
 )
 FOREACH (m IN CASE WHEN v IS NULL THEN [] ELSE [1] END |
@@ -425,6 +459,35 @@ def query_vendor_context(pulled_names, k: int = 3, limit: int = 40) -> str:
     return _HEADER + "\n" + "\n".join(lines)
 
 
+def migrate_schema() -> list[str]:
+    """Drop superseded constraints and install the current ones.
+
+    Explicitly invoked, never on connect: `AGENTS.md` forbids implicit graph
+    schema changes, and dropping a constraint is destructive. Returns the
+    statements that ran, so the caller can report them.
+
+    The lineage graph is a derived index — `demo/rebuild_graph.py` reconstructs
+    it from a run's artifacts — so after this the graph is rebuilt rather than
+    migrated.
+    """
+    if not enabled():
+        return []
+    ran: list[str] = []
+    for name in _SUPERSEDED_CONSTRAINTS:
+        stmt = f"DROP CONSTRAINT {name} IF EXISTS"
+        try:
+            _DRIVER.execute_query(stmt, database_=_DB)
+            ran.append(stmt)
+        except Exception as exc:  # noqa: BLE001 — report, do not abort the rest
+            ran.append(f"{stmt}  -- failed: {type(exc).__name__}: {exc}")
+    for stmt in _SCHEMA:
+        try:
+            _DRIVER.execute_query(stmt, database_=_DB)
+        except Exception as exc:  # noqa: BLE001
+            ran.append(f"{stmt}  -- failed: {type(exc).__name__}: {exc}")
+    return ran
+
+
 def _cli(argv: list[str]) -> int:
     if len(argv) >= 2 and argv[1] == "query" and len(argv) > 2:
         try:
@@ -438,7 +501,26 @@ def _cli(argv: list[str]) -> int:
             return 0
         finally:
             close_graph()
-    print('usage: python harness/graph.py query "NIP LIT" [...]')
+    if len(argv) >= 2 and argv[1] == "migrate-schema":
+        try:
+            if not enabled():
+                print(
+                    "graph disabled — set NEO4J_URI/NEO4J_USER/NEO4J_PASSWORD in .env"
+                )
+                return 1
+            for stmt in migrate_schema():
+                print(stmt)
+            print(
+                "schema updated — rebuild the lineage with "
+                "demo/rebuild_graph.py <run-dir>"
+            )
+            return 0
+        finally:
+            close_graph()
+    print(
+        'usage: python harness/graph.py query "NIP LIT" [...]\n'
+        "       python harness/graph.py migrate-schema"
+    )
     return 2
 
 
