@@ -52,6 +52,15 @@ uv run --directory research marimo run ../demo/console.py   # Run / Memory / Gra
 
 ---
 
+## Example output
+
+Bank counterparty match: `Matched Sender/Beneficiary` filled where the lookup
+resolves; empty cells are routed to `exceptions.json` with source-row evidence.
+
+![tieout output screenshot](assets/output-screenshot.png)
+
+---
+
 ## Show vs skip
 
 | Show | Skip |
