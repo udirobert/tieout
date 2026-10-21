@@ -141,6 +141,11 @@
   pre.term .okl { color: #9ec78a; }
   pre.term .dim { color: #6e6a63; }
 
+  /* the figure — Fig. 01, the close ledger */
+  .figure-frame { border: 1px solid var(--line); box-shadow: 12px 14px 0 rgba(224, 122, 58, 0.13); background: var(--ink-2); margin-top: 30px; }
+  .figure-frame iframe { display: block; width: 100%; height: 760px; border: 0; background: var(--ink); }
+  @media (max-width: 860px) { .figure-frame iframe { height: 900px; } }
+
   /* still images */
   .still { border: 1px solid var(--line); box-shadow: 12px 14px 0 rgba(224, 122, 58, 0.13); display: block; width: 100%; height: auto; }
   figcaption { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--paper-dim); margin-top: 14px; }
@@ -199,6 +204,7 @@
         <a href="#workflow">Workflow</a>
         <a href="#proof">Proof</a>
         <a href="#queue">Queue</a>
+        <a href="#ledger">Fig. 01</a>
         <a href="#governance">Governance</a>
         <a href="#run">Run it</a>
       </nav>
@@ -545,6 +551,24 @@
     </div>
   </section>
 
+  <section id="ledger">
+    <p class="kicker">Fig. 01 — the close ledger</p>
+    <h2>The whole close, with only the decisions lit.</h2>
+    <span class="chip grey">interactive · press a lit cell · the write gate refuses without a recorded decision</span>
+    <p class="lede">This is the close package, drawn: a stack of sheets, the answer grid, and the
+      write gate. Two thousand six hundred and twenty-nine cells tied themselves and are silent. The
+      lit ones are the fourteen that did not, and they are the only coloured thing on the plate —
+      because that is the product's whole argument, rendered.</p>
+    <div class="figure-frame">
+      <iframe src="figures/index.html" title="Fig. 01 — the close ledger: an isometric close package where only the cells needing a human are lit" loading="lazy"></iframe>
+    </div>
+    <p class="quiet mono" style="font-size:12.5px; margin-top:18px;">
+      Built from the same fixture the CLI and the console read, so the figure cannot drift from the
+      product. <a href="figures/index.html">Open it on its own</a> ·
+      <a href="https://github.com/udirobert/tieout/blob/main/docs/figures/fig01-close-ledger.js">its source</a>.
+    </p>
+  </section>
+
   <section id="run">
     <p class="kicker">Try it</p>
     <h2>Three ways in, none of them needs our keys.</h2>
@@ -573,6 +597,36 @@ python /tmp/close-keeper-video/refusal_take.py   # or the
           through the confirmed, evidenced path.</p>
         <pre class="term" style="font-size:12px">claude mcp add --transport http seapoint-staging \  https://mcp.seapoint.dev/mcp
 /mcp   # then authenticate in the browser</pre>
+      </div>
+    </div>
+    <div class="cols" style="margin-top:44px">
+      <div>
+        <h3>4 — Bring us a close</h3>
+        <p>The last way in is not a demo. Send us one month of bank lines and the exceptions you
+          flagged yourself, and we shadow your next close: which of your decisions were mechanical,
+          which were judgment, and which had no evidence behind them at all. We hand back the reasoning,
+          the source rows, and the audit record. No ledger is touched.</p>
+        <p class="quiet" style="font-size:16px;">We price per entity, per month, and we would rather
+          derive the number from what the shadow close actually cost you than quote you a round figure
+          now. There is no customer yet, so there is no ROI claim on this page.</p>
+        <div class="cta" style="margin-top:20px">
+          <a class="btn" href="mailto:hello@tieout.dev?subject=Shadow%20our%20close">Ask%20about%20a%20shadow%20close</a>
+        </div>
+        <p class="quiet mono" style="font-size:12px; margin-top:22px;">
+          A bank export, an invoice list, and the GL codes you used. That is all the first conversation
+          needs.
+        </p>
+      </div>
+      <div>
+        <h3>The other two surfaces</h3>
+        <div class="card"><div class="rows">
+          <div class="row"><span class="k">the console</span><span class="v">Run / Memory / Graph — the instrument</span></div>
+          <div class="row"><span class="k">the close desk</span><span class="v">load → queue → decide → memory → history</span></div>
+          <div class="row"><span class="k">the CLI</span><span class="v">harness/exceptions.py review</span></div>
+        </div></div>
+        <p style="margin-top:24px;">All three read the same artifacts and write through the same
+          <span class="mono">apply_decisions</span>. None of them has a third way to change a workbook,
+          and each decision is appended to your ledger before anything is touched.</p>
       </div>
     </div>
   </section>

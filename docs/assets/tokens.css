@@ -1,0 +1,99 @@
+/* tieout design tokens — one palette, every surface.
+
+The product had four unrelated visual languages: an editorial serif site, a
+default-themed marimo notebook, a dark terminal film, and the figures. That
+reads as a repo of related demos rather than one product, which is exactly
+what it was.
+
+So the tokens live here, once, and the surfaces import them. The vocabulary is
+the one from the iso-glow figure system — `--panel --line --body --deck --ink
+--ink-hi --glass --recess --accent --accent-hi` — because a figure is a
+surface too, and it should not need its own palette.
+
+The site was already within a hex of that system: `--ink: #0e1013` against
+`#0c0d0e`, `--orange: #e07a3a` against `--accent: #ff9a2e`. These are the
+site's own values, renamed. Nothing about the site's look changes; it stops
+being the only surface that has a palette.
+
+One accent. It means *live* — a cell that needs a human, a rule that is
+active, a write that is waiting for its evidence. Nothing else is orange. That
+is the product's argument rendered as a rendering rule: the 0.5% that reaches
+a person should be the only lit thing on the page.
+*/
+
+:root {
+  color-scheme: dark;
+
+  /* surfaces */
+  --bg: #0e1013;
+  --panel: #15181d;
+  --edge: #262a30;
+  --deck: #1b1e23;
+
+  /* structure */
+  --line: #3a3e44;
+  --detail: #24272c;
+  --body: #17191d;
+
+  /* ink */
+  --ink: #b9b3a8;
+  --ink-hi: #f5f0e8;
+  --live: #f5f0e8;
+
+  /* glass — a lit surface */
+  --glass: #0b0d0f;
+  --glass-on: #241a12;
+  --recess: #101215;
+
+  /* the one accent */
+  --accent: #e07a3a;
+  --accent-hi: #f0a878;
+  --accent-dim: rgba(224, 122, 58, 0.10);
+
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --serif: "Newsreader", "Iowan Old Style", Georgia, "Times New Roman", serif;
+}
+
+/* Light theme: the same tokens, inverted for legibility. The accent keeps one
+   hue and changes only its value, so "orange means live" holds in both. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+    --bg: #f5f2ec;
+    --panel: #fffdf9;
+    --edge: #dcd6ca;
+    --deck: #ece7dd;
+    --line: #8e887c;
+    --detail: #cfc9bd;
+    --body: #f0ece3;
+    --ink: #5d574c;
+    --ink-hi: #1b1a17;
+    --live: #1b1a17;
+    --glass: #ffffff;
+    --glass-on: #fbeadd;
+    --recess: #e6e1d6;
+    --accent: #b4530f;
+    --accent-hi: #8f3f08;
+    --accent-dim: rgba(180, 83, 15, 0.08);
+  }
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f5f2ec;
+  --panel: #fffdf9;
+  --edge: #dcd6ca;
+  --deck: #ece7dd;
+  --line: #8e887c;
+  --detail: #cfc9bd;
+  --body: #f0ece3;
+  --ink: #5d574c;
+  --ink-hi: #1b1a17;
+  --live: #1b1a17;
+  --glass: #ffffff;
+  --glass-on: #fbeadd;
+  --recess: #e6e1d6;
+  --accent: #b4530f;
+  --accent-hi: #8f3f08;
+  --accent-dim: rgba(180, 83, 15, 0.08);
+}

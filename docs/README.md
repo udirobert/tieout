@@ -17,6 +17,13 @@ Two surfaces, both readable without a key. They read the same artifacts.
 Source: [`docs/index.html`](index.html) (static, no build, no credentials, no server).
 It carries the workflow, the counted numbers, and the entry film.
 
+**Fig. 01 — the close ledger** lives at [`docs/figures/index.html`](figures/index.html):
+an isometric close package where the cells that need a human are the only lit
+thing on the plate. Press one to read its source rows; press the write gate and
+it refuses until a decision is recorded. Source:
+[`fig01-close-ledger.js`](figures/fig01-close-ledger.js), rebuilt with
+`python3 scripts/build_figure.py`.
+
 ### 2. Tie-out console — [`demo/console.py`](../demo/console.py)
 
 The marimo app over three tabs:
@@ -80,6 +87,7 @@ carries the "construction, not model evidence" banner:
 | Doc | For |
 |-----|-----|
 | [**close_keeper/README.md**](../close_keeper/README.md) | The Strands agent for the close: the working agreement, the governed write path, the Seapoint MCP connection, and what is verified |
+| [**close_keeper/app.py**](../close_keeper/app.py) | The close desk — the customer-facing surface: load, queue, decide, memory, history |
 | [**HACKATHONS.md**](HACKATHONS.md) | close-keeper's next entries: which events admit an existing project, and what each needs |
 
 ### Deeper docs, each carrying its own measured caveats
@@ -178,6 +186,35 @@ Details, including the measured read-path A/B and the fixture's answer-key leak,
 uv sync --directory research --extra agent
 research/.venv/bin/python -m close_keeper --no-seapoint \
   "Tie out the close package (all tasks), then tell me which cells need my decision and why."
+```
+
+### The close desk — the customer surface
+
+[`close_keeper/app.py`](../close_keeper/app.py) is the app a finance team would
+use, as opposed to the console, which is the instrument an engineer uses. One
+flow: load a close package, review the queue with its evidence and diff, decide
+through the recorded write path, then read the governed memory and the history
+of every decision the tenant has made.
+
+```bash
+uv run --directory research marimo run ../close_keeper/app.py
+```
+
+### Reviewing a close from the CLI
+
+```bash
+# the queue, with the evidence rows and the before → after diff
+python3 harness/exceptions.py review /tmp/syndicate-demo/exceptions.json
+
+# record every decision in the tenant's ledger as well
+python3 harness/exceptions.py review /tmp/syndicate-demo/exceptions.json \
+  --approve-all --ledger /tmp/syndicate-demo/ledger.sqlite3 \
+  --reviewer "ann" --tenant "fund-admin-1"
+
+# what that close cost
+python3 harness/close_metrics.py /tmp/syndicate-demo/exceptions.json \
+  --ledger /tmp/syndicate-demo/ledger.sqlite3 \
+  --tenant "fund-admin-1" --period "2026-10" --dataset "demo/close-tieout"
 ```
 
 ---

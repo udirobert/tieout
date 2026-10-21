@@ -1,0 +1,152 @@
+{
+  "version": "1",
+  "metadata": {
+    "marimo_version": "0.24.2",
+    "script_metadata_hash": "64f882e0407bad00082690a68f5b379b"
+  },
+  "cells": [
+    {
+      "id": "Hbol",
+      "code_hash": "eadf080049e50ef72d7ee002c1ac861f",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "MJUe",
+      "code_hash": "167da0e6b98f163ddeea742cd2fd186b",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h1 id=\"the-close-desk\">The close desk</h1>\n<span class=\"paragraph\">One package in. The cells that need a person, with their evidence.\nEvery decision recorded.</span>\n<span class=\"paragraph\"><strong>A blank is an answer.</strong> A cell the pipeline cannot verify is left\nblank and routed here with its source rows \u2014 never guessed. One\nrecorded write path: <code>exceptions.apply_decisions</code>, the same function\nthe CLI and the agent's tools call.</span>\n<blockquote>\n<span class=\"paragraph\"><strong>Local pilot, not a hosted service.</strong> Reviewer identity is\nself-attested, and this runs on your machine. Nothing here posts to a\nledger or writes back to a source workbook.</span>\n</blockquote></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "vblA",
+      "code_hash": "4392be523593b0c2870f9e2e1119912f",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "bkHC",
+      "code_hash": "5d1243541a1f0b82ad821eb94d376b0b",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "lEQa",
+      "code_hash": "f6b0d17ece6f68f77b2f301283bb6662",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "PKri",
+      "code_hash": "842e251b658c8978c6981f8afa92287f",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Xref",
+      "code_hash": "cb28893f38decb1f6d91004996063891",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "SFPL",
+      "code_hash": "ed76b40487057c513e4fe7d995bd5bd8",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "BYtC",
+      "code_hash": "b9cf415c8e813b31511639e4f0a6e3f9",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "RGSE",
+      "code_hash": "aaf89c4b0a6c2a83754b7a8bdd1d0ed2",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Kclp",
+      "code_hash": "b3ee8de95673035cc001bdf0b30903d9",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    }
+  ]
+}

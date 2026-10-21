@@ -17,23 +17,39 @@ production multi-tenant service. See [docs/COREWEAVE.md](docs/COREWEAVE.md).
 
 ## Frontends
 
-Two surfaces, both readable without a key:
+Three surfaces, all readable without a key:
 
 | Frontend | Where | What it is |
 |---|---|---|
-| **Public site** | [udirobert.github.io/tieout](https://udirobert.github.io/tieout/) — source [docs/index.html](docs/index.html) | The workflow, the counted numbers, the film. Static, no build, no credentials. |
-| **Tie-out console** | [demo/console.py](demo/console.py) — [open in molab](https://molab.marimo.io/github/udirobert/tieout/blob/main/demo/console.py) | The marimo app over **Run / Memory / Graph**: run grading and exception review, governed memory, lineage graph. |
+| **Public site** | [udirobert.github.io/tieout](https://udirobert.github.io/tieout/) — source [docs/index.html](docs/index.html) | The workflow, the counted numbers, the film, and **Fig. 01** — the close ledger, an isometric close package where only the cells needing a human are lit. |
+| **Tie-out console** | [demo/console.py](demo/console.py) — [open in molab](https://molab.marimo.io/github/udirobert/tieout/blob/main/demo/console.py) | The marimo instrument over **Run / Memory / Graph**: run grading and exception review, governed memory, lineage graph. |
+| **Close desk** | [close_keeper/app.py](close_keeper/app.py) | The customer-facing surface: load a close package → the queue with its evidence → decide → the memory → the history. |
 
 ```bash
-# the console, locally
+# the console and the close desk, locally
 uv sync --directory research
 uv run --directory research marimo run ../demo/console.py
+uv run --directory research marimo run ../close_keeper/app.py
 ```
 
-Both read the same artifacts: the console's Graph tab rebuilds lineage offline from a
-run's outputs, so no Aura credentials are needed to look around.
+All three read the same artifacts and write through the same
+`exceptions.apply_decisions`. None of them has a third way to change a
+workbook, and every decision is appended to the tenant's ledger before anything
+is touched.
 
 ---
+
+## What is behind it
+
+| | |
+|---|---|
+| **One evidence model** | `harness/evidence.py` — the cell, its current value, the proposed value, the reason, and the source rows. The CLI, the console, the walkthrough and the ledger all render *this*, so the surfaces cannot drift. |
+| **Tenant isolation** | `harness/tenant.py`, `harness/tenant_store.py` — a store belongs to one tenant; another tenant's rows are structurally invisible, not merely filtered. |
+| **An append-only ledger** | `harness/ledger.py` — what a human decided, when, and on what evidence. It outlives the workbook it describes. |
+| **Measured closes** | `harness/close_metrics.py` — exceptions raised, decisions, minutes in queue, reopened exceptions. Computed from what those two stores already hold. |
+| **Governed memory** | `harness/memory_store.py` — correction → propose → validate → activate → revoke, enforced in the tools, not in a prompt. |
+
+Details in [docs/README.md](docs/README.md) and [docs/COREWEAVE.md](docs/COREWEAVE.md).
 
 ## close-keeper — Seapoint MCP + Claude (FinOps Hackathon 2026)
 
@@ -86,7 +102,6 @@ Claude's connector) and the beats are driven in that session. Full detail:
 | [demo/README.md](demo/README.md) | Fixtures, scenarios, and the demo commands |
 | [research/README.md](research/README.md) | The research track (SpreadsheetBench) and how to score it |
 | [videos/close-keeper-finops/](videos/close-keeper-finops/) | The 2:00 entry film, its frame-by-frame source, and `BRIEF.md` |
-
 **Measured result:** on SpreadsheetBench-400 with Qwen3-8B served locally, thinking-on
 beats thinking-off by ~5 points on sheet-level pass rate and ~18 points on cell-level
 pass rate, at 4× the wall-clock. Write-up and artifacts:

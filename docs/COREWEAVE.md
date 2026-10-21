@@ -295,6 +295,56 @@ Neo4j cell keys also need tenant/workbook/version scoping before multi-client
 use. Do not migrate a live graph implicitly or call scoped matching an access
 control boundary.
 
+### Price shape
+
+**The unit is the entity, per month.** A fund administrator already budgets per
+entity, and so does an outsourced finance team; per-seat pricing does not fit a
+buyer whose controller is one person and whose board is not buying seats. The
+price therefore sits beside the fractional-CFO retainer it displaces, and
+should be a fraction of it — the customer is not buying accuracy, they are
+buying back the attention of the one person who signs.
+
+**The renewal argument is the governed memory, and it is the only durable one.**
+The rule store accumulates: the fourteenth close asks less of the reviewer than
+the first, because the questions that were answered stay answered. Switching
+resets it. That is a real switching cost, and it is the only claim here that
+grows with time rather than decaying.
+
+**The number is derived, not chosen.** Once a pilot has run, the price follows
+from a measured number: minutes in the queue per close (`harness/close_metrics.py`),
+times the customer's cost for that attention. Publishing the derivation matters
+more than the figure — a price whose arithmetic a buyer can check is credible; a
+price quoted as a round number is a guess with a decimal point on it.
+
+**What the price is not.** Not per-decision: the unit is too small and the
+marginal cost of an extra decision is not what anyone budgets for. Not
+per-transaction: this product does not touch the transactions that tie
+themselves, so charging for them would price the part the customer never sees.
+Not accuracy-scored, for the reason the site already states — a percentage
+computed by the system that grades itself is not an argument.
+
+**What is not claimed.** No customer, no measured ROI, no days-saved figure.
+The pilot sequence above produces those numbers; until it has run, this section
+is a shape and a method, not a price.
+
+### What the substrate now provides
+
+`harness/tenant.py` and `harness/tenant_store.py` bind every store to exactly
+one tenant: a store opened under the wrong tenant raises rather than serving
+another customer's rows, a write naming another tenant is refused, and rows
+outside the tenant are never returned by a read. One file per tenant, so
+retention, deletion, and export are filesystem operations rather than a
+`WHERE` clause someone has to remember. `harness/ledger.py` makes the decision
+record append-only and exportable, and `harness/close_metrics.py` computes the
+pilot's measures from what those two stores already hold.
+
+**What it does not provide.** Real authentication — `Principal` is a seam with
+an obviously-fake local implementation, and reviewer identity is still
+self-attested text. Multi-tenant has to mean tenant *isolation* on a shared
+deployment, which one-file-per-tenant does not yet give: the files are separate,
+but nothing stops one process opening two of them. Encryption at rest, backup,
+and retention schedules are unaddressed.
+
 Out of scope for this slice: ERP write-back, production multi-tenancy, fuzzy
 alias auto-approval, fine-tuning, unattended policy changes, and a claimed
 production efficiency gain.
