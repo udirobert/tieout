@@ -49,6 +49,27 @@ No model guess, prompt-overlay change, or Neo4j match is an approved correction.
 Reviewer names are self-attested; matching scope is not authentication or tenant
 access isolation. See `docs/COREWEAVE.md` for the synthetic demo and pilot limits.
 
+## Tenancy, the ledger, and the customer surface
+
+Every store is bound to **one tenant**. `MemoryStore(path, tenant)` and
+`DecisionLedger(path, tenant)` record their tenant in a `meta` table: opening a
+file under a different tenant raises `TenantMismatch`, a write naming another
+tenant raises `CrossTenantWrite`, and rows outside the tenant are never
+returned by a read. One file per tenant, so retention, deletion, and export are
+filesystem operations rather than a `WHERE` clause someone has to remember.
+
+Review decisions are appended to the tenant's **ledger**
+(`ledger.py`) before the workbooks are touched — append-only, so deleting the
+run directory does not erase what was decided. `close_metrics.py` then measures
+the close from what the queue and the ledger already hold.
+
+`close_keeper/app.py` is the customer surface: load a close package, review the
+queue with its evidence and diff, decide through the recorded write path, then
+read the governed memory and the history. `demo/console.py` is the instrument an
+engineer uses; `close_keeper/demo_app.py` is the key-free walkthrough. All
+three write through `exceptions.apply_decisions`, and none has a third way to
+change a workbook.
+
 ## Files
 
 - `pipeline.py` — entry. Sheet-level: codegen loop then one values-first fallback. Cell-level: values-first then one codegen fallback. Default `--model tinker:Qwen/Qwen3.8-27B`.
@@ -59,7 +80,12 @@ access isolation. See `docs/COREWEAVE.md` for the synthetic demo and pilot limit
 - `parsing.py` — lenient JSON (keeps `Sheet1!B6`) and codegen fence parser.
 - `verifier.py` — graded cells present + scalars + no `#ERR!`; soffice recalc when `SOFFICE` / LibreOffice exists, silent skip otherwise.
 - `tracer.py` — `traces/<id>.jsonl`, one line per model call. Codegen steps add `tool`/`tool_output`.
-- `exceptions.py` — post-run exception queue (`exceptions.json`) + human review CLI
+- `exceptions.py` — post-run exception queue (`exceptions.json`) + human review CLI. `apply_decisions` is the one write path: it persists the decision (and appends to the ledger) *before* any workbook is touched.
+- `evidence.py` — the shared model of a flagged cell: current value, proposed value, reason, source rows. Every surface renders this, so the CLI, the console, the walkthrough and the ledger cannot drift apart.
+- `tenant.py` — who is acting: `Principal` carries the tenant, the subject and the capabilities. A seam, not an authentication system — `local_principal()` trusts whoever runs the process.
+- `tenant_store.py` — the shared base for tenant-bound SQLite stores: one file per tenant, bound on first write and locked afterwards.
+- `ledger.py` — the append-only decision ledger. Survives the workbook it describes; `export()` returns the tenant's whole record.
+- `close_metrics.py` — what a close cost: exceptions raised, decisions, minutes in queue, reopened exceptions. Computed from the queue and the ledger.
 - `weave_hooks.py` — Weave init gating + traceable op wrappers (no-op without WANDB_API_KEY)
 
 After each task, `write_exceptions()` flags blank cells, `#N/A`, Excel errors, and review

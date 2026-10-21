@@ -42,7 +42,12 @@ Workbook + mandate → Classify → Execute → Verify (≤3 retries) → Except
 |-----------|------|
 | `harness/pipeline.py` | Classify → values-first or codegen → verify → repair |
 | `harness/exceptions.py` | Post-run queue + approve/reject CLI with evidence rows |
+| `harness/evidence.py` | The shared model of a flagged cell — current value, proposed value, reason, source rows. Every surface renders this |
+| `harness/ledger.py` | The append-only decision ledger; decisions are recorded before any workbook is touched |
+| `harness/tenant.py`, `harness/tenant_store.py` | One store, one tenant. Another tenant's rules are structurally invisible, not merely filtered |
+| `harness/close_metrics.py` | What a close cost: exceptions, decisions, minutes in queue, reopened exceptions |
 | `demo/console.py` | Tabbed marimo console (Run / Memory / Graph) — review, governed memory and the offline lineage reconstruction over the same artifacts |
+| `close_keeper/app.py` | The close desk — the customer surface: load, queue, decide, memory, history |
 | `harness/skills.py` | Domain skill fragments (lookup, aggregation, consolidation) |
 | `harness/verifier.py` | Blocks fatal errors; flags unresolved lookups |
 | `harness/graph.py` | *Optional* Neo4j cell lineage + counterparty retrieval — see below |
@@ -102,6 +107,9 @@ cd research && uv run python ../harness/exceptions.py review /tmp/syndicate-demo
 
 # same artifacts in a browser — Run / Memory / Graph, no Aura credentials needed
 uv run --directory research marimo run ../demo/console.py
+
+# or the close desk — the surface a finance team would use
+uv run --directory research marimo run ../close_keeper/app.py
 ```
 
 Live inference (optional): set `TINKER_API_KEY` from `.env`, then `./demo/run_demo.sh close-tieout-bank-cp`

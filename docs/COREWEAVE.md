@@ -104,6 +104,16 @@ activation/revocation, stale validation, scope boundaries, sparse sheets, source
 snapshot consistency, and literal-string exports. The captured synthetic
 scenario is `/tmp/tieout-memory-run-SEef/evidence.json`.
 
+**The suite is now 61 tests.** The extra 32 cover what the product gained
+afterwards: tenant isolation (`research/test_tenant_isolation.py` — a rule from
+one tenant never surfaces for another, a store opened under the wrong tenant
+raises, a decision survives the workbook it describes), the evidence model and
+its metrics (`research/test_evidence_metrics.py` — one rendering of a decision
+across every surface, and a report that counts what it says it counts), and the
+agent's write path (`research/test_agent_write_path.py` — the agent's decisions
+reach the tenant's ledger and survive the run directory). Run the whole suite
+with `research/.venv/bin/python -m unittest discover -s research -p 'test_*.py'`.
+
 The revised callback-based marimo UI passed static checks, but its full extended
 browser flow remains unverified. Browser testing was stopped at the user's
 request due to CPU impact; the task's browser processes and marimo server were
@@ -130,6 +140,17 @@ reject reverts to init, unselected rows are untouched, and the aggregate
 `exceptions.json` keeps its array shape. Rendering the Graph tab never
 connects: `graph.configured()` inspects the environment only, because
 `graph.enabled()` would ensure schema on page load.
+
+**Since that round the console changed, and the change is not browser-verified.**
+The review table now carries the current value, the proposed value and the
+evidence rows, rendered from the shared model in `harness/evidence.py`, and a
+panel below the queue shows the full source rows for the selected cells. The
+static checks pass (`marimo check demo/console.py`, script-mode run) and the
+underlying write path is covered by the unit tests, but **no browser has
+rendered the revised table.** The same applies to `close_keeper/app.py`, the
+close desk: its decision path is exercised by script against scratch copies,
+not by clicking. Treat both as unverified in a browser until someone says
+otherwise — and do not restart browser testing without permission.
 
 ### Workbook contract
 

@@ -38,10 +38,12 @@ export TINKER_API_KEY= # set from .env
 cd research && uv run python ../harness/exceptions.py review /tmp/syndicate-demo/exceptions.json
 
 # Frontends (marimo) — the console is one app over Run / Memory / Graph;
-# the two older apps remain as legacy single-purpose entry points
+# the two older apps remain as legacy single-purpose entry points.
+# The close desk (close_keeper/app.py) is the customer surface, not an instrument.
 uv run --directory research marimo run ../demo/console.py
 uv run --directory research marimo run ../demo/close_workspace.py
 uv run --directory research marimo run ../demo/loop_dashboard.py
+uv run --directory research marimo run ../close_keeper/app.py
 
 # Console checks that need no browser: script mode runs every cell, and
 # marimo check does the static dataflow check

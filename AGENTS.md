@@ -1,7 +1,7 @@
 # Project workflow
 
 - Run Python commands with `research/.venv/bin/python`, or `uv run --directory research` after syncing existing dependencies.
-- Governed-memory unit tests: `research/.venv/bin/python -m unittest discover -s research -p 'test_memory_*.py' -v`. Tenant isolation and the evidence model have their own files: `test_tenant_*.py` and `test_evidence_*.py` — run `-p 'test_*.py'` for the whole suite.
+- Governed-memory unit tests: `research/.venv/bin/python -m unittest discover -s research -p 'test_memory_*.py' -v`. Tenant isolation, the evidence model, and the agent's write path have their own files: `test_tenant_*.py`, `test_evidence_*.py`, `test_agent_*.py` — run `-p 'test_*.py'` for the whole suite.
 - Static workspace check: `research/.venv/bin/marimo check demo/console.py` (console.py is the instrument surface; close_keeper/app.py is the customer surface; close_workspace.py and loop_dashboard.py are legacy utilities).
 - The `close_keeper/` surface is the active one for the Agents for Humans hackathon (Strands Agents SDK, Professional track). See `close_keeper/README.md`. `demo/console.py` is the research console; `close_keeper/app.py` is the close desk a customer would use; `close_keeper/demo_app.py` is the key-free marimo walkthrough.
 - Synthetic two-cycle scenario: `research/.venv/bin/python demo/memory_scenario.py --out-dir <new-directory>`. Preserve existing artifacts; the scenario refuses to overwrite them.

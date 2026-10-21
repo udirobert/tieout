@@ -41,7 +41,7 @@ disabling silently — a paused Aura instance is no longer indistinguishable fro
                     (:CloseRun {run_id,task_id,status,mandate})
                           |  PRODUCED {value,status}        \  RAISED
                           v                                  v
-  (:Sheet)<-IN_SHEET-(:Cell kind=answer  ref="Staging Sheet!K5")-ROUTED_TO->(:Exception {reason,status})
+  (:Sheet)<-IN_SHEET-(:Cell kind=answer  cell_ref="Staging Sheet!K5")-ROUTED_TO->(:Exception {reason,status})
                           |  \
               DERIVED_FROM     MATCHES {method,score}          EVIDENCED_BY
                           |        \                                |
@@ -56,8 +56,31 @@ disabling silently — a paused Aura instance is no longer indistinguishable fro
 |------|--------------|-------|
 | `Vendor` | `vendor_key` = normalize(`clean_name`) | `name, clean_name, jurisdiction (LU/Non-LU), legal_entity_domain, source_list (vendor-master\|related-party), variants[] (every spelling of the identity, primary first — 535 across 510 nodes), norm_key, norm_clean` |
 | `Sheet` | `name` | — |
-| `Cell` | `ref` (`"Staging Sheet!K5"`) | `sheet, coord, row, col, header, kind(answer\|source), value, last_run_id, last_status, first_seen, updated_at` |
-| `EvidenceRow` | `(sheet, row, key)` | — |
+| `Cell` | `ref` = **scoped**: `tenant ␟ workbook_version ␟ "Staging Sheet!K5"` | `cell_ref` (the readable `"Staging Sheet!K5"`), `tenant`, `workbook`, `sheet, coord, row, col, header, kind(answer\|source), value, last_run_id, last_status, first_seen, updated_at` |
+| `EvidenceRow` | `(scope, sheet, row, key)` | `scope` = the same scoped key |
+
+**Why `Cell.ref` is scoped.** A bare `"Staging Sheet!K5"` is only unique within one
+workbook. Two customers with a workbook of the same name would collide in a
+shared Aura instance, and one customer's lineage would attach to the other's
+cell. The natural key is now `tenant ␟ workbook_version ␟ cell_ref` — the
+workbook version is a digest of the init workbook's bytes, so a revised
+workbook produces new keys rather than overwriting the old lineage. The
+readable reference is kept on `cell_ref` beside it, so queries can still match
+on it.
+
+**This changes the constraint names.** `EvidenceRow`'s key shape changed, so its
+constraint is now `evidence_scope_unique` and the old `evidence_unique` is
+superseded. Dropping a constraint is destructive, so it happens only on an
+explicit command — never implicitly on connect, because a graph schema change
+must never be a side effect of a page load:
+
+```bash
+cd research && uv run --extra graph python ../harness/graph.py migrate-schema
+# then rebuild the lineage: demo/rebuild_graph.py <run-dir>
+```
+
+The graph is a derived index, so after this it is rebuilt rather than
+migrated. `demo/rebuild_graph.py` reconstructs it from a run's artifacts.
 
 **Per-run nodes:**
 
@@ -283,6 +306,10 @@ by `demo/simulate_demo.sh` — `status = 'ok: simulated golden'` — so its 15/1
 model evidence; the A/B numbers above come from live model runs. The provenance is the *"every cell
 tied to its source"* claim, and it is the part to demo.
 
+Those counts were measured before the keys were scoped. Scoping changes the *key*, not the shape of
+the graph, so a single-tenant instance rebuilds to the same counts; a multi-tenant one would hold
+each tenant's cells side by side rather than merging them.
+
 ```bash
 uv run --directory research --extra graph python ../demo/seed_graph.py   # 510 vendors
 cd research
@@ -417,17 +444,20 @@ Dockerfile `pip install`s only its 3 pinned packages and is unaffected).
 
 ## Demo Cypher (Neo4j Browser / Aura console)
 
+`Cell.ref` is the scoped key, so match on `cell_ref` — the readable reference —
+rather than on `ref`. That is the point of keeping both.
+
 Lineage for one answer cell — K5 tied to its source, its run, and the exception it raised
 (K5/K13 are the two unresolved cells in the golden bank-cp workbook):
 
 ```cypher
-MATCH (c:Cell {ref: 'Staging Sheet!K5'})-[r]-(n) RETURN c, r, n;
+MATCH (c:Cell {cell_ref: 'Staging Sheet!K5'})-[r]-(n) RETURN c, r, n;
 ```
 
 Why K5 routed to review (the exception + the evidence rows behind it):
 
 ```cypher
-MATCH (c:Cell {ref: 'Staging Sheet!K5'})-[:ROUTED_TO]->(e:Exception)
+MATCH (c:Cell {cell_ref: 'Staging Sheet!K5'})-[:ROUTED_TO]->(e:Exception)
 OPTIONAL MATCH (c)-[:EVIDENCED_BY]->(ev:EvidenceRow)
 RETURN c.value AS answer, e.reason, e.status, collect(ev) AS evidence;
 ```
@@ -436,8 +466,14 @@ Contrast — a resolved cell K16 linked to its vendor (the "memory" edge; K6 →
 SOLUTIONS APS`, K16 → `NIP P/S`):
 
 ```cypher
-MATCH (c:Cell {ref: 'Staging Sheet!K16'})-[m:MATCHES]->(v:Vendor)
+MATCH (c:Cell {cell_ref: 'Staging Sheet!K16'})-[m:MATCHES]->(v:Vendor)
 RETURN c.value, m.method, m.score, v.name, v.jurisdiction;
+```
+
+Scoping a query to one customer's work — the reason the key is scoped at all:
+
+```cypher
+MATCH (c:Cell {tenant: 'acme'}) RETURN c.cell_ref, c.workbook LIMIT 20;
 ```
 
 The vendor memory the read path queries, and the lineage written by one run:

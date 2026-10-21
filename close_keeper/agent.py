@@ -126,25 +126,28 @@ def list_exceptions(out_dir: str) -> str:
     path = Path(out_dir) / "exceptions.json"
     if not path.exists():
         return "no exceptions.json — run tie_out_workbook first"
+    import exceptions as exc_mod  # harness/exceptions.py
+
     payloads = json.loads(path.read_text())
+    if isinstance(payloads, dict):
+        payloads = [payloads]
     lines: list[str] = []
     for payload in payloads:
         pending = [e for e in payload.get("exceptions", []) if e.get("status") == "pending"]
         if not pending:
             continue
         lines.append(f"task {payload['task_id']}: {len(pending)} pending")
-        for exc in pending:
-            ev = exc.get("evidence_rows", [])[:2]
-            ev_s = "; ".join(f"{e['sheet']} row {e['row']} (key={e['key']})" for e in ev)
-            lines.append(
-                f"  {exc['cell']} | {exc['reason']} | proposed: {exc.get('proposed_value')!r}"
-                + (f" | evidence: {ev_s}" if ev_s else "")
-            )
+        # Rendered from the shared model, so the agent sees the same cell, the
+        # same diff, and the same source rows every other surface shows.
+        for decision in exc_mod.decisions_from_payload(payload):
+            if decision.status != "pending":
+                continue
+            lines.append(f"  {decision.render_line()}")
     return "\n".join(lines) if lines else "no pending exceptions — the run is fully filed"
 
 
 @tool
-def apply_review_decisions(out_dir: str, decisions: dict) -> str:
+def apply_review_decisions(out_dir: str, decisions: dict, tenant: str = "") -> str:
     """Apply human review decisions to the exception queue — the one write path.
 
     Approved cells keep the proposed value; rejected and undecided cells revert
@@ -152,9 +155,13 @@ def apply_review_decisions(out_dir: str, decisions: dict) -> str:
     so an approval is never lost and a value is never written without a
     recorded decision.
 
+    Each decision is also appended to the tenant's ledger, before the workbook
+    is touched, so the record of what was decided outlives the run directory.
+
     Args:
         out_dir: run directory holding exceptions.json
         decisions: {task_id: {"Sheet!CELL": "approved" | "rejected"}}
+        tenant: the tenant the decisions belong to (the ledger is bound to it)
     """
     import exceptions as exc_mod  # harness/exceptions.py
 
@@ -175,9 +182,37 @@ def apply_review_decisions(out_dir: str, decisions: dict) -> str:
             verdict = clean.get(payload["task_id"], {}).get(exc["cell"])
             if verdict:
                 exc["status"] = verdict
-    exc_mod.apply_decisions(payloads, clean, path, as_array=as_array)
+    # The ledger is the durable record; it is written before the workbooks,
+    # exactly as the decisions themselves are.
+    ledger = None
+    try:
+        from ledger import DecisionLedger  # harness/ledger.py
+
+        ledger_path = Path(out_dir) / f"ledger-{tenant or 'local'}.sqlite3"
+        ledger = DecisionLedger(ledger_path, tenant or None)
+    except Exception as exc:  # noqa: BLE001 — never let the ledger block a decision
+        ledger = None
+        ledger_note = f" (ledger not written: {exc})"
+    else:
+        ledger_note = ""
+    try:
+        exc_mod.apply_decisions(
+            payloads,
+            clean,
+            path,
+            as_array=as_array,
+            ledger=ledger,
+            reviewer="agent",
+            tenant=tenant,
+        )
+    finally:
+        if ledger is not None:
+            ledger.close()
     n = sum(len(c) for c in clean.values())
-    return f"applied {n} decision(s); workbooks rewritten with approved values only"
+    return (
+        f"applied {n} decision(s); workbooks rewritten with approved values only"
+        f"{ledger_note}"
+    )
 
 
 # ---------------------------------------------------- governed memory

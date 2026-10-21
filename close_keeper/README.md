@@ -192,7 +192,11 @@ confirms a live connection in ten seconds before the reconciliation loop runs.
 
 **Live demo (no keys needed):** `demo_app.py` — a guided molab walk through the
 exception queue, the recorded write path, and the governance gate, including the
-refusals. **Deploy:** [DEPLOY.md](DEPLOY.md) puts the agent on Bedrock AgentCore
+refusals. **The close desk:** `app.py` — the surface a finance team would use,
+as opposed to a demo of one: load a close package, review the queue with its
+evidence and its before→proposed diff, decide through the recorded write path,
+then read the governed memory and the history of every decision the tenant has
+made. **Deploy:** [DEPLOY.md](DEPLOY.md) puts the agent on Bedrock AgentCore
 Runtime; [policies/](policies/) restates the governance as Cedar at the Gateway
 boundary, so a compromised loop still can't write a decision or activate a rule.
 
@@ -212,12 +216,16 @@ is ever echoed to the model.
 | tool | wraps | writes? |
 |---|---|---|
 | `tie_out_workbook` | `harness/pipeline.py` | run artifacts in `--out-dir` |
-| `list_exceptions` | `exceptions.json` | no |
-| `apply_review_decisions` | `harness/exceptions.apply_decisions` | yes — recorded decisions only |
+| `list_exceptions` | `exceptions.json`, rendered by `harness/evidence.py` | no |
+| `apply_review_decisions` | `harness/exceptions.apply_decisions` | yes — recorded decisions, appended to the tenant's ledger first |
 | `preview_workbook` | `research/sb.serialize_workbook` | no |
 | `suggest_mappings` | `memory_store.suggest` | no |
 | `list_memory_rules` | `memory_store.rules` | no |
 | `record_correction` / `propose_rule` / `validate_rule` / `activate_rule` / `revoke_rule` | `harness/memory_store.py` | yes — governed SQLite |
+
+Every surface — the CLI, the console, the close desk, and these tools — renders the
+same evidence model and writes through the same `apply_decisions`, which appends
+to the tenant's ledger before any workbook is touched.
 
 ## Verified
 
