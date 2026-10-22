@@ -147,6 +147,18 @@ once, reported on stderr and in the system prompt — the agent can never overcl
 68/68 tests incl. 7 engine-seam tests; live end-to-end verified (engine ledger logged
 create/promote/read/update alongside the SQLite event trail).
 
+**Day-1 surface state:** `query_close_source` (Zetaris, read-only by construction) +
+`list_memory_conflicts` / `memory_sleep_preview` (engine-native ops) join the agent's
+tools, each with a live/offline block in the system prompt — the agent cannot claim a
+capability it does not have. Verified in a real Strands run: the model used recall and
+correctly described it as corroborating evidence, not the decision. Zetaris pieces
+(`harness/zetaris_client.py`, `zetaris/sql/`, `scripts/export_close_sources.py`) are
+built to their tested REST contract and wait on the instance install on vultr
+(`ssh -L 3300:localhost:3300`, `ZETARIS_API_KEY`). The close desk (`close_keeper/app.py`,
+`marimo check` clean) now renders the story: an integrations status strip, the engine's
+layered view under Memory, and the two ledgers side by side under History — "two trails
+that must agree" is shown, not asserted.
+
 ### PayPal AI Hackathon
 
 Deadline **12 Nov 2026** — the project page shows 12:00 PST and the rules page has shown 14:00

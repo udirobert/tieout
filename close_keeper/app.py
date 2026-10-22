@@ -56,10 +56,11 @@ def _():
 
     import close_metrics
     import exceptions as exc_mod
+    import hmem_client
     import ledger as ledger_mod
     import memory_store as memory_store_mod
 
-    return Path, close_metrics, exc_mod, ledger_mod, memory_store_mod, mo
+    return Path, close_metrics, exc_mod, hmem_client, ledger_mod, memory_store_mod, mo
 
 
 @app.cell
@@ -94,6 +95,7 @@ def _(mo):
 @app.cell
 def _(Path, exc_mod, mo, set_msg, set_ws):
     """Load a close package: the workbook plus where its artifacts live."""
+
     def _load(value):
         if value is None:
             return
@@ -144,11 +146,47 @@ def _(Path, exc_mod, mo, set_msg, set_ws):
 
     load_block = mo.vstack(
         [
-            mo.md("## 1 · Load a close\n\nThe run directory holding `exceptions.json`."),
+            mo.md(
+                "## 1 · Load a close\n\nThe run directory holding `exceptions.json`."
+            ),
             _loader,
         ]
     )
     return (load_block,)
+
+
+@app.cell
+def _(hmem_client, mo):
+    """Integrations — which engines are actually attached, stated plainly.
+
+    The desk never claims a capability it does not have, the same way the
+    CLI reports recall live/off on stderr. Probes run once per render with
+    short timeouts; a dead engine reads as off, never as an error banner.
+    """
+    import os
+
+    _bits = []
+    _want = os.environ.get("HMEM_SIDECAR_URL") or os.environ.get("CLOSE_KEEPER_HMEM")
+    try:
+        _hmem = bool(_want) and hmem_client.hmem_available(timeout=2)
+    except Exception:  # noqa: BLE001
+        _hmem = False
+    _bits.append(
+        f"**H-MEM recall:** {'live' if _hmem else 'off — governed store only'}"
+    )
+    if os.environ.get("ZETARIS_API_KEY"):
+        try:
+            import zetaris_client
+
+            _z = zetaris_client.zetaris_available(timeout=3)
+        except Exception:  # noqa: BLE001
+            _z = False
+        _bits.append(f"**Zetaris federation:** {'live' if _z else 'unreachable'}")
+    else:
+        _bits.append("**Zetaris federation:** off")
+    _bits.append("**Seapoint:** per-session (agent surface)")
+    integrations_block = mo.md(" · ".join(_bits))
+    return (integrations_block,)
 
 
 @app.cell
@@ -308,7 +346,7 @@ def _(get_rev, get_ws, mo):
 
 
 @app.cell
-def _(Path, get_mem, get_rev, get_ws, memory_store_mod, mo, set_msg):
+def _(Path, get_mem, get_rev, get_ws, hmem_client, memory_store_mod, mo, set_msg):
     """Teach the agent once: a correction becomes a candidate rule, gated."""
     _ = get_rev()
     _ = get_mem()
@@ -336,28 +374,54 @@ def _(Path, get_mem, get_rev, get_ws, memory_store_mod, mo, set_msg):
             }
             for r in _rules
         ]
-        memory_block = mo.vstack(
-            [
+        # The engine's own view: what the recall substrate holds for this
+        # tenant, layered. Activation promotes to long_term; revocation marks
+        # superseded — the record stays, penalized, never deleted.
+        _engine_rows = []
+        try:
+            _client = hmem_client.HmemClient(_ws["tenant"])
+            if _client.available():
+                _engine_rows = [
+                    {
+                        "id": m["id"],
+                        "layer": m["layer"],
+                        "superseded": "yes" if m.get("supersededBy") else "",
+                        "content": m["content"][:70],
+                    }
+                    for m in _client.all_memories()
+                ]
+        except Exception:  # noqa: BLE001 — engine off is not an error here
+            _engine_rows = []
+        _parts = [
+            mo.md(
+                "## 4 · Memory — what was learned, under governance\n\n"
+                "A correction is evidence, not a rule. It becomes a rule "
+                "only through record → propose → validate → activate, and "
+                "the tools refuse an activation that has not cleared the "
+                "replay gate."
+            ),
+            (
+                mo.ui.table(_rows, pagination=False)
+                if _rows
+                else mo.md("*no rules yet*")
+            ),
+        ]
+        if _engine_rows:
+            _parts += [
                 mo.md(
-                    "## 4 · Memory — what was learned, under governance\n\n"
-                    "A correction is evidence, not a rule. It becomes a rule "
-                    "only through record → propose → validate → activate, and "
-                    "the tools refuse an activation that has not cleared the "
-                    "replay gate."
+                    "**The engine's view.** H-MEM holds the recallable content "
+                    "for this tenant — layered, scored, superseded rather than "
+                    "deleted. This is what `suggest` recalls as evidence."
                 ),
-                (
-                    mo.ui.table(_rows, pagination=False)
-                    if _rows
-                    else mo.md("*no rules yet*")
-                ),
+                mo.ui.table(_engine_rows, pagination=False),
             ]
-        )
+        memory_block = mo.vstack(_parts)
     return (memory_block,)
 
 
 @app.cell
-def _(Path, get_rev, get_ws, ledger_mod, mo):
-    """History: every decision this tenant has made."""
+def _(Path, get_rev, get_ws, hmem_client, ledger_mod, mo):
+    """History: every decision this tenant has made — and the engine's own trail."""
     _ = get_rev()
     _ws = get_ws()
     if not _ws:
@@ -384,19 +448,44 @@ def _(Path, get_rev, get_ws, ledger_mod, mo):
             }
             for e in _entries
         ]
-        history_block = mo.vstack(
-            [
+        # The second ledger: the engine logs its own actions (create, promote,
+        # read, update) independently. Two trails that must agree — that is
+        # the point of the design, so it is shown, not asserted.
+        _engine_rows = []
+        try:
+            _client = hmem_client.HmemClient(_ws["tenant"])
+            if _client.available():
+                _engine_rows = [
+                    {
+                        "memory": e["memoryId"],
+                        "action": e["action"],
+                        "actor": e["actor"],
+                    }
+                    for e in _client.ledger()[-15:]
+                ]
+        except Exception:  # noqa: BLE001 — engine off is not an error here
+            _engine_rows = []
+        _parts = [
+            mo.md(
+                f"## 5 · History — {len(_rows)} recorded decision(s)\n\n"
+                "Append-only. Deleting the workbooks does not erase this."
+            ),
+            (
+                mo.ui.table(_rows, pagination=False)
+                if _rows
+                else mo.md("*no decisions recorded yet*")
+            ),
+        ]
+        if _engine_rows:
+            _parts += [
                 mo.md(
-                    f"## 5 · History — {len(_rows)} recorded decision(s)\n\n"
-                    "Append-only. Deleting the workbooks does not erase this."
+                    "**The second ledger.** The memory engine logs its own "
+                    "actions — create, promote, read, supersede — independently "
+                    "of the decision ledger. Two trails that must agree."
                 ),
-                (
-                    mo.ui.table(_rows, pagination=False)
-                    if _rows
-                    else mo.md("*no decisions recorded yet*")
-                ),
+                mo.ui.table(_engine_rows, pagination=False),
             ]
-        )
+        history_block = mo.vstack(_parts)
     return (history_block,)
 
 

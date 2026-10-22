@@ -66,6 +66,38 @@ Seapoint's `change_id`. Next month the same narrative resolves without asking.
 days-saved number exists because there is no customer; multi-entity, FX and payroll are out
 of scope. The improvement is not speed — it is that a guess stops being invisible.
 
+## Open Agent Hackathon 2026 — wildcard branch
+
+Branch `open-agent-2026` adds the two sponsor integrations the wildcard track requires,
+each enforced the same way the rest of this product is enforced — structurally, not by prompt.
+
+**Meterless — H-MEM as the governed-memory substrate.** `harness/hmem/` vendors the
+Apache-2.0 H-MEM engine (spec + conformance suite, 13/13 green) behind a tenant-scoped
+sidecar on `:8737`. `MemoryStore(path, hmem=...)` keeps SQLite as the system of record for
+the correction → propose → validate → activate lifecycle; the engine adds what SQLite does
+not: hybrid-scored **recall** on `suggest` (advisory evidence, never the decision),
+layered **promotion** on activation, and `superseded` marking on revoke — penalized in
+ranking, never deleted. The engine's own append-only **trust ledger** independently logs
+every substrate action, so the memory now has two audit trails that must agree. A
+mismatched-tenant client is `CrossTenantWrite`; a dead sidecar degrades every operation to
+the pre-engine behaviour. Enable on the agent surface with `HMEM_SIDECAR_URL` or
+`CLOSE_KEEPER_HMEM` — off means the prompt says so and `recall` is simply absent.
+
+**Zetaris — the judgment queue reads federated.** `harness/zetaris_client.py` talks
+Lightning SQL over the instance's REST API and is **read-only by construction** — non-read
+statements are refused before the wire, the same stance as the Seapoint write-holdback.
+`query_close_source` joins the agent's tools; the close package becomes three genuinely
+separate sources (`bank_feed`, `corvus_le_reference`, `gl_movements` — see `zetaris/sql/`
+and `scripts/export_close_sources.py`), so questions that cross sources stop being a
+per-provider export problem. Instance install runs on a docker host; see `.env.example`.
+
+```bash
+# engine sidecar, then the agent with recall live:
+cd harness/hmem && npm install && npx tsx src/server.ts &
+HMEM_SIDECAR_URL=http://127.0.0.1:8737 research/.venv/bin/python -m close_keeper \
+  --no-seapoint "list memory rules, then suggest mappings for the queue and tell me what recall adds"
+```
+
 ## The working agreement
 
 - **Blank is an answer.** Cells the pipeline can't verify route to the exception
@@ -222,6 +254,8 @@ is ever echoed to the model.
 | `suggest_mappings` | `memory_store.suggest` | no |
 | `list_memory_rules` | `memory_store.rules` | no |
 | `record_correction` / `propose_rule` / `validate_rule` / `activate_rule` / `revoke_rule` | `harness/memory_store.py` | yes — governed SQLite |
+| `list_memory_conflicts` / `memory_sleep_preview` | H-MEM engine via `harness/hmem_client.py` | no — engine queue/preview |
+| `query_close_source` | `harness/zetaris_client.py` (read-only) | no |
 
 Every surface — the CLI, the console, the close desk, and these tools — renders the
 same evidence model and writes through the same `apply_decisions`, which appends
