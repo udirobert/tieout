@@ -69,3 +69,6 @@ research/data/sft/tmp_outputs/
 .claude/
 agent/
 skills-lock.json
+
+# H-MEM sidecar (TypeScript engine vendored for the Open Agent Hackathon)
+harness/hmem/node_modules/

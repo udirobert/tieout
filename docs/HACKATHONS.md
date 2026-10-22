@@ -80,15 +80,62 @@ browser whether prior work is admissible there. The wildcard states its allowanc
 is why it is the entry we can actually plan around.
 
 Sponsors whose tech must appear in a wildcard entry: **Zetaris** (data access / virtualisation —
-its CTO is judging) and **Meterless** (agent metering). Neither is in the product today. The
+its CTO is judging) and **Meterless** — *re-read 22 Oct: it is not metering.* Meterless is an
+Apache-2.0 local-first context stack for agents: **H-MEM** (a three-tier memory with provenance, an
+append-only trust ledger, and preview-first "sleep" consolidation), World Model, Markovian, Scout
+Intent, and an OpenAI-compatible **Meterless Runtime** at `127.0.0.1:8088/v1`. Each engine ships as
+an AGENTS.md spec + TypeScript reference + conformance suite; "integrate Meterless" means implement
+an engine spec in your stack and pass its conformance. Neither is in the product today. The
 plausible reading of Zetaris for us is that the judgment queue stops being Seapoint-only: invoices,
 the bank feed and the ledger read through one federated source, which is also the honest answer to
-"does this work outside one provider's sandbox". Meterless fits the governed-memory ledger: the
-refusal and the write-back already carry `change_id` audit records, and a meter is a natural place
-to put the cost of an action a human has to review.
+"does this work outside one provider's sandbox". Meterless fits the governed memory itself:
+`record_correction → propose_rule → validate_rule → activate_rule` is already the H-MEM shape —
+mine → store → preview-first consolidate → promote — and the tenant ledger is already a trust
+ledger. Porting the H-MEM spec into `harness/memory_store.py` and passing its conformance suite is
+a real integration, not a logo; Meterless Runtime is also a drop-in agent-loop provider via
+`CLOSE_KEEPER_BASE_URL`.
 
-**Action if we want this:** register before 23:59 UTC on 22 Oct. Registration is not a
-commitment; the integration decision can be made after the door shuts.
+**Day-1 status, 22 Oct:** registered. Sponsor set has since widened — NVIDIA (DGX Spark prize for
+best Nemotron use), SpaceXAI with Cursor, and Bright Data joined Zetaris and Meterless. Zetaris
+runs as a "local install" on `snapflip-vultr` (Ubuntu x86_64, 4 CPU, 31 GB RAM, Docker 29, 104 GB
+free — meets every requirement; the Mac can't host it: 8 GB total, no Docker, amd64 emulation).
+Reach it over JDBC `:10000` via SSH tunnel. Download needs a Zetaris Cloud account; hackathon
+getting-started repo is github.com/zetaris/getting-started.
+
+**Day-1 record — the five answers** (the Day-1 brief's required output):
+
+1. **User:** the finance owner at a ~12-person company with no controller — founder or
+   fractional CFO doing month-end close, working the rows the auto-matcher couldn't tie.
+2. **Problem:** the unmatched queue gets resolved by *"what did we code it as last month?"*,
+   and nothing records that it was a guess — the guess silently becomes next month's pattern.
+3. **Goes in:** bank feed, invoices, coded ledger — read through Zetaris federation across
+   sources, not one provider's API — plus the tenant's prior governed corrections.
+4. **Comes out:** a short judgment queue (proposed coding + evidence rows + explicit
+   refusals), audited write-back returning `change_id`, governed rules for next month.
+5. **Why an agent:** matching is a script's job. Weighing conflicting evidence across live
+   sources, knowing when to refuse, and carrying learned rules across months is not. A
+   single prompt has no memory and no enforced write gate; a script cannot abstain.
+
+**Build shape:** Zetaris installs on `snapflip-vultr` via its docker-compose bundle (user
+downloads `zetaris-platform.zip` + registry creds from Zetaris Cloud — the one manual step).
+Federate the close package: invoices/bank/GL as separate sources (file + REST cookbooks),
+queue read through Lightning SQL, JDBC `:10000` over SSH tunnel. Meterless is H-MEM as a
+TypeScript sidecar — the conformance runner (`npx tsx conformance/runner.ts`,
+`HMEM_IMPL=<index.ts>`) requires a TS module exporting `HMEM`; reference passes 13/13 on
+this machine. `harness/memory_store.py` stays the governed facade: `record_correction`→
+`add(source=user_correction)`, `propose`→`dream_proposed`, `validate`→approval boundary,
+`activate`→`dream_approved`+promote to long_term, `revoke`→`supersededBy` (never deleted),
+tenant ledger→TrustLedgerService, `suggest`→hybrid retrieval. Meterless Runtime as model
+provider is optional — its default port 8088 is already bound on the Vultr box (veles
+stack; the box also runs iota/bothy workloads, so budget its resources politely). New work
+goes on branch `open-agent-2026` so the wildcard's "scored on new work" diff stays legible.
+
+**Day-1 build state:** `harness/hmem/` vendors the reference engine (`vendor/`, unmodified)
+plus a tenant-scoped `src/index.ts` and an HTTP sidecar `src/server.ts` on **:8737** — one
+HMEM instance per tenant, `x-tenant` on every call, `HMEM_PERSIST_ROOT` for per-tenant
+persistence. `harness/hmem_client.py` is the only Python path in; `available()` is how
+surfaces degrade to the SQLite store without pretending. Conformance: 13/13 against our
+`src/index.ts`. Smoke-verified: add/query/ledger/feedback, tenant isolation, python client.
 
 ### PayPal AI Hackathon
 

@@ -1,0 +1,13 @@
+{
+  "name": "@tieout/hmem-sidecar",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "H-MEM governed-memory engine for tieout. Vendor/ is the Apache-2.0 Meterless H-MEM reference; src/ adds tenant scoping and the sidecar server.",
+  "scripts": {
+    "serve": "tsx src/server.ts"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0"
+  }
+}
