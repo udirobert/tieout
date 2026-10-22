@@ -355,6 +355,49 @@ def preview_workbook(path: str, max_rows: int = 40, max_cols: int = 12) -> str:
     return serialize_workbook(path, max_rows=max_rows, max_cols=max_cols)
 
 
+def _engine_for(memory_db: str):
+    """The bound store's engine client, or None when recall is off."""
+    store = _store(memory_db)
+    tenant = store.tenant
+    store.close()
+    if not hmem_enabled() or not tenant:
+        return None
+    from hmem_client import HmemClient  # harness/hmem_client.py
+
+    return HmemClient(tenant)
+
+
+@tool
+def list_memory_conflicts(memory_db: str) -> str:
+    """Memory contradictions the H-MEM engine queued for human review.
+
+    A scan runs first, then the queue is returned: each conflict names the
+    two records and why they contradict. Resolution stays with the human —
+    the engine auto-resolves only above its own confidence gate and marks the
+    loser superseded, never deleted.
+    """
+    engine = _engine_for(memory_db)
+    if engine is None:
+        return "H-MEM engine not connected, or the store has no bound tenant"
+    engine.conflicts_scan()
+    return json.dumps(engine.conflicts_queue(), indent=2, default=str)
+
+
+@tool
+def memory_sleep_preview(memory_db: str) -> str:
+    """Preview the engine's sleep cycle — consolidation plan, nothing applied.
+
+    Shows what a sleep run WOULD do: stale short-term memories to promote,
+    low-value ones to archive, similar groups to synthesize. The same
+    preview-first discipline as the governed write path; execution is a
+    separate deliberate step.
+    """
+    engine = _engine_for(memory_db)
+    if engine is None:
+        return "H-MEM engine not connected, or the store has no bound tenant"
+    return json.dumps(engine.sleep_preview(), indent=2, default=str)
+
+
 # ---------------------------------------------------- Zetaris federation
 
 _ZETARIS_LIVE: bool | None = None
@@ -417,6 +460,9 @@ LOCAL_TOOLS = [
     activate_rule,
     revoke_rule,
     preview_workbook,
+    # engine-native memory ops (H-MEM)
+    list_memory_conflicts,
+    memory_sleep_preview,
     # federated reads
     query_close_source,
 ]
