@@ -89,9 +89,12 @@ def tie_out_workbook(dataset_dir: str, out_dir: str, ids: str = "") -> str:
     cmd = [
         str(RESEARCH_PYTHON) if RESEARCH_PYTHON.exists() else sys.executable,
         str(ROOT / "harness" / "pipeline.py"),
-        "--dataset-dir", dataset_dir,
-        "--out-dir", str(out),
-        "--path", "hybrid",
+        "--dataset-dir",
+        dataset_dir,
+        "--out-dir",
+        str(out),
+        "--path",
+        "hybrid",
     ]
     if ids.strip():
         cmd += ["--ids", ids.strip()]
@@ -133,7 +136,9 @@ def list_exceptions(out_dir: str) -> str:
         payloads = [payloads]
     lines: list[str] = []
     for payload in payloads:
-        pending = [e for e in payload.get("exceptions", []) if e.get("status") == "pending"]
+        pending = [
+            e for e in payload.get("exceptions", []) if e.get("status") == "pending"
+        ]
         if not pending:
             continue
         lines.append(f"task {payload['task_id']}: {len(pending)} pending")
@@ -143,7 +148,9 @@ def list_exceptions(out_dir: str) -> str:
             if decision.status != "pending":
                 continue
             lines.append(f"  {decision.render_line()}")
-    return "\n".join(lines) if lines else "no pending exceptions — the run is fully filed"
+    return (
+        "\n".join(lines) if lines else "no pending exceptions — the run is fully filed"
+    )
 
 
 @tool
@@ -286,7 +293,9 @@ def suggest_mappings(memory_db: str, records: list[dict]) -> str:
 
 
 @tool
-def record_correction(memory_db: str, record: dict, vendor: str, reviewer: str, rationale: str) -> str:
+def record_correction(
+    memory_db: str, record: dict, vendor: str, reviewer: str, rationale: str
+) -> str:
     """Record a human-taught correction in governed memory (step 1 of 4).
 
     A correction is evidence, not a rule: it influences nothing until it is
@@ -307,7 +316,9 @@ def propose_rule(memory_db: str, correction_id: str) -> str:
 
 
 @tool
-def validate_rule(memory_db: str, rule_id: str, cases: list[dict], reviewer: str) -> str:
+def validate_rule(
+    memory_db: str, rule_id: str, cases: list[dict], reviewer: str
+) -> str:
     """Replay a candidate rule against labeled cases (step 3 of 4).
 
     The gate requires positive, hard-negative, scope-boundary and conflict
@@ -344,6 +355,52 @@ def preview_workbook(path: str, max_rows: int = 40, max_cols: int = 12) -> str:
     return serialize_workbook(path, max_rows=max_rows, max_cols=max_cols)
 
 
+# ---------------------------------------------------- Zetaris federation
+
+_ZETARIS_LIVE: bool | None = None
+
+
+def zetaris_enabled() -> bool:
+    """Whether the Zetaris federated read path is on (probed once).
+
+    On only when ZETARIS_API_KEY is set AND the instance answers SELECT 1 —
+    otherwise the close package is the only data source and the system prompt
+    says so.
+    """
+    global _ZETARIS_LIVE
+    if _ZETARIS_LIVE is None:
+        if not os.environ.get("ZETARIS_API_KEY"):
+            _ZETARIS_LIVE = False
+        else:
+            from zetaris_client import zetaris_available  # harness/zetaris_client.py
+
+            _ZETARIS_LIVE = zetaris_available()
+    return _ZETARIS_LIVE
+
+
+@tool
+def query_close_source(sql: str, limit: int = 200) -> str:
+    """Query the federated close sources through Zetaris Lightning SQL.
+
+    Read-only by construction: only SELECT/SHOW/DESCRIBE/EXPLAIN statements
+    run — the client's guard refuses everything else. Sources live under the
+    close_federation database: bank_feed, corvus_le_reference, gl_movements.
+    Use this to answer questions that cross sources — e.g. staging rows with
+    no legal-entity match — not to restate what one workbook already says.
+    """
+    if not zetaris_enabled():
+        return "Zetaris is not connected this session — answer from the close package instead"
+    from zetaris_client import ZetarisClient, ZetarisError, ZetarisUnavailable
+
+    try:
+        rows = ZetarisClient().run(sql, limit=limit)
+    except ZetarisUnavailable as exc:
+        return f"Zetaris unreachable: {exc} — answer from the close package instead"
+    except ZetarisError as exc:
+        return f"Zetaris error: {exc}"
+    return json.dumps({"rows": rows, "count": len(rows)}, default=str)
+
+
 # Local, always-available tools. Live Seapoint tools (if a workspace is
 # connected) are discovered at runtime and prepended — see assemble_tools().
 LOCAL_TOOLS = [
@@ -360,6 +417,8 @@ LOCAL_TOOLS = [
     activate_rule,
     revoke_rule,
     preview_workbook,
+    # federated reads
+    query_close_source,
 ]
 
 
@@ -367,7 +426,14 @@ LOCAL_TOOLS = [
 
 # Raw Seapoint tool-name prefixes treated as mutating: held back from the agent and
 # reachable only via the governed write-back wrappers in seapoint_writes.py.
-_SEAPOINT_WRITE_PREFIXES = ("set_", "update_", "approve_", "create_", "delete_", "remove_")
+_SEAPOINT_WRITE_PREFIXES = (
+    "set_",
+    "update_",
+    "approve_",
+    "create_",
+    "delete_",
+    "remove_",
+)
 
 _SEAPOINT_LIVE = """- Seapoint is CONNECTED via MCP. Read tools are namespaced `seapoint_query_*`
   (plus `seapoint_get_current_user`). Start with accounts, then transactions and
@@ -393,6 +459,15 @@ _HMEM_OFFLINE_BLOCK = """- The H-MEM recall engine is NOT connected this session
   governed SQLite store alone and suggestions carry no `recall` field. Do not
   claim semantic recall."""
 
+_ZETARIS_LIVE_BLOCK = """- Zetaris federation is CONNECTED — `query_close_source` runs read-only
+  Lightning SQL across bank_feed, corvus_le_reference and gl_movements. Use it
+  for questions that genuinely cross sources; it refuses non-read statements,
+  so there is nothing you must not call — but there is also no way to write
+  through it."""
+
+_ZETARIS_OFFLINE_BLOCK = """- Zetaris is NOT connected this session — `query_close_source` will say so.
+  Answer from the local close package; do not claim federated reads."""
+
 _SEAPOINT_OFFLINE = """- Seapoint is NOT connected this session, so there is no live financial data.
   Work entirely from the local close package below. Do not claim to have read
   live accounts, transactions, or invoices — say plainly when something would
@@ -409,6 +484,7 @@ human judgment is required. Everything else is filed autonomously.
 Your working agreement:
 {seapoint_block}
 {hmem_block}
+{zetaris_block}
 - Blank is an answer. If the pipeline or memory cannot verify a value, it routes
   to the exception queue. You never fill a cell on a hunch.
 - You write approved values ONLY through apply_review_decisions, after the human
@@ -434,7 +510,9 @@ def make_model(use_bedrock: bool):
 
     # Native Claude via the Anthropic API — recommended for the hackathon. An
     # explicit CLOSE_KEEPER_API_KEY (an OpenAI-compatible endpoint) still wins.
-    if os.environ.get("ANTHROPIC_API_KEY") and not os.environ.get("CLOSE_KEEPER_API_KEY"):
+    if os.environ.get("ANTHROPIC_API_KEY") and not os.environ.get(
+        "CLOSE_KEEPER_API_KEY"
+    ):
         from strands.models.anthropic import AnthropicModel
 
         return AnthropicModel(
@@ -458,7 +536,9 @@ def make_model(use_bedrock: bool):
         # W&B Serverless Inference (OpenAI-compatible)
         base_url = "https://api.inference.wandb.ai/v1"
         api_key = os.environ["WANDB_API_KEY"]
-        model_id = os.environ.get("CLOSE_KEEPER_MODEL", "meta-llama/Llama-3.3-70B-Instruct")
+        model_id = os.environ.get(
+            "CLOSE_KEEPER_MODEL", "meta-llama/Llama-3.3-70B-Instruct"
+        )
     else:
         base_url = os.environ.get("OPENAI_BASE_URL")
         api_key = os.environ.get("OPENAI_API_KEY")
@@ -468,7 +548,10 @@ def make_model(use_bedrock: bool):
             "no API key: set CLOSE_KEEPER_API_KEY, OPENROUTER_API_KEY, or WANDB_API_KEY, or pass --bedrock"
         )
     return OpenAIModel(
-        client_args={"api_key": api_key, **({"base_url": base_url} if base_url else {})},
+        client_args={
+            "api_key": api_key,
+            **({"base_url": base_url} if base_url else {}),
+        },
         model_id=model_id,
     )
 
@@ -482,15 +565,18 @@ def make_agent(
     tools: list | None = None,
     seapoint_live: bool = False,
     hmem_live: bool = False,
+    zetaris_live: bool = False,
 ) -> Agent:
     seapoint_block = _SEAPOINT_LIVE if seapoint_live else _SEAPOINT_OFFLINE
     hmem_block = _HMEM_LIVE_BLOCK if hmem_live else _HMEM_OFFLINE_BLOCK
+    zetaris_block = _ZETARIS_LIVE_BLOCK if zetaris_live else _ZETARIS_OFFLINE_BLOCK
     return Agent(
         model=model,
         tools=list(tools) if tools is not None else list(LOCAL_TOOLS),
         system_prompt=SYSTEM_PROMPT.format(
             seapoint_block=seapoint_block,
             hmem_block=hmem_block,
+            zetaris_block=zetaris_block,
             dataset_dir=dataset_dir,
             out_dir=out_dir,
             memory_db=memory_db,
@@ -514,7 +600,11 @@ def assemble_tools(stack, *, use_seapoint: bool = True, log=None) -> tuple[list,
             seapoint_status_line,
         )
     except ImportError:  # run as a loose script with close_keeper/ on sys.path
-        from seapoint import build_seapoint_client, seapoint_enabled, seapoint_status_line
+        from seapoint import (
+            build_seapoint_client,
+            seapoint_enabled,
+            seapoint_status_line,
+        )
 
     say = log or (lambda m: print(f"[close-keeper] {m}", file=sys.stderr))
     tools = list(LOCAL_TOOLS)
@@ -525,7 +615,8 @@ def assemble_tools(stack, *, use_seapoint: bool = True, log=None) -> tuple[list,
     client = build_seapoint_client()
     if client is None:
         say(
-            seapoint_status_line() if not seapoint_enabled()
+            seapoint_status_line()
+            if not seapoint_enabled()
             else "Seapoint: not configured — local close package only"
         )
         return tools, False
@@ -569,15 +660,19 @@ def main() -> None:
     p.add_argument("--dataset-dir", default=str(DEFAULT_DATASET_DIR))
     p.add_argument("--out-dir", default=str(DEFAULT_OUT_DIR))
     p.add_argument("--memory-db", default=str(DEFAULT_OUT_DIR / "memory.sqlite3"))
-    p.add_argument("--bedrock", action="store_true", help="use Strands' default Bedrock model")
     p.add_argument(
-        "--no-seapoint", action="store_true",
+        "--bedrock", action="store_true", help="use Strands' default Bedrock model"
+    )
+    p.add_argument(
+        "--no-seapoint",
+        action="store_true",
         help="skip the live Seapoint connection; run on local data only",
     )
     args = p.parse_args()
 
     model = make_model(args.bedrock)
     hmem_live = hmem_enabled()
+    zetaris_live = zetaris_enabled()
     print(
         f"[close-keeper] H-MEM recall: "
         + (
@@ -587,11 +682,22 @@ def main() -> None:
         ),
         file=sys.stderr,
     )
+    print(
+        f"[close-keeper] Zetaris federation: "
+        + ("live" if zetaris_live else "off — local close package only"),
+        file=sys.stderr,
+    )
     with contextlib.ExitStack() as stack:
         tools, seapoint_live = assemble_tools(stack, use_seapoint=not args.no_seapoint)
         agent = make_agent(
-            model, args.dataset_dir, args.out_dir, args.memory_db,
-            tools=tools, seapoint_live=seapoint_live, hmem_live=hmem_live,
+            model,
+            args.dataset_dir,
+            args.out_dir,
+            args.memory_db,
+            tools=tools,
+            seapoint_live=seapoint_live,
+            hmem_live=hmem_live,
+            zetaris_live=zetaris_live,
         )
         print(agent(args.prompt))
 
