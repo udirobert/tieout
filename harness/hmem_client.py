@@ -36,6 +36,16 @@ class HmemUnavailable(RuntimeError):
     """The sidecar did not answer. Callers decide whether to fall back."""
 
 
+def hmem_available(base_url: str | None = None, timeout: float = 3) -> bool:
+    """Whether a sidecar answers healthz — no tenant needed for the probe."""
+    url = (base_url or os.environ.get("HMEM_SIDECAR_URL") or DEFAULT_URL).rstrip("/")
+    try:
+        with urllib.request.urlopen(f"{url}/healthz", timeout=timeout) as resp:
+            return json.loads(resp.read().decode()).get("ok") is True
+    except (urllib.error.URLError, OSError, ValueError):
+        return False
+
+
 class HmemClient:
     """One tenant's handle on the H-MEM sidecar."""
 

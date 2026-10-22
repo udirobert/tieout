@@ -137,6 +137,16 @@ persistence. `harness/hmem_client.py` is the only Python path in; `available()` 
 surfaces degrade to the SQLite store without pretending. Conformance: 13/13 against our
 `src/index.ts`. Smoke-verified: add/query/ledger/feedback, tenant isolation, python client.
 
+**Day-1 wiring state:** `MemoryStore(path, hmem=client|True)` — SQLite stays the system of
+record, the engine adds recall + a second audit trail. Lifecycle mapping is live:
+correction→`working` memory, propose→derived memory, activate→`promote` to `long_term`,
+revoke→`superseded`, `suggest` attaches `recall` while `resolve` stays the decision. A
+mismatched-tenant client is `CrossTenantWrite`; a dead sidecar degrades cleanly. The agent
+surface opts in via `HMEM_SIDECAR_URL`/`CLOSE_KEEPER_HMEM` (`agent.hmem_enabled()`, probed
+once, reported on stderr and in the system prompt — the agent can never overclaim recall).
+68/68 tests incl. 7 engine-seam tests; live end-to-end verified (engine ledger logged
+create/promote/read/update alongside the SQLite event trail).
+
 ### PayPal AI Hackathon
 
 Deadline **12 Nov 2026** — the project page shows 12:00 PST and the rules page has shown 14:00

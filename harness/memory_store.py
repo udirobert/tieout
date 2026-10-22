@@ -13,7 +13,7 @@ from memory_policy import (
     required_text,
     resolve,
 )
-from hmem_client import HmemUnavailable
+from hmem_client import HmemClient, HmemUnavailable
 from tenant import CrossTenantWrite
 from tenant_store import TenantStore
 
@@ -322,18 +322,24 @@ class MemoryStore(TenantStore):
     def _engine(self):
         """The bound tenant's engine client, or None when recall is off.
 
-        An unbound store cannot use the engine (no tenant to trust), and a
-        client that names a different tenant than the bound store is refused
-        outright rather than quietly ignored.
+        `hmem=True` at construction means "attach the engine for whatever
+        tenant this store binds to" — the client is built lazily on first use,
+        so an unbound file that binds on its first write still gets recall for
+        the rest of the lifecycle. An unbound store cannot use the engine (no
+        tenant to trust), and a client that names a different tenant than the
+        bound store is refused outright rather than quietly ignored.
         """
         if self._hmem is None or self._tenant is None:
             return None
-        if self._hmem.tenant != self._tenant:
+        client = self._hmem
+        if client is True:
+            client = self._hmem = HmemClient(self._tenant)
+        if client.tenant != self._tenant:
             raise CrossTenantWrite(
-                f"engine client for tenant {self._hmem.tenant!r} cannot write "
+                f"engine client for tenant {client.tenant!r} cannot write "
                 f"to the store for {self._tenant!r}"
             )
-        return self._hmem
+        return client
 
     def _engine_add(
         self,
