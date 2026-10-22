@@ -155,10 +155,12 @@ correctly described it as corroborating evidence, not the decision. Zetaris piec
 (`harness/zetaris_client.py`, `zetaris/sql/`, `scripts/export_close_sources.py`) are
 built against the now-confirmed live contract — the documented `/sql-editor/sqls/run`
 307s; the UI proxies everything under `/api/proxy` (`POST /api/proxy/sql-editor/sqls/run`
-→ `{headers, data, total}`; tunnel convention Mac `:3000` → vultr `:3300`). Still needed:
-this project's own API key (issue a second one in the GUI — clean per-project audit
-trail) and the three close-source CSVs hosted at `/data/close-sources/` on the vultr
-box for FILESTORE registration. The close desk (`close_keeper/app.py`,
+→ `{headers, data, total}`; tunnel convention Mac `:3000` → vultr `:3300`). Registered
+22 Oct under a second, close-keeper-scoped API key: `close_federation` + three FILESTORE
+tables, verified counts 15/84/12 and a live `query_close_source` call. FILESTORE rejects
+local paths outright — the bridge is a SeaweedFS container (`seaweed-s3`, anonymous S3 on
+`zetaris_default`, nothing public; uploads via its filer on host loopback `:18888`), which
+also keeps credentials out of the committed SQL via `isS3BucketPublic`. The close desk (`close_keeper/app.py`,
 `marimo check` clean) now renders the story: an integrations status strip, the engine's
 layered view under Memory, and the two ledgers side by side under History — "two trails
 that must agree" is shown, not asserted.
