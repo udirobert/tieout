@@ -116,8 +116,8 @@ getting-started repo is github.com/zetaris/getting-started.
    sources, knowing when to refuse, and carrying learned rules across months is not. A
    single prompt has no memory and no enforced write gate; a script cannot abstain.
 
-**Build shape:** Zetaris installs on `snapflip-vultr` via its docker-compose bundle (user
-downloads `zetaris-platform.zip` + registry creds from Zetaris Cloud — the one manual step).
+**Build shape:** Zetaris runs on `snapflip-vultr` via its docker-compose bundle — installed
+22 Oct (compose bundle + registry creds from Zetaris Cloud, the one manual step, done).
 Federate the close package: invoices/bank/GL as separate sources (file + REST cookbooks),
 queue read through Lightning SQL, JDBC `:10000` over SSH tunnel. Meterless is H-MEM as a
 TypeScript sidecar — the conformance runner (`npx tsx conformance/runner.ts`,
@@ -153,8 +153,12 @@ tools, each with a live/offline block in the system prompt — the agent cannot 
 capability it does not have. Verified in a real Strands run: the model used recall and
 correctly described it as corroborating evidence, not the decision. Zetaris pieces
 (`harness/zetaris_client.py`, `zetaris/sql/`, `scripts/export_close_sources.py`) are
-built to their tested REST contract and wait on the instance install on vultr
-(`ssh -L 3300:localhost:3300`, `ZETARIS_API_KEY`). The close desk (`close_keeper/app.py`,
+built against the now-confirmed live contract — the documented `/sql-editor/sqls/run`
+307s; the UI proxies everything under `/api/proxy` (`POST /api/proxy/sql-editor/sqls/run`
+→ `{headers, data, total}`; tunnel convention Mac `:3000` → vultr `:3300`). Still needed:
+this project's own API key (issue a second one in the GUI — clean per-project audit
+trail) and the three close-source CSVs hosted at `/data/close-sources/` on the vultr
+box for FILESTORE registration. The close desk (`close_keeper/app.py`,
 `marimo check` clean) now renders the story: an integrations status strip, the engine's
 layered view under Memory, and the two ledgers side by side under History — "two trails
 that must agree" is shown, not asserted.

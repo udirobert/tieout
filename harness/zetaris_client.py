@@ -6,11 +6,14 @@ as separate sources answering one Lightning SQL, instead of one provider's
 export. The instance runs on `snapflip-vultr` (docker compose bundle); this
 client talks to its UI-proxy REST API over an SSH tunnel.
 
-The contract mirrors the tested scripts in github.com/zetaris/getting-started
-(`scripts/zetaris_sql.py`): `POST /sql-editor/sqls/run` carries one statement
-and returns `{"data": rows}`; every request needs `X-Org-ID` and a fresh
-`X-Request-ID`. JDBC (`jaydebeapi`, driver JAR from the bundle) is the second
-channel and can be added here once the instance is up.
+The contract was confirmed against the live install (22 Oct): the UI proxies
+every backend call under `/api/proxy`, so `POST
+/api/proxy/sql-editor/sqls/run` carries one statement and returns
+`{"headers": cols, "data": rows, "total", "timeUsed"}`. The path the
+getting-started scripts document (`/sql-editor/sqls/run` on the origin) answers
+307 to /login. Every request needs `X-Org-ID` and a fresh `X-Request-ID`.
+JDBC (`jaydebeapi`, driver JAR from the bundle) is the second channel and can
+be added here if the REST path ever falls short.
 
 The honest limit, stated here because it belongs next to the code: this client
 is structurally read-only. `run()` refuses anything whose first keyword is not
@@ -29,7 +32,8 @@ import urllib.request
 import uuid
 from typing import Any
 
-DEFAULT_URL = "http://127.0.0.1:3300"  # SSH tunnel to the vultr install's UI
+# SSH tunnel convention: Mac 127.0.0.1:3000 -> vultr UI :3300
+DEFAULT_URL = "http://127.0.0.1:3000"
 TIMEOUT_S = 60
 
 READ_VERBS = {"select", "show", "describe", "desc", "explain", "with"}
@@ -102,8 +106,10 @@ class ZetarisClient:
                 f"refused non-read statement: {(sql or '')[:40]!r} "
                 f"(allowed: {', '.join(sorted(READ_VERBS))})"
             )
+        # Confirmed against the live install: the documented /sql-editor/sqls/run
+        # 307-redirects; the working endpoint sits under the UI's /api/proxy.
         out = self._call(
-            "/sql-editor/sqls/run",
+            "/api/proxy/sql-editor/sqls/run",
             {
                 "queryId": str(uuid.uuid4()),
                 "sql": sql,
@@ -114,4 +120,4 @@ class ZetarisClient:
         return out.get("data") or [] if isinstance(out, dict) else []
 
     def datasources(self) -> Any:
-        return self._call("/datasource/datasources")
+        return self._call("/api/proxy/datasource/datasources")
