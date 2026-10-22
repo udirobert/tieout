@@ -13,7 +13,7 @@ import http from "node:http";
 import path from "node:path";
 import { HMEM } from "./index.ts";
 import type { AddInput } from "../vendor/memoryStore.ts";
-import type { FeedbackKind, MiningEventType } from "../vendor/types.ts";
+import type { FeedbackKind, MemoryLayer, MiningEventType } from "../vendor/types.ts";
 
 const PORT = Number(process.env.HMEM_SIDECAR_PORT ?? 8737);
 const HOST = process.env.HMEM_SIDECAR_HOST ?? "127.0.0.1";
@@ -73,6 +73,11 @@ const routes: Record<string, (body: Body, h: HMEM) => unknown | Promise<unknown>
   "POST /memory/mine": (b, h) =>
     h.mine(b.event as MiningEventType, b.text as string, b.opts as { chatId?: string }),
   "GET /memory/all": (_b, h) => h.store.all(),
+  "POST /memory/get": (b, h) => h.store.get(b.memoryId as string) ?? null,
+  "POST /memory/promote": (b, h) =>
+    h.store.promote(b.memoryId as string, b.layer as MemoryLayer),
+  "POST /memory/supersede": (b, h) =>
+    h.store.update(b.memoryId as string, { supersededBy: b.by as string }),
   "GET /ledger": (_b, h) => h.ledger.all(),
   "GET /ledger/stats": (_b, h) => h.ledger.stats(),
   "POST /sleep/preview": (_b, h) => h.sleep.preview(),

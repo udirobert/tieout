@@ -66,7 +66,7 @@ class HmemClient:
             raise HmemUnavailable(f"{self.base_url}{path}: {exc}") from exc
         if not out.get("ok"):
             raise RuntimeError(out.get("error", "hmem sidecar error"))
-        return out["data"]
+        return out.get("data")
 
     def available(self) -> bool:
         try:
@@ -100,6 +100,19 @@ class HmemClient:
 
     def all_memories(self) -> list[dict]:
         return self._call("GET", "/memory/all")
+
+    def get_memory(self, memory_id: str) -> dict | None:
+        return self._call("POST", "/memory/get", {"memoryId": memory_id})
+
+    def promote(self, memory_id: str, layer: str) -> None:
+        """Move a record between layers; the engine's ledger logs `promote`."""
+        self._call("POST", "/memory/promote", {"memoryId": memory_id, "layer": layer})
+
+    def supersede(self, memory_id: str, by: str) -> dict:
+        """Mark a record superseded — penalized in ranking, never deleted."""
+        return self._call(
+            "POST", "/memory/supersede", {"memoryId": memory_id, "by": by}
+        )
 
     def ledger(self) -> list[dict]:
         return self._call("GET", "/ledger")
