@@ -182,6 +182,13 @@ that must agree" is shown, not asserted.
 - Security rule: no keys anywhere — `.env.example` is placeholders only, verify before
   submission (grep for sk-/Bearer/long tokens on the branch before pushing public).
 
+**Journey-map deltas (read 22 Oct):** team composition locks the moment the first
+submission is created — confirm solo/team before touching the form. Their rhythm puts
+23–24 Oct on agent behaviour + logging (ours: the two ledgers already log everything),
+25 Oct on data/tools (Zetaris lands here), 26 Oct on README + deck + clean-setup test +
+1–4 min video, 27 Oct final checks + declare pre-existing + **submit early**, not at
+23:45. "Log agent activity from day one" — already true by design.
+
 ### PayPal AI Hackathon
 
 Deadline **12 Nov 2026** — the project page shows 12:00 PST and the rules page has shown 14:00
