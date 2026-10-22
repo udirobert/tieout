@@ -159,6 +159,29 @@ built to their tested REST contract and wait on the instance install on vultr
 layered view under Memory, and the two ledgers side by side under History — "two trails
 that must agree" is shown, not asserted.
 
+**Welcome Guide deltas (read 22 Oct, authoritative):**
+
+- Full rubric — the 20 unread points resolved: Impact 30, Technical 20, Innovation 15,
+  Demo 15, **Product & UX 10**, **Sponsor Tech 10**. Ties break on Impact, then timestamp.
+- **Cursor is required** — "teams must use Cursor as their development environment", and
+  the sponsor-tech explanation must say how it was used. The build so far ran in Devin;
+  remaining work should run in Cursor where practical, and the deck states that honestly.
+- **NVIDIA "wherever it contributes"** — must appear in the sponsor-tech explanation.
+  Cheapest honest fit: Nemotron via NVIDIA's OpenAI-compatible endpoint as an agent-loop
+  model option (`CLOSE_KEEPER_BASE_URL`/`_MODEL` already support it); the DGX Spark prize
+  is for best Nemotron use.
+- **Submission needs (27 Oct 23:45 UTC):** 1–4 min demo video showing the workflow + both
+  integrations; slide deck (problem/users, agent architecture, stack, sponsor use);
+  public repo with README; sponsor-tech explanation covering Zetaris, Meterless, Cursor,
+  NVIDIA; and **pre-existing components must be declared on the form** — the tieout
+  harness and pre-branch close-keeper are exactly that. Declare them.
+- Their "strong agent" vocabulary maps cleanly: verify→repair→blank loop = executor +
+  evaluator; the replay gate = governance evaluator; governed store + H-MEM recall =
+  shared memory; decision ledger + engine trust ledger = the reasoning trace. Frame the
+  deck's architecture section in those terms.
+- Security rule: no keys anywhere — `.env.example` is placeholders only, verify before
+  submission (grep for sk-/Bearer/long tokens on the branch before pushing public).
+
 ### PayPal AI Hackathon
 
 Deadline **12 Nov 2026** — the project page shows 12:00 PST and the rules page has shown 14:00
