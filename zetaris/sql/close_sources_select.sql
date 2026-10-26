@@ -11,7 +11,7 @@ FROM close_federation.bank_feed
 WHERE matched_legal_entity IS NULL OR matched_legal_entity = '';
 
 -- LE mapping coverage: mapped names that exist in the reference master.
-SELECT le.corvus_le, ref.corvus_le_id
+SELECT le.legal_entity, ref.corvus_le_id
 FROM close_federation.gl_movements le
 LEFT JOIN close_federation.corvus_le_reference ref
   ON le.legal_entity = ref.corvus_le;

@@ -438,10 +438,13 @@ def query_close_source(sql: str, limit: int = 200) -> str:
     """Query the federated close sources through Zetaris Lightning SQL.
 
     Read-only by construction: only SELECT/SHOW/DESCRIBE/EXPLAIN statements
-    run — the client's guard refuses everything else. Sources live under the
-    close_federation database: bank_feed, corvus_le_reference, gl_movements.
+    run — the client's guard refuses everything else. Sources: the
+    close_federation database (bank_feed, corvus_le_reference, gl_movements —
+    FILESTORE CSVs in object storage) and close_fx.fx_rates_eur — live ECB-
+    derived FX rates over REST (rate_date, gbp_rate, dkk_rate, eur_rate).
     Use this to answer questions that cross sources — e.g. staging rows with
-    no legal-entity match — not to restate what one workbook already says.
+    no legal-entity match, or restating non-GBP lines at value-date rates —
+    not to restate what one workbook already says.
     """
     if not zetaris_enabled():
         return "Zetaris is not connected this session — answer from the close package instead"
@@ -518,10 +521,11 @@ _HMEM_OFFLINE_BLOCK = """- The H-MEM recall engine is NOT connected this session
   claim semantic recall."""
 
 _ZETARIS_LIVE_BLOCK = """- Zetaris federation is CONNECTED — `query_close_source` runs read-only
-  Lightning SQL across bank_feed, corvus_le_reference and gl_movements. Use it
-  for questions that genuinely cross sources; it refuses non-read statements,
-  so there is nothing you must not call — but there is also no way to write
-  through it."""
+  Lightning SQL across close_federation (bank_feed, corvus_le_reference,
+  gl_movements — CSVs in object storage) and close_fx.fx_rates_eur (live FX
+  rates over REST). Use it for questions that genuinely cross sources; it
+  refuses non-read statements, so there is nothing you must not call — but
+  there is also no way to write through it."""
 
 _ZETARIS_OFFLINE_BLOCK = """- Zetaris is NOT connected this session — `query_close_source` will say so.
   Answer from the local close package; do not claim federated reads."""

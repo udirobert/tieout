@@ -89,7 +89,11 @@ statements are refused before the wire, the same stance as the Seapoint write-ho
 `query_close_source` joins the agent's tools; the close package becomes three genuinely
 separate sources (`bank_feed`, `corvus_le_reference`, `gl_movements` — see `zetaris/sql/`
 and `scripts/export_close_sources.py`), so questions that cross sources stop being a
-per-provider export problem. Instance install runs on a docker host; see `.env.example`.
+per-provider export problem. A fourth source is deliberately heterogenous: `FX_RATES`
+registers a public date-indexed FX API as `CREATE LIGHTNING REST TABLE`s — one SELECT
+restates the DKK/EUR staging lines in GBP across object-storage files and a live REST
+endpoint (`zetaris/sql/close_sources_fx_*.sql`). Instance install runs on a docker host;
+see `.env.example`.
 
 ```bash
 # engine sidecar, then the agent with recall live:
