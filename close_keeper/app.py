@@ -152,6 +152,7 @@ def _(Path, exc_mod, mo, set_msg, set_ws):
             _loader,
         ]
     )
+    load_block
     return (load_block,)
 
 
@@ -186,12 +187,14 @@ def _(hmem_client, mo):
         _bits.append("**Zetaris federation:** off")
     _bits.append("**Seapoint:** per-session (agent surface)")
     integrations_block = mo.md(" · ".join(_bits))
+    integrations_block
     return (integrations_block,)
 
 
 @app.cell
 def _(get_msg, mo):
     message_block = mo.md(f"_{get_msg()}_")
+    message_block
     return (message_block,)
 
 
@@ -229,6 +232,7 @@ def _(exc_mod, get_rev, get_ws, mo):
                 ),
             ]
         )
+    queue_block if queue_block is not None else mo.md("")
     return (queue_block,)
 
 
@@ -326,6 +330,7 @@ def _(Path, exc_mod, get_rev, get_ws, ledger_mod, mo, set_msg, set_rev, time):
                 _decision_form,
             ]
         )
+    decide_block if decide_block is not None else mo.md("")
     return (decide_block,)
 
 
@@ -342,6 +347,7 @@ def _(get_rev, get_ws, mo):
             "full list for every cell is in the tenant's ledger export, and "
             "`harness/close_metrics.py` reads the same records."
         )
+    evidence_block if evidence_block is not None else mo.md("")
     return (evidence_block,)
 
 
@@ -416,6 +422,7 @@ def _(Path, get_mem, get_rev, get_ws, hmem_client, memory_store_mod, mo, set_msg
                 mo.ui.table(_engine_rows, pagination=False),
             ]
         memory_block = mo.vstack(_parts)
+    memory_block if memory_block is not None else mo.md("")
     return (memory_block,)
 
 
@@ -486,6 +493,7 @@ def _(Path, get_rev, get_ws, hmem_client, ledger_mod, mo):
                 mo.ui.table(_engine_rows, pagination=False),
             ]
         history_block = mo.vstack(_parts)
+    history_block if history_block is not None else mo.md("")
     return (history_block,)
 
 
@@ -527,6 +535,7 @@ def _(Path, close_metrics, get_rev, get_ws, ledger_mod, memory_store_mod, mo):
                 mo.md("```\n" + _metrics.render() + "\n```"),
             ]
         )
+    metrics_block if metrics_block is not None else mo.md("")
     return (metrics_block,)
 
 
