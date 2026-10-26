@@ -98,6 +98,18 @@ def tie_out_workbook(dataset_dir: str, out_dir: str, ids: str = "") -> str:
     ]
     if ids.strip():
         cmd += ["--ids", ids.strip()]
+    model = os.environ.get("TIEOUT_MODEL", "")
+    if not model:
+        try:
+            import tinker  # noqa: F401
+
+            tinker_ready = bool(os.environ.get("TINKER_API_KEY"))
+        except ImportError:
+            tinker_ready = False
+        if not tinker_ready and os.environ.get("WANDB_API_KEY"):
+            model = "wandb:meta-llama/Llama-3.3-70B-Instruct"
+    if model:
+        cmd += ["--model", model]
     proc = subprocess.run(
         cmd, capture_output=True, text=True, timeout=1800, env=_run_env()
     )

@@ -204,6 +204,9 @@ path, not the prompt.
 
 ```bash
 uv sync --directory research --extra agent   # adds strands-agents
+# add `--extra tinker` + TINKER_API_KEY for the pipeline's default model; with
+# only WANDB_API_KEY present, tie_out_workbook falls back to the wandb adapter
+# (or set TIEOUT_MODEL explicitly — see .env.example)
 
 # Sandbox (hackathon): connect Seapoint through Claude — see "Seapoint connection"
 # above — then drive the live beats inside that Claude session, where close-keeper's
