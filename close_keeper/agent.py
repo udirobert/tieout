@@ -590,10 +590,14 @@ def make_model(use_bedrock: bool):
         api_key = os.environ["CLOSE_KEEPER_API_KEY"]
         model_id = os.environ.get("CLOSE_KEEPER_MODEL", "minimax/minimax-m3.1-flash")
     elif os.environ.get("OPENROUTER_API_KEY"):
-        # OpenRouter: OpenAI-compatible, access to Claude, MiniMax M3.1 Flash (free 72h), etc.
+        # OpenRouter: OpenAI-compatible. Default is NVIDIA Nemotron 3 Ultra —
+        # a full governed session was verified on it 26 Oct 2026 (sponsor
+        # tech for the Open Agent wildcard entry).
         base_url = "https://openrouter.ai/api/v1"
         api_key = os.environ["OPENROUTER_API_KEY"]
-        model_id = os.environ.get("CLOSE_KEEPER_MODEL", "minimax/minimax-m3.1-flash")
+        model_id = os.environ.get(
+            "CLOSE_KEEPER_MODEL", "nvidia/nemotron-3-ultra-550b-a55b:free"
+        )
     elif os.environ.get("WANDB_API_KEY"):
         # W&B Serverless Inference (OpenAI-compatible)
         base_url = "https://api.inference.wandb.ai/v1"
